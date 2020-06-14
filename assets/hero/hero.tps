@@ -163,13 +163,13 @@
             <key>scaleMode</key>
             <enum type="ScaleMode">Smooth</enum>
             <key>extrude</key>
-            <uint>0</uint>
+            <uint>1</uint>
             <key>trimThreshold</key>
             <uint>1</uint>
             <key>trimMargin</key>
             <uint>1</uint>
             <key>trimMode</key>
-            <enum type="SpriteSettings::TrimMode">Crop</enum>
+            <enum type="SpriteSettings::TrimMode">Trim</enum>
             <key>tracerTolerance</key>
             <int>200</int>
             <key>heuristicMask</key>
@@ -181,76 +181,27 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">../../downloads/freeknight/png/small/Attack (1).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Attack (10).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Attack (2).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Attack (3).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Attack (4).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Attack (5).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Attack (6).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Attack (7).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Attack (8).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Attack (9).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Dead (1).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Dead (10).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Dead (2).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Dead (3).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Dead (4).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Dead (5).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Dead (6).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Dead (7).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Dead (8).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Dead (9).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Idle (1).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Idle (10).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Idle (2).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Idle (3).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Idle (4).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Idle (5).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Idle (6).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Idle (7).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Idle (8).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Idle (9).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Jump (1).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Jump (10).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Jump (2).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Jump (3).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Jump (4).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Jump (5).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Jump (6).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Jump (7).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Jump (8).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Jump (9).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/JumpAttack (1).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/JumpAttack (10).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/JumpAttack (2).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/JumpAttack (3).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/JumpAttack (4).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/JumpAttack (5).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/JumpAttack (6).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/JumpAttack (7).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/JumpAttack (8).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/JumpAttack (9).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Run (1).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Run (10).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Run (2).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Run (3).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Run (4).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Run (5).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Run (6).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Run (7).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Run (8).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Run (9).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Walk (1).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Walk (10).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Walk (2).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Walk (3).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Walk (4).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Walk (5).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Walk (6).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Walk (7).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Walk (8).png</key>
-            <key type="filename">../../downloads/freeknight/png/small/Walk (9).png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Attack_00.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Attack_01.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Attack_02.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Attack_03.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Attack_04.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Attack_05.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Attack_06.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Attack_07.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Attack_08.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Attack_09.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_JumpAttack_00.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_JumpAttack_01.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_JumpAttack_02.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_JumpAttack_03.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_JumpAttack_04.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_JumpAttack_05.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_JumpAttack_06.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_JumpAttack_07.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_JumpAttack_08.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_JumpAttack_09.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_JumpAttack_10.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -259,85 +210,167 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>8,16,16,32</rect>
+                <rect>7,8,13,16</rect>
                 <key>scale9Paddings</key>
-                <rect>8,16,16,32</rect>
+                <rect>7,8,13,16</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Dead_00.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Dead_01.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Dead_02.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Dead_03.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Dead_04.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Dead_05.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Dead_06.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Dead_07.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Dead_08.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Dead_09.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Dead_10.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Dead_11.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Dead_12.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Dead_13.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Dead_14.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Dead_15.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,6,16,13</rect>
+                <key>scale9Paddings</key>
+                <rect>8,6,16,13</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Idle_00.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Idle_01.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Idle_02.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Idle_03.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Idle_04.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Idle_05.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Idle_06.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Idle_07.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Idle_08.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Idle_09.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Idle_10.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Idle_11.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Idle_12.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Idle_13.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Idle_14.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Idle_15.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Idle_16.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Idle_17.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Idle_18.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Run_00.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Run_01.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Run_02.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Run_03.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Run_04.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Run_05.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Run_06.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Run_07.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Run_08.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Run_09.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Run_10.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Run_11.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Run_12.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Walk_00.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Walk_01.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Walk_02.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Walk_03.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Walk_04.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Walk_05.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Walk_06.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Walk_07.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Walk_08.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Walk_09.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Walk_10.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Walk_11.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Walk_12.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Walk_13.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Walk_14.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>6,8,11,16</rect>
+                <key>scale9Paddings</key>
+                <rect>6,8,11,16</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Jump_00.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Jump_01.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Jump_02.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Jump_03.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Jump_04.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Jump_05.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Jump_06.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Jump_07.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Jump_08.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Jump_09.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Jump_10.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Jump_11.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Jump_12.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>6,8,12,16</rect>
+                <key>scale9Paddings</key>
+                <rect>6,8,12,16</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Pivot_00.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Pivot_01.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Pivot_02.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Pivot_03.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Pivot_04.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Pivot_05.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Pivot_06.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Pivot_07.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Pivot_08.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Pivot_09.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Pivot_10.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Pivot_11.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Pivot_12.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Pivot_13.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Pivot_14.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Pivot_15.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Pivot_16.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Pivot_17.png</key>
+            <key type="filename">../../downloads/freeknight/dragonbones/anims/small/Knight_Pivot_18.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>5,8,11,16</rect>
+                <key>scale9Paddings</key>
+                <rect>5,8,11,16</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>../../downloads/freeknight/png/small/Attack (1).png</filename>
-            <filename>../../downloads/freeknight/png/small/Attack (10).png</filename>
-            <filename>../../downloads/freeknight/png/small/Attack (2).png</filename>
-            <filename>../../downloads/freeknight/png/small/Attack (3).png</filename>
-            <filename>../../downloads/freeknight/png/small/Attack (4).png</filename>
-            <filename>../../downloads/freeknight/png/small/Attack (5).png</filename>
-            <filename>../../downloads/freeknight/png/small/Attack (6).png</filename>
-            <filename>../../downloads/freeknight/png/small/Attack (7).png</filename>
-            <filename>../../downloads/freeknight/png/small/Attack (8).png</filename>
-            <filename>../../downloads/freeknight/png/small/Attack (9).png</filename>
-            <filename>../../downloads/freeknight/png/small/Dead (1).png</filename>
-            <filename>../../downloads/freeknight/png/small/Dead (10).png</filename>
-            <filename>../../downloads/freeknight/png/small/Dead (2).png</filename>
-            <filename>../../downloads/freeknight/png/small/Dead (3).png</filename>
-            <filename>../../downloads/freeknight/png/small/Dead (4).png</filename>
-            <filename>../../downloads/freeknight/png/small/Dead (5).png</filename>
-            <filename>../../downloads/freeknight/png/small/Dead (6).png</filename>
-            <filename>../../downloads/freeknight/png/small/Dead (7).png</filename>
-            <filename>../../downloads/freeknight/png/small/Dead (8).png</filename>
-            <filename>../../downloads/freeknight/png/small/Dead (9).png</filename>
-            <filename>../../downloads/freeknight/png/small/Idle (1).png</filename>
-            <filename>../../downloads/freeknight/png/small/Idle (10).png</filename>
-            <filename>../../downloads/freeknight/png/small/Idle (2).png</filename>
-            <filename>../../downloads/freeknight/png/small/Idle (3).png</filename>
-            <filename>../../downloads/freeknight/png/small/Idle (4).png</filename>
-            <filename>../../downloads/freeknight/png/small/Idle (5).png</filename>
-            <filename>../../downloads/freeknight/png/small/Idle (6).png</filename>
-            <filename>../../downloads/freeknight/png/small/Idle (7).png</filename>
-            <filename>../../downloads/freeknight/png/small/Idle (8).png</filename>
-            <filename>../../downloads/freeknight/png/small/Idle (9).png</filename>
-            <filename>../../downloads/freeknight/png/small/Jump (1).png</filename>
-            <filename>../../downloads/freeknight/png/small/Jump (10).png</filename>
-            <filename>../../downloads/freeknight/png/small/Jump (2).png</filename>
-            <filename>../../downloads/freeknight/png/small/Jump (3).png</filename>
-            <filename>../../downloads/freeknight/png/small/Jump (4).png</filename>
-            <filename>../../downloads/freeknight/png/small/Jump (5).png</filename>
-            <filename>../../downloads/freeknight/png/small/Jump (6).png</filename>
-            <filename>../../downloads/freeknight/png/small/Jump (7).png</filename>
-            <filename>../../downloads/freeknight/png/small/Jump (8).png</filename>
-            <filename>../../downloads/freeknight/png/small/Jump (9).png</filename>
-            <filename>../../downloads/freeknight/png/small/JumpAttack (1).png</filename>
-            <filename>../../downloads/freeknight/png/small/JumpAttack (10).png</filename>
-            <filename>../../downloads/freeknight/png/small/JumpAttack (2).png</filename>
-            <filename>../../downloads/freeknight/png/small/JumpAttack (3).png</filename>
-            <filename>../../downloads/freeknight/png/small/JumpAttack (4).png</filename>
-            <filename>../../downloads/freeknight/png/small/JumpAttack (5).png</filename>
-            <filename>../../downloads/freeknight/png/small/JumpAttack (6).png</filename>
-            <filename>../../downloads/freeknight/png/small/JumpAttack (7).png</filename>
-            <filename>../../downloads/freeknight/png/small/JumpAttack (8).png</filename>
-            <filename>../../downloads/freeknight/png/small/JumpAttack (9).png</filename>
-            <filename>../../downloads/freeknight/png/small/Run (1).png</filename>
-            <filename>../../downloads/freeknight/png/small/Run (10).png</filename>
-            <filename>../../downloads/freeknight/png/small/Run (2).png</filename>
-            <filename>../../downloads/freeknight/png/small/Run (3).png</filename>
-            <filename>../../downloads/freeknight/png/small/Run (4).png</filename>
-            <filename>../../downloads/freeknight/png/small/Run (5).png</filename>
-            <filename>../../downloads/freeknight/png/small/Run (6).png</filename>
-            <filename>../../downloads/freeknight/png/small/Run (7).png</filename>
-            <filename>../../downloads/freeknight/png/small/Run (8).png</filename>
-            <filename>../../downloads/freeknight/png/small/Run (9).png</filename>
-            <filename>../../downloads/freeknight/png/small/Walk (1).png</filename>
-            <filename>../../downloads/freeknight/png/small/Walk (10).png</filename>
-            <filename>../../downloads/freeknight/png/small/Walk (2).png</filename>
-            <filename>../../downloads/freeknight/png/small/Walk (3).png</filename>
-            <filename>../../downloads/freeknight/png/small/Walk (4).png</filename>
-            <filename>../../downloads/freeknight/png/small/Walk (5).png</filename>
-            <filename>../../downloads/freeknight/png/small/Walk (6).png</filename>
-            <filename>../../downloads/freeknight/png/small/Walk (7).png</filename>
-            <filename>../../downloads/freeknight/png/small/Walk (8).png</filename>
-            <filename>../../downloads/freeknight/png/small/Walk (9).png</filename>
+            <filename>../../downloads/freeknight/dragonbones/anims/small</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
