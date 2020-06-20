@@ -24,6 +24,11 @@ class Hero extends Phaser.GameObjects.Sprite {
     this.keys = scene.cursorKeys;
     this.input = {};
 
+    this.label = scene.add.text(0, 0, "name", {
+      font: "7px Arial",
+      fill: "#ffffa0",
+    });
+
     this.setupAnimations();
     this.setupMovement();
   }
@@ -146,6 +151,10 @@ class Hero extends Phaser.GameObjects.Sprite {
   }
   preUpdate(time, delta) {
     super.preUpdate(time, delta);
+
+    this.label.setText(this.name);
+    this.label.x = this.x - 8;
+    this.label.y = this.y;
 
     this.input.didPressJump =
       !this.isDead() && Phaser.Input.Keyboard.JustDown(this.keys.up);
