@@ -1,12 +1,14 @@
 /// <reference path="./typings/phaser.d.ts" />
+/// <reference path="./external/dragonBones.d.ts" />
 
-import { NinePatchPlugin } from '@koreez/phaser3-ninepatch';
-import Phaser from 'phaser';
+import { NinePatchPlugin } from "@koreez/phaser3-ninepatch";
+
+import Phaser from "phaser";
 
 export default {
   type: Phaser.AUTO,
-  parent: 'game',
-  backgroundColor: '#33A5E7',
+  parent: "game",
+  backgroundColor: "#33A5E7",
   scale: {
     width: 500,
     height: 320,
@@ -14,24 +16,23 @@ export default {
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
   plugins: {
-    global: [
-      { key: 'NinePatchPlugin', plugin: NinePatchPlugin, start: true }
-    ]
+    global: [{ key: "NinePatchPlugin", plugin: NinePatchPlugin, start: true }],
+    scene: [],
   },
   render: {
-    pixelArt: true
+    pixelArt: true,
   },
   // see photonstorm.github.io/phase3-docs/phaser.physics.arcade.html
   physics: {
-    default: 'arcade',
+    default: "arcade",
     arcade: {
       gravity: {
-        y: 750
+        y: 750,
       },
       debug: false,
       debugShowVelocity: true,
       debugShowBody: true,
-      debugShowStaticBody: true
-    }
-  }
+      debugShowStaticBody: true,
+    },
+  },
 };

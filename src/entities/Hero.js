@@ -11,14 +11,13 @@ class Hero extends Phaser.GameObjects.Sprite {
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
-    this.anims.play("hero-running");
-
     // middle bottom
     this.setOrigin(0.5, 1);
 
     this.body.setCollideWorldBounds(true);
-    this.body.setSize(12, 40);
-    this.body.setOffset(12, 23);
+
+    this.body.setSize(18, 32);
+    this.body.setOffset(6, 32);
     this.body.setMaxVelocity(250, 400);
     this.body.setDragX(750);
 
@@ -68,13 +67,13 @@ class Hero extends Phaser.GameObjects.Sprite {
         return this.body.onFloor() && !facingDirectionOfWalk;
       },
       jump: () => {
-        return this.body.velocity.y < 0;
+        return this.body.velocity.y < 0 && false;
       },
       flip: () => {
         return this.body.velocity.y < 0 && this.moveState.is("flipping");
       },
       fall: () => {
-        return this.body.velocity.y > 0;
+        return this.body.velocity.y > 0 && false;
       },
     };
   }

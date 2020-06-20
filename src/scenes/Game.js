@@ -1,6 +1,7 @@
 /// <reference path="../typings/phaser.d.ts" />
 
 import Phaser from "phaser";
+
 import Hero from "../entities/Hero";
 import Actions from "../dialogs/actions";
 
@@ -256,32 +257,53 @@ class Game extends Phaser.Scene {
   }
 
   loadHeroSpriteSheets() {
-    // this.load.multiatlas("hero-sheet", "assets/hero/hero.json", "assets/hero");
-
-    var ss = [
-      "idle",
-      "run",
-      "pivot",
-      "jump",
-      { name: "flip", image: "jump" },
+    const sheetNames = [
+      "attack",
+      "walk",
       "fall",
-      { name: "die", image: "dead" },
+      "idle",
+      "dead",
+      "jump",
+      "pivot",
+      "run",
     ];
-    for (const sheet of ss) {
-      let key = sheet;
-      let image = sheet;
-      if (sheet.name) {
-        key = sheet.name;
-        image = sheet.image;
-      }
-      this.load.spritesheet(
-        `hero-${key}-sheet`,
-        `assets/hero/hero-${image}.png`,
-        {
-          frameWidth: 32,
-          frameHeight: 32,
-        }
-      );
+    for (const sn of sheetNames) {
+      this.load.spritesheet("hero-" + sn, "assets/hero/knight_" + sn + ".png", {
+        frameWidth: 32,
+        frameHeight: 64,
+      });
+    }
+  }
+  createHeroAnims() {
+    var anims = [
+      { key: "attack", anim: "attacking" },
+      { key: "fall", anim: "falling", frameCount: 2 },
+      { key: "walk", anim: "walking" },
+      { key: "dead", anim: "dead" },
+      { key: "idle", anim: "idle" },
+
+      { key: "jump", anim: "jumping" },
+      { key: "pivot", anim: "pivoting" },
+
+      { key: "run", anim: "running" },
+      { key: "walk", anim: "walking" },
+    ];
+
+    for (const anim of anims) {
+      const frameCount = 30 || anim.frameCount;
+      const f = this.anims.generateFrameNumbers("hero-" + anim.key, {
+        start: 0,
+        end: frameCount,
+      });
+
+      this.anims.create({
+        key: "hero-" + anim.anim,
+
+        frames: f,
+
+        frameRate: 60,
+        repeat: -1,
+      });
     }
   }
 
@@ -304,57 +326,6 @@ class Game extends Phaser.Scene {
 
       frameRate: 10,
       showOnStart: true,
-    });
-  }
-
-  createHeroAnims() {
-    this.anims.create({
-      key: "hero-idle",
-      frames: this.anims.generateFrameNumbers("hero-idle-sheet"),
-      // frames: this.anims.generateFrameNames("hero-sheet", {
-      //   prefix: "Knight_Idle_",
-      //   start: 1,
-      //   end: 20,
-      //   zeroPad: 2,
-      // }),
-      frameRate: 24,
-      repeat: -1,
-    });
-    this.anims.create({
-      key: "hero-running",
-      frames: this.anims.generateFrameNumbers("hero-run-sheet"),
-      frameRate: 10,
-      repeat: -1,
-    });
-    this.anims.create({
-      key: "hero-pivoting",
-      frames: this.anims.generateFrameNumbers("hero-pivot-sheet"),
-      frameRate: 10,
-      repeat: -1,
-    });
-    this.anims.create({
-      key: "hero-jumping",
-      frames: this.anims.generateFrameNumbers("hero-jump-sheet"),
-      frameRate: 10,
-      repeat: -1,
-    });
-    this.anims.create({
-      key: "hero-flipping",
-      frames: this.anims.generateFrameNumbers("hero-flip-sheet"),
-      frameRate: 30,
-      repeat: 0,
-    });
-    this.anims.create({
-      key: "hero-falling",
-      frames: this.anims.generateFrameNumbers("hero-jump-sheet"),
-      frameRate: 10,
-      repeat: -1,
-    });
-    this.anims.create({
-      key: "hero-dead",
-      frames: this.anims.generateFrameNumbers("hero-dead-sheet"),
-      frameRate: 10,
-      repeat: -1,
     });
   }
 
