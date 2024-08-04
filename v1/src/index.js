@@ -7,6 +7,6 @@ import HeroAnimationDemo from "./scenes/HeroAnimationDemo";
 
 new Phaser.Game(
   Object.assign(config, {
-    scene: [HeroAnimationDemo],
+    scene: [GameScene],
   })
 );
