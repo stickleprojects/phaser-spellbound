@@ -1,6 +1,5 @@
-import { Scene } from 'phaser';
-
-export class Preloader extends Scene
+import Phaser from 'phaser';
+export class Preloader extends Phaser.Scene
 {
     constructor ()
     {
@@ -25,6 +24,8 @@ export class Preloader extends Scene
             bar.width = 4 + (460 * progress);
 
         });
+
+        
     }
 
     preload ()
@@ -33,6 +34,11 @@ export class Preloader extends Scene
         this.load.setPath('assets');
 
         this.load.image('logo', 'logo.png');
+        this.load.tilemapTiledJSON('levels','all_levels.tmj')
+this.load.image('map_foreground','c64tiles_foreground.png')
+this.load.image('map_background','c64tiles.png')
+this.load.spritesheet('characters','charactersprites.png', {frameWidth:16, frameHeight:16});
+
     }
 
     create ()
@@ -41,6 +47,6 @@ export class Preloader extends Scene
         //  For example, you can define global animations here, so we can use them in other scenes.
 
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-        this.scene.start('MainMenu');
+        this.scene.start('GamePlay');
     }
 }

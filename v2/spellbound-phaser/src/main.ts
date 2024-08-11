@@ -1,8 +1,8 @@
 import { Boot } from './scenes/Boot';
-import { Game as MainGame } from './scenes/Game';
-import { GameOver } from './scenes/GameOver';
+// import { Game as MainGame } from './scenes/Game';
+// import { GameOver } from './scenes/GameOver';
 import { GamePlay } from './scenes/GamePlay';
-import { MainMenu } from './scenes/MainMenu';
+// import { MainMenu } from './scenes/MainMenu';
 import { Preloader } from './scenes/Preloader';
 
 import { Game, Types } from "phaser";
@@ -19,13 +19,21 @@ const config: Types.Core.GameConfig = {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: {y: 9.8},
+            debug: true
+        }
+    },
     scene: [
-        GamePlay,
-        Boot,
-        Preloader,
-        MainMenu,
-        MainGame,
-        GameOver
+        
+         Boot,
+         Preloader,
+         GamePlay
+        // MainMenu,
+        // MainGame,
+        // GameOver
     ]
 };
 
