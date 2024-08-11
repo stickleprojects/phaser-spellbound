@@ -4,6 +4,7 @@ import { createWorld, IWorld, System } from "bitecs";
 import createMovementSystem from "../systems/movement";
 import createInputSystem from "../systems/input";
 import createSpriteSystem from "../systems/sprite";
+import Position from '../components/position';
 
 export class GamePlay extends Phaser.Scene {
     private camera: Phaser.Cameras.Scene2D.Camera;
@@ -26,6 +27,7 @@ export class GamePlay extends Phaser.Scene {
     characterLayer: Phaser.Types.Tilemaps.TiledObject[];
     doorLayer: Phaser.Types.Tilemaps.TiledObject[];
     objectLayer: Phaser.Types.Tilemaps.TiledObject[];
+    characterMap: Map<String, { x: integer; y: integer; }>;
     
     constructor() {
         super('GamePlay')
@@ -45,10 +47,8 @@ export class GamePlay extends Phaser.Scene {
 
         this.inputSystem = createInputSystem(this.cursors)
         this.camera = this.cameras.main;
-        this.camera.setBackgroundColor(0x00ff00);
+        this.camera.setBackgroundColor(0x000000);
 
-        this.background = this.add.image(512, 384, 'background');
-        this.background.setAlpha(0.5);
 
         this.msg_text = this.add.text(512, 384, 'Gameplay scene', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
@@ -68,12 +68,40 @@ export class GamePlay extends Phaser.Scene {
         this.characterLayer = this.map.getObjectLayer('characters')?.objects!
         this.doorLayer = this.map.getObjectLayer('doorobjects')?.objects!
         this.objectLayer = this.map.getObjectLayer('objects')?.objects!
+                        
+        this.characterMap = new Map<String, {x:integer,y: integer}>();
+        this.characterMap.set("left1", {x:0,y:0});
+        this.characterMap.set("left2", {x:1,y:0});
+        this.characterMap.set("ladyrosmar_right", {x:4,y:0});
+        this.characterMap.set("ladyrosmar_left", {x:5,y:0});
+        this.characterMap.set("thor_right", {x:6,y:0});
+        this.characterMap.set("thor_left", {x:7,y:0});
+        this.characterMap.set("florin_right", {x:8,y:0});
+        this.characterMap.set("florin_left", {x:9,y:0});
+        this.characterMap.set("banshee_right", {x:10,y:0});
+        this.characterMap.set("banshee_left", {x:11,y:0});
+        this.characterMap.set("samsun_right", {x:12,y:0});
+        this.characterMap.set("samsun_left", {x:13,y:0});
+        this.characterMap.set("elrand_right", {x:14,y:0});
+        this.characterMap.set("elrand_left", {x:15,y:0});
+        
         
         // create the objets
         this.objectLayer.forEach(o => {
             this.add.sprite(o.x!, o.y!, 'characters',0);
         })
-        
+
+        this.characterLayer.forEach(o => {
+            const characterName=o.name+"_right";
+            const characterPosition = this.characterMap.get(characterName);
+
+            if(!characterPosition ) {
+                console.log("Cannot find character texture for "+characterName);
+            } else {
+                this.add.sprite(o.x!, o.y!, 'characters', characterPosition.x);
+            }
+        })
+
         this.loadRoom();
 
        

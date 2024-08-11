@@ -33,11 +33,12 @@ export class Preloader extends Phaser.Scene
         //  Load the assets for the game - Replace with your own assets
         this.load.setPath('assets');
 
-        this.load.image('logo', 'logo.png');
         this.load.tilemapTiledJSON('levels','all_levels.tmj')
 this.load.image('map_foreground','c64tiles_foreground.png')
 this.load.image('map_background','c64tiles.png')
-this.load.spritesheet('characters','charactersprites.png', {frameWidth:16, frameHeight:16});
+this.load.spritesheet('characters','charactersprites.png', {frameWidth:16, frameHeight:32});
+
+// add charcter map
 
     }
 
