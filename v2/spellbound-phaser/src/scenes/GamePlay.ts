@@ -4,7 +4,6 @@ import { createWorld, IWorld, System } from "bitecs";
 import createMovementSystem from "../systems/movement";
 import createInputSystem from "../systems/input";
 import createSpriteSystem from "../systems/sprite";
-import Position from '../components/position';
 
 export class GamePlay extends Phaser.Scene {
     private camera: Phaser.Cameras.Scene2D.Camera;
@@ -27,8 +26,11 @@ export class GamePlay extends Phaser.Scene {
     characterLayer: Phaser.Types.Tilemaps.TiledObject[];
     doorLayer: Phaser.Types.Tilemaps.TiledObject[];
     objectLayer: Phaser.Types.Tilemaps.TiledObject[];
-    characterMap: Map<String, { x: integer; y: integer; }>;
-    
+    roomX: number;
+    roomY: number;
+    roomWidth: number;
+    roomHeight: number;
+     characterMap: Map<String, { x: integer; y: integer; }>;
     constructor() {
         super('GamePlay')
     }
@@ -49,6 +51,8 @@ export class GamePlay extends Phaser.Scene {
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor(0x000000);
 
+        this.background = this.add.image(512, 384, 'background');
+        this.background.setAlpha(0.5);
 
         this.msg_text = this.add.text(512, 384, 'Gameplay scene', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
@@ -85,7 +89,11 @@ export class GamePlay extends Phaser.Scene {
         this.characterMap.set("elrand_right", {x:14,y:0});
         this.characterMap.set("elrand_left", {x:15,y:0});
         
-        
+        this.roomX = -9;
+        this.roomY = -8;
+        this.roomWidth=8*4;
+        this.roomHeight=8;
+       
         // create the objets
         this.objectLayer.forEach(o => {
             this.add.sprite(o.x!, o.y!, 'characters',0);
@@ -103,10 +111,22 @@ export class GamePlay extends Phaser.Scene {
         })
 
         this.loadRoom();
+this.input.on('key_up', () => {
+console.log(this.camera.scrollX);
+
+            this.roomX--;
+            this.showRoom();
+            
+
+        });
 
        
     }
-    
+    showRoom() {
+        console.log(this.roomX);
+
+        this.camera.setScroll(this.roomX  * this.roomWidth, this.roomY  * this.roomHeight);
+    }
     loadRoom() {
 
     }
