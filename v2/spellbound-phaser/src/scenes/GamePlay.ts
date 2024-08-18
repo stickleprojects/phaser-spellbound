@@ -96,6 +96,8 @@ console.log(this.camera.scrollX);
             
 
         });
+
+        //this.scene.launch('Hud')
     }
     
     showRoom() {

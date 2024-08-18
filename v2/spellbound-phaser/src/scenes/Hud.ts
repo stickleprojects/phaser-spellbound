@@ -9,5 +9,6 @@ export class Hud extends Phaser.Scene {
     preload() {
 
     }
-    create() {
+    create() {}
+    
 }
