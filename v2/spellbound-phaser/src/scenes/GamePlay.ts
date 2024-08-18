@@ -26,6 +26,10 @@ export class GamePlay extends Phaser.Scene {
     characterLayer: Phaser.Types.Tilemaps.TiledObject[];
     doorLayer: Phaser.Types.Tilemaps.TiledObject[];
     objectLayer: Phaser.Types.Tilemaps.TiledObject[];
+    roomX: number;
+    roomY: number;
+    roomWidth: number;
+    roomHeight: number;
     
     constructor() {
         super('GamePlay')
@@ -43,9 +47,11 @@ export class GamePlay extends Phaser.Scene {
         this.movementSystem = createMovementSystem()
         this.spriteSystem = createSpriteSystem(this, [""])
 
+        
         this.inputSystem = createInputSystem(this.cursors)
         this.camera = this.cameras.main;
-        this.camera.setBackgroundColor(0x00ff00);
+        this.camera.setZoom(4,4);
+        this.camera.setBackgroundColor(0x000000);
 
         this.background = this.add.image(512, 384, 'background');
         this.background.setAlpha(0.5);
@@ -69,6 +75,11 @@ export class GamePlay extends Phaser.Scene {
         this.doorLayer = this.map.getObjectLayer('doorobjects')?.objects!
         this.objectLayer = this.map.getObjectLayer('objects')?.objects!
         
+        this.roomX = -9;
+        this.roomY = -8;
+        this.roomWidth=8*4;
+        this.roomHeight=8;
+       
         // create the objets
         this.objectLayer.forEach(o => {
             this.add.sprite(o.x!, o.y!, 'characters',0);
@@ -76,9 +87,22 @@ export class GamePlay extends Phaser.Scene {
         
         this.loadRoom();
 
-       
+
+        this.input.on('key_up', () => {
+console.log(this.camera.scrollX);
+
+            this.roomX--;
+            this.showRoom();
+            
+
+        });
     }
     
+    showRoom() {
+        console.log(this.roomX);
+
+        this.camera.setScroll(this.roomX  * this.roomWidth, this.roomY  * this.roomHeight);
+    }
     loadRoom() {
 
     }
