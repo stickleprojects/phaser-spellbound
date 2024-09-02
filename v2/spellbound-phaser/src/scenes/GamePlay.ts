@@ -32,6 +32,7 @@ export class GamePlay extends Phaser.Scene {
     roomHeight: number;
      characterMap: Map<String, { x: integer; y: integer; }>;
     objectMap: Map<String, { x: integer; y: integer; }>;
+    cameraController: any;
     constructor() {
         super('GamePlay')
     }
@@ -51,7 +52,9 @@ export class GamePlay extends Phaser.Scene {
         this.inputSystem = createInputSystem(this.cursors)
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor(0x000000);
-
+        this.camera.setZoom(0.5);
+        
+/*
         this.background = this.add.image(512, 384, 'background');
         this.background.setAlpha(0.5);
 
@@ -61,6 +64,7 @@ export class GamePlay extends Phaser.Scene {
             align: 'center'
         });
         this.msg_text.setOrigin(0.5);
+*/
 
         this.map = this.make.tilemap({key: 'levels', tileWidth: 16, tileHeight: 16});
 
@@ -73,7 +77,8 @@ export class GamePlay extends Phaser.Scene {
         this.characterLayer = this.map.getObjectLayer('characters')?.objects!
         this.doorLayer = this.map.getObjectLayer('doorobjects')?.objects!
         this.objectLayer = this.map.getObjectLayer('objects')?.objects!
-                        
+
+        
         this.characterMap = new Map<String, {x:integer,y: integer}>();
         this.characterMap.set("left1", {x:0,y:0});
         this.characterMap.set("left2", {x:1,y:0});
@@ -158,7 +163,7 @@ export class GamePlay extends Phaser.Scene {
 
             const index=(objectPosition.y * mapWidth) + objectPosition.x;
 
-            this.add.sprite(o.x!, o.y! + 8, 'objects',index);
+            this.add.sprite(o.x! + 4, o.y! + 8, 'objects',index);
             }
         })
 
@@ -171,26 +176,29 @@ export class GamePlay extends Phaser.Scene {
             } else {
                 const index=(characterPosition.y * mapWidth) + characterPosition.x;
 
-                this.add.sprite(o.x!, o.y!, 'characters', index);
+                this.add.sprite(o.x! + 4, o.y! + 8, 'characters', index);
             }
         })
 
         this.loadRoom();
-this.input.on('key_up', () => {
-console.log(this.camera.scrollX);
-
-            this.roomX--;
-            this.showRoom();
-            
-
-        });
-
+        var controlConfig = {
+            camera: this.cameras.main,
+            left: this.cursors!.left,
+            right: this.cursors!.right,
+            up: this.cursors!.up,
+            down: this.cursors!.down,
+            speed: 0.5,
+            disableCull: true,
+            zoomIn: this.input!.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+            zoomOut: this.input!.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.E),
+        };
+        this.cameraController = new Phaser.Cameras.Controls.FixedKeyControl(controlConfig);
        
     }
     showRoom() {
         console.log(this.roomX);
 
-        this.camera.setScroll(this.roomX  * this.roomWidth, this.roomY  * this.roomHeight);
+        //this.camera.setScroll(this.roomX  * this.roomWidth, this.roomY  * this.roomHeight);
     }
     loadRoom() {
 
@@ -206,13 +214,11 @@ console.log(this.camera.scrollX);
             this.world = createWorld()
         }
     }
-    update() {
+    update(time, delta) {
         // tick the physics
         this.movementSystem(this.world)
         this.inputSystem(this.world)
-        
-
-        // draw all characters in this location
+        this.cameraController.update(delta);
 
         // tick the input system and other systems maybe
         
