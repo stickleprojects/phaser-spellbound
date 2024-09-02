@@ -37,6 +37,7 @@ export class Preloader extends Phaser.Scene
 this.load.image('map_foreground','c64tiles_foreground.png')
 this.load.image('map_background','c64tiles.png')
 this.load.spritesheet('characters','charactersprites.png', {frameWidth:16, frameHeight:32});
+this.load.spritesheet('objects','objectsprites.png', {frameWidth:16, frameHeight:32});
 
 // add charcter map
 

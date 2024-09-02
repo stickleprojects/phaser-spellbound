@@ -31,6 +31,7 @@ export class GamePlay extends Phaser.Scene {
     roomWidth: number;
     roomHeight: number;
      characterMap: Map<String, { x: integer; y: integer; }>;
+    objectMap: Map<String, { x: integer; y: integer; }>;
     constructor() {
         super('GamePlay')
     }
@@ -89,6 +90,57 @@ export class GamePlay extends Phaser.Scene {
         this.characterMap.set("elrand_right", {x:14,y:0});
         this.characterMap.set("elrand_left", {x:15,y:0});
         
+        this.objectMap = new Map<String, {x:integer,y: integer}>();
+        this.objectMap.set("shadows", {x:0, y:0});
+        this.objectMap.set("fish", {x:1, y:0});
+        this.objectMap.set("crystalball", {x:2, y:0});
+        this.objectMap.set("candle", {x:3, y:0});
+        this.objectMap.set("redherring", {x:4, y:0});
+        this.objectMap.set("mirror", {x:5, y:0});
+        this.objectMap.set("elfhorn", {x:6, y:0});
+        this.objectMap.set("wand", {x:7, y:0});
+        this.objectMap.set("bluegem", {x:8, y:0});
+        this.objectMap.set("whitering", {x:9, y:0});
+        this.objectMap.set("saxophone", {x:10, y:0});
+        this.objectMap.set("glowingbottle", {x:11, y:0});
+        this.objectMap.set("fourleafclover", {x:12, y:0});
+        this.objectMap.set("greenbottle", {x:13, y:0});
+        this.objectMap.set("yellowadvert", {x:14, y:0});
+        this.objectMap.set("prism", {x:15, y:0});
+        this.objectMap.set("javelin", {x:16, y:0});
+        this.objectMap.set("greengem", {x:17, y:0});
+
+        this.objectMap.set("whiteadvert", {x:18, y:0});
+        this.objectMap.set("advert", {x:18, y:0});
+        
+        this.objectMap.set("redgem", {x:19, y:0});
+        this.objectMap.set("whiteball", {x:20, y:0});
+        this.objectMap.set("engravedcandle", {x:21, y:0});
+        this.objectMap.set("yellowkey", {x:22, y:0});
+        this.objectMap.set("urn", {x:23, y:0});
+        this.objectMap.set("talisman", {x:24, y:0});
+        this.objectMap.set("teleportkey", {x:25, y:0});
+        this.objectMap.set("teleportpad", {x:26, y:0});
+        this.objectMap.set("masonry", {x:27, y:0});
+        this.objectMap.set("bluebottle", {x:28, y:0});
+        this.objectMap.set("goldbrick2", {x:29, y:0});
+        this.objectMap.set("goldbrick", {x:29, y:0});
+        
+        this.objectMap.set("blueball", {x:30, y:0});
+        this.objectMap.set("whitegoldring", {x:31, y:0});
+
+        this.objectMap.set("stickybun", {x:0, y:1});
+        this.objectMap.set("greenbook", {x:1, y:1});
+        this.objectMap.set("goblet", {x:2, y:1});
+        this.objectMap.set("glue", {x:3, y:1});
+        this.objectMap.set("trumpet", {x:4, y:1});
+        this.objectMap.set("puddle", {x:5, y:1});
+        this.objectMap.set("lazer", {x:6, y:1});
+        this.objectMap.set("brokentalisman", {x:7, y:1});
+        this.objectMap.set("powerpongplant", {x:8, y:1});
+        this.objectMap.set("shield", {x:9, y:0});
+        
+        
         this.roomX = -9;
         this.roomY = -8;
         this.roomWidth=8*4;
@@ -96,17 +148,30 @@ export class GamePlay extends Phaser.Scene {
        
         // create the objets
         this.objectLayer.forEach(o => {
-            this.add.sprite(o.x!, o.y!, 'characters',0);
+            const objectName=o.name;
+            const objectPosition = this.objectMap.get(objectName);
+
+            const mapWidth=16;
+            if(!objectPosition) {
+                console.log("Failed to find object "+objectName)
+            } else {
+
+            const index=(objectPosition.y * mapWidth) + objectPosition.x;
+
+            this.add.sprite(o.x!, o.y! + 8, 'objects',index);
+            }
         })
 
         this.characterLayer.forEach(o => {
             const characterName=o.name+"_right";
             const characterPosition = this.characterMap.get(characterName);
-
+            const mapWidth=16;
             if(!characterPosition ) {
                 console.log("Cannot find character texture for "+characterName);
             } else {
-                this.add.sprite(o.x!, o.y!, 'characters', characterPosition.x);
+                const index=(characterPosition.y * mapWidth) + characterPosition.x;
+
+                this.add.sprite(o.x!, o.y!, 'characters', index);
             }
         })
 
