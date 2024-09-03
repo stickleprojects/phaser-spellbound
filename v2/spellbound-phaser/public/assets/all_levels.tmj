@@ -78,7 +78,7 @@
          "name":"solid",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":150,
          "x":0,
          "y":0
@@ -670,7 +670,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -710,7 +710,7 @@
                  "visible":true,
                  "width":37,
                  "x":1386,
-                 "y":443
+                 "y":431
                 }, 
                 {
                  "height":19,
@@ -720,8 +720,8 @@
                  "type":"",
                  "visible":true,
                  "width":21,
-                 "x":1812,
-                 "y":435
+                 "x":1810.66666666667,
+                 "y":430.333333333333
                 }, 
                 {
                  "height":23,
@@ -731,8 +731,8 @@
                  "type":"",
                  "visible":true,
                  "width":18,
-                 "x":1628,
-                 "y":596
+                 "x":1630,
+                 "y":590
                 }, 
                 {
                  "height":23,
@@ -742,8 +742,8 @@
                  "type":"",
                  "visible":true,
                  "width":18,
-                 "x":834,
-                 "y":596
+                 "x":837,
+                 "y":588
                 }, 
                 {
                  "height":28,
@@ -754,7 +754,7 @@
                  "visible":true,
                  "width":23,
                  "x":313,
-                 "y":592
+                 "y":590
                 }],
          "opacity":1,
          "type":"objectgroup",
