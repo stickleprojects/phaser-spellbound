@@ -4,6 +4,8 @@ import { createWorld, IWorld, System } from "bitecs";
 import createMovementSystem from "../systems/movement";
 import createInputSystem from "../systems/input";
 import createSpriteSystem from "../systems/sprite";
+import createCharacterMap from '../maps/characters';
+import createObjectMap from '../maps/objects';
 
 export class GamePlay extends Phaser.Scene {
     private camera: Phaser.Cameras.Scene2D.Camera;
@@ -79,72 +81,10 @@ export class GamePlay extends Phaser.Scene {
         this.objectLayer = this.map.getObjectLayer('objects')?.objects!
 
         
-        this.characterMap = new Map<String, {x:integer,y: integer}>();
-        this.characterMap.set("left1", {x:0,y:0});
-        this.characterMap.set("left2", {x:1,y:0});
-        this.characterMap.set("ladyrosmar_right", {x:4,y:0});
-        this.characterMap.set("ladyrosmar_left", {x:5,y:0});
-        this.characterMap.set("thor_right", {x:6,y:0});
-        this.characterMap.set("thor_left", {x:7,y:0});
-        this.characterMap.set("florin_right", {x:8,y:0});
-        this.characterMap.set("florin_left", {x:9,y:0});
-        this.characterMap.set("banshee_right", {x:10,y:0});
-        this.characterMap.set("banshee_left", {x:11,y:0});
-        this.characterMap.set("samsun_right", {x:12,y:0});
-        this.characterMap.set("samsun_left", {x:13,y:0});
-        this.characterMap.set("elrand_right", {x:14,y:0});
-        this.characterMap.set("elrand_left", {x:15,y:0});
-        
-        this.objectMap = new Map<String, {x:integer,y: integer}>();
-        this.objectMap.set("shadows", {x:0, y:0});
-        this.objectMap.set("fish", {x:1, y:0});
-        this.objectMap.set("crystalball", {x:2, y:0});
-        this.objectMap.set("candle", {x:3, y:0});
-        this.objectMap.set("redherring", {x:4, y:0});
-        this.objectMap.set("mirror", {x:5, y:0});
-        this.objectMap.set("elfhorn", {x:6, y:0});
-        this.objectMap.set("wand", {x:7, y:0});
-        this.objectMap.set("bluegem", {x:8, y:0});
-        this.objectMap.set("whitering", {x:9, y:0});
-        this.objectMap.set("saxophone", {x:10, y:0});
-        this.objectMap.set("glowingbottle", {x:11, y:0});
-        this.objectMap.set("fourleafclover", {x:12, y:0});
-        this.objectMap.set("greenbottle", {x:13, y:0});
-        this.objectMap.set("yellowadvert", {x:14, y:0});
-        this.objectMap.set("prism", {x:15, y:0});
-        this.objectMap.set("javelin", {x:16, y:0});
-        this.objectMap.set("greengem", {x:17, y:0});
+        this.characterMap =createCharacterMap();
 
-        this.objectMap.set("whiteadvert", {x:18, y:0});
-        this.objectMap.set("advert", {x:18, y:0});
-        
-        this.objectMap.set("redgem", {x:19, y:0});
-        this.objectMap.set("whiteball", {x:20, y:0});
-        this.objectMap.set("engravedcandle", {x:21, y:0});
-        this.objectMap.set("yellowkey", {x:22, y:0});
-        this.objectMap.set("urn", {x:23, y:0});
-        this.objectMap.set("talisman", {x:24, y:0});
-        this.objectMap.set("teleportkey", {x:25, y:0});
-        this.objectMap.set("teleportpad", {x:26, y:0});
-        this.objectMap.set("masonry", {x:27, y:0});
-        this.objectMap.set("bluebottle", {x:28, y:0});
-        this.objectMap.set("goldbrick2", {x:29, y:0});
-        this.objectMap.set("goldbrick", {x:29, y:0});
-        
-        this.objectMap.set("blueball", {x:30, y:0});
-        this.objectMap.set("whitegoldring", {x:31, y:0});
+        this.objectMap = createObjectMap();
 
-        this.objectMap.set("stickybun", {x:0, y:1});
-        this.objectMap.set("greenbook", {x:1, y:1});
-        this.objectMap.set("goblet", {x:2, y:1});
-        this.objectMap.set("glue", {x:3, y:1});
-        this.objectMap.set("trumpet", {x:4, y:1});
-        this.objectMap.set("puddle", {x:5, y:1});
-        this.objectMap.set("lazer", {x:6, y:1});
-        this.objectMap.set("brokentalisman", {x:7, y:1});
-        this.objectMap.set("powerpongplant", {x:8, y:1});
-        this.objectMap.set("shield", {x:9, y:0});
-        
         
         this.roomX = -9;
         this.roomY = -8;
@@ -180,7 +120,6 @@ export class GamePlay extends Phaser.Scene {
             }
         })
 
-        this.loadRoom();
         var controlConfig = {
             camera: this.cameras.main,
             left: this.cursors!.left,
@@ -194,14 +133,6 @@ export class GamePlay extends Phaser.Scene {
         };
         this.cameraController = new Phaser.Cameras.Controls.FixedKeyControl(controlConfig);
        
-    }
-    showRoom() {
-        console.log(this.roomX);
-
-        //this.camera.setScroll(this.roomX  * this.roomWidth, this.roomY  * this.roomHeight);
-    }
-    loadRoom() {
-
     }
     init(data) {
         // everything is loaded, so display stuff
