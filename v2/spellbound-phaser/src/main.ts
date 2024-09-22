@@ -2,6 +2,7 @@ import { Boot } from './scenes/Boot';
 // import { Game as MainGame } from './scenes/Game';
 // import { GameOver } from './scenes/GameOver';
 import { GamePlay } from './scenes/GamePlay';
+import { Hud } from './scenes/Hud';
 // import { MainMenu } from './scenes/MainMenu';
 import { Preloader } from './scenes/Preloader';
 
@@ -22,15 +23,16 @@ const config: Types.Core.GameConfig = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: {y: 9.8},
+            gravity: { y: 9.8 },
             debug: true
         }
     },
     scene: [
-        
-         Boot,
-         Preloader,
-         GamePlay
+
+        Boot,
+        Preloader,
+        GamePlay,
+        Hud
         // MainMenu,
         // MainGame,
         // GameOver

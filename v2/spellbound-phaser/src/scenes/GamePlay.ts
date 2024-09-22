@@ -6,6 +6,7 @@ import createInputSystem from "../systems/input";
 import createSpriteSystem from "../systems/sprite";
 import createCharacterMap from '../maps/characters';
 import createObjectMap from '../maps/objects';
+import { Hud } from './Hud';
 
 export class GamePlay extends Phaser.Scene {
     private camera: Phaser.Cameras.Scene2D.Camera;
@@ -35,6 +36,7 @@ export class GamePlay extends Phaser.Scene {
     characterMap: Map<String, { x: integer; y: integer; }>;
     objectMap: Map<String, { x: integer; y: integer; }>;
     cameraController: any;
+    hud: any;
     constructor() {
         super('GamePlay')
     }
@@ -54,19 +56,7 @@ export class GamePlay extends Phaser.Scene {
         this.inputSystem = createInputSystem(this.cursors)
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor(0x000000);
-        this.camera.setZoom(0.5);
-
-        /*
-                this.background = this.add.image(512, 384, 'background');
-                this.background.setAlpha(0.5);
-        
-                this.msg_text = this.add.text(512, 384, 'Gameplay scene', {
-                    fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
-                    stroke: '#000000', strokeThickness: 8,
-                    align: 'center'
-                });
-                this.msg_text.setOrigin(0.5);
-        */
+        this.camera.setZoom(3.5);
 
         this.map = this.make.tilemap({ key: 'levels', tileWidth: 16, tileHeight: 16 });
 
@@ -146,10 +136,11 @@ export class GamePlay extends Phaser.Scene {
             right: this.cursors!.right,
             up: this.cursors!.up,
             down: this.cursors!.down,
-            speed: 0.5,
+            speed: 0.2,
             disableCull: true,
             zoomIn: this.input!.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.A),
             zoomOut: this.input!.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.E),
+
         };
         this.cameraController = new Phaser.Cameras.Controls.FixedKeyControl(controlConfig);
 
@@ -157,6 +148,7 @@ export class GamePlay extends Phaser.Scene {
     init(data) {
         // everything is loaded, so display stuff
         // data is the params passed to this scene with this.scene.start(key,data)
+        this.scene.launch('hud', this);
 
         // in this example, i will share the world with one passed in
         if (data.world) {
@@ -171,6 +163,7 @@ export class GamePlay extends Phaser.Scene {
         this.inputSystem(this.world)
         this.cameraController.update(delta);
 
+        this.events.emit("screenmov", this.roomX);
         // tick the input system and other systems maybe
 
     }
