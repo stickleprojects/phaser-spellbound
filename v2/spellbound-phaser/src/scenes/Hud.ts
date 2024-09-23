@@ -50,6 +50,7 @@ export class Hud extends Phaser.Scene {
     create() {
         this.roomLocationControl = this.add.text(0, 0, "Room: (0,0)");
 
+        this.add.text(0, 20, 'Instructions: Use the cursor keys to explore the building (theres only 9x7 rooms or so)');
 
     }
 
