@@ -18,6 +18,7 @@ export class HudParameters {
 export class Hud extends Phaser.Scene {
     parentScene: Phaser.Scene;
     roomLocationControl: Phaser.GameObjects.Text;
+    instructions: Phaser.GameObjects.Text;
 
     updateRoomLocation(xy: object) {
         const x = xy.x;
@@ -50,7 +51,7 @@ export class Hud extends Phaser.Scene {
     create() {
         this.roomLocationControl = this.add.text(0, 0, "Room: (0,0)");
 
-        this.add.text(0, 20, 'Instructions: Use the cursor keys to explore the building (theres only 9x7 rooms or so)');
+        this.instructions = this.add.text(0, 20, 'Instructions: Use the cursor keys to explore the building (theres only 8x6 rooms or so)');
 
     }
 

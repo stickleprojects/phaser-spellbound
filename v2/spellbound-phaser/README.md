@@ -5,6 +5,10 @@ running in netlify! see [netlify](https://master--kwspbound-phaser.netlify.app/)
 ![screenshot](screenshot.png)
 
 
+# Map of the original game below
+![spectrum128](./public/assets/Spellbound128_Color.jpg)
+
+
 ## Requirements
 
 [Node.js](https://nodejs.org) is required to install dependencies and run scripts via `npm`.
