@@ -51,7 +51,12 @@ export class Hud extends Phaser.Scene {
     create() {
         this.roomLocationControl = this.add.text(0, 0, "Room: (0,0)");
 
-        this.instructions = this.add.text(0, 20, 'Instructions: Use the cursor keys to explore the building (theres only 8x6 rooms or so)');
+        const instructionText = [
+            'Instructions: Use the cursor keys to explore theres only 8x6 rooms or so, and the characters dont move',
+            '              The Room name and position will be displayed in topleft hand corner'
+        ];
+
+        this.instructions = this.add.text(0, 15, instructionText);
 
     }
 

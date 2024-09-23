@@ -223,6 +223,11 @@ export class GamePlay extends Phaser.Scene {
         const h = this.roomHeightInTiles * this.map.tileHeight * this.cameras.main.zoomY;
         this.cameras.main.setSize(w, h);
 
+        // set the start room
+        this.roomX = 5;
+        this.roomY = 2;
+
+
         this.positionCameraAccordingToRoom();
 
     }
