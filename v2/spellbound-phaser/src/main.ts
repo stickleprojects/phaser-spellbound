@@ -3,6 +3,7 @@ import { Boot } from './scenes/Boot';
 // import { GameOver } from './scenes/GameOver';
 import { GamePlay } from './scenes/GamePlay';
 import { Hud } from './scenes/Hud';
+import { MainWindow } from './scenes/MainWindow';
 // import { MainMenu } from './scenes/MainMenu';
 import { Preloader } from './scenes/Preloader';
 
@@ -32,7 +33,8 @@ const config: Types.Core.GameConfig = {
         Boot,
         Preloader,
         GamePlay,
-        Hud
+        Hud,
+        MainWindow
         // MainMenu,
         // MainGame,
         // GameOver

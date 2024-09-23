@@ -1,5 +1,20 @@
-import Phaser from 'phaser';
+import Phaser, { Scene } from 'phaser';
 
+export class HudParameters {
+    parent: Scene;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+
+    constructor(parent: Scene, x: number, y: number, width: number, height: number) {
+        this.parent = parent;
+        this.x = x;
+        this.y = y;
+        this.height = height;
+        this.width = width;
+    }
+}
 export class Hud extends Phaser.Scene {
     parentScene: Phaser.Scene;
     roomLocationControl: Phaser.GameObjects.Text;
@@ -16,8 +31,10 @@ export class Hud extends Phaser.Scene {
 
     }
 
-    init(args) {
-        this.parentScene = args;
+    init(data: HudParameters) {
+        this.parentScene = data.parent;
+
+        this.cameras.main.setViewport(data.x, data.y, data.width, data.height);
 
         this.parentScene.events.on('screenmov', (args: object) => {
             this.updateRoomLocation(args);
