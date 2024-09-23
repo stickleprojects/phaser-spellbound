@@ -1,4 +1,6 @@
 import Phaser from 'phaser';
+
+
 export class Preloader extends Phaser.Scene {
     constructor() {
         super('Preloader');
@@ -35,7 +37,6 @@ export class Preloader extends Phaser.Scene {
         this.load.spritesheet('characters', 'charactersprites.png', { frameWidth: 16, frameHeight: 32 });
         this.load.spritesheet('objects', 'objectsprites.png', { frameWidth: 16, frameHeight: 32 });
 
-        // add charcter map
 
     }
 

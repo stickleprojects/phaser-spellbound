@@ -2,11 +2,11 @@ import Phaser from 'phaser';
 
 export class Hud extends Phaser.Scene {
     parentScene: Phaser.Scene;
-    roomLocationControl: Phaser.GameObjects.Text = null;
+    roomLocationControl: Phaser.GameObjects.Text;
 
-    updateRoomLocation(x: integer) {
-        //const x = 2;
-        const y = 1;
+    updateRoomLocation(xy: object) {
+        const x = xy.x;
+        const y = xy.y;
         if (!this.roomLocationControl) return;
         this.roomLocationControl.setText(`Room: (${x},${y})`);
     }
@@ -19,7 +19,7 @@ export class Hud extends Phaser.Scene {
     init(args) {
         this.parentScene = args;
 
-        this.parentScene.events.on('screenmov', (args: integer) => {
+        this.parentScene.events.on('screenmov', (args: object) => {
             this.updateRoomLocation(args);
 
 

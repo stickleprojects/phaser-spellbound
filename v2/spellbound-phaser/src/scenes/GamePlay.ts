@@ -1,4 +1,4 @@
-import Phaser from 'phaser';
+import Phaser, { Tilemaps } from 'phaser';
 
 import { createWorld, IWorld, System } from "bitecs";
 import createMovementSystem from "../systems/movement";
@@ -8,7 +8,17 @@ import createCharacterMap from '../maps/characters';
 import createObjectMap from '../maps/objects';
 import { Hud } from './Hud';
 
+class RoomData {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}
+
 export class GamePlay extends Phaser.Scene {
+
+
+
     private camera: Phaser.Cameras.Scene2D.Camera;
     private world: IWorld;
     private movementSystem: System;
@@ -29,16 +39,55 @@ export class GamePlay extends Phaser.Scene {
     characterLayer: Phaser.Types.Tilemaps.TiledObject[];
     doorLayer: Phaser.Types.Tilemaps.TiledObject[];
     objectLayer: Phaser.Types.Tilemaps.TiledObject[];
-    roomX: number;
-    roomY: number;
+    roomX: number = 0;
+    roomY: number = 0;
+    rooms: RoomData[];
     roomWidth: number;
     roomHeight: number;
     characterMap: Map<String, { x: integer; y: integer; }>;
     objectMap: Map<String, { x: integer; y: integer; }>;
     cameraController: any;
     hud: any;
+    horizontalRooms: number;
+    verticalRooms: number;
+    inputTimer: Phaser.Time.TimerEvent;
     constructor() {
         super('GamePlay')
+    }
+
+
+    splitTileMapIntoRooms(map: Tilemaps.Tilemap) {
+
+
+        // iterate throught he map
+        const roomWidthInTiles = 16;
+        const roomHeightInTiles = 10;
+
+        // map.width is in tiles, map.height is in tiles
+        this.horizontalRooms = Phaser.Math.RoundTo(map.width / roomWidthInTiles, 0);
+        this.verticalRooms = Phaser.Math.RoundTo(map.height / roomHeightInTiles, 0);
+
+
+        var rooms = [];
+
+        for (var y = 0; y < this.verticalRooms; y++)
+            for (var x = 0; x < this.horizontalRooms; x++) {
+                // copy the data
+
+                const i = x * roomWidthInTiles
+                const j = y * roomHeightInTiles
+
+                const roomData = {
+                    x: i * map.tileWidth,
+                    y: j * map.tileHeight,
+                    width: roomWidthInTiles * map.tileWidth,
+                    height: roomHeightInTiles * map.tileHeight
+                }
+
+                rooms.push(roomData)
+            }
+
+        return rooms;
     }
 
     preload() {
@@ -50,6 +99,14 @@ export class GamePlay extends Phaser.Scene {
 
         // init the systems
 
+        // this.inputTimer = this.time.addEvent({
+        //     callback: this.updateInput,
+        //     callbackScope: this,
+        //     delay: 500,
+        //     loop: true
+        // });
+
+
         this.movementSystem = createMovementSystem()
         this.spriteSystem = createSpriteSystem(this, [""])
 
@@ -59,6 +116,8 @@ export class GamePlay extends Phaser.Scene {
         this.camera.setZoom(3.5);
 
         this.map = this.make.tilemap({ key: 'levels', tileWidth: 16, tileHeight: 16 });
+        this.rooms = this.splitTileMapIntoRooms(this.map);
+
 
         this.map_alltiles = this.map.addTilesetImage('alltiles', 'map_background')!
         this.map_foregroundtiles = this.map.addTilesetImage('foregroundtiles', 'map_foreground')!
@@ -76,10 +135,6 @@ export class GamePlay extends Phaser.Scene {
         this.objectMap = createObjectMap();
 
 
-        this.roomX = -9;
-        this.roomY = -8;
-        this.roomWidth = 8 * 4;
-        this.roomHeight = 8;
 
         const objectTileHeight = 16;
         const objectTileWidth = 16;
@@ -142,8 +197,26 @@ export class GamePlay extends Phaser.Scene {
             zoomOut: this.input!.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.E),
 
         };
-        this.cameraController = new Phaser.Cameras.Controls.FixedKeyControl(controlConfig);
+        //this.cameraController = new Phaser.Cameras.Controls.FixedKeyControl(controlConfig);
 
+
+
+    }
+    positionCameraAccordingToRoom() {
+
+
+        this.roomX = Phaser.Math.Clamp(this.roomX, 0, this.horizontalRooms - 1);
+        this.roomY = Phaser.Math.Clamp(this.roomY, 0, this.verticalRooms - 1);
+        const roomIndex = this.roomX + (this.roomY * this.horizontalRooms);
+        const roomData = this.rooms[roomIndex];
+
+        if (!roomData) {
+            console.log("Failed to find room!");
+        } else {
+
+            this.events.emit("screenmov", { x: this.roomX, y: this.roomY });
+            this.camera.setBounds(roomData.x, roomData.y, roomData.width, roomData.height, false);
+        }
     }
     init(data) {
         // everything is loaded, so display stuff
@@ -156,14 +229,36 @@ export class GamePlay extends Phaser.Scene {
         } else {
             this.world = createWorld()
         }
+
+
+    }
+    updateInput() {
+
+        if (Phaser.Input.Keyboard.JustDown(this.cursors!.down)) {
+            this.roomY++;
+            this.positionCameraAccordingToRoom();
+        }
+        if (Phaser.Input.Keyboard.JustDown(this.cursors!.up)) {
+            this.roomY--;
+            this.positionCameraAccordingToRoom();
+        }
+        if (Phaser.Input.Keyboard.JustDown(this.cursors!.left)) {
+            this.roomX--;
+            this.positionCameraAccordingToRoom();
+        }
+        if (Phaser.Input.Keyboard.JustDown(this.cursors!.right)) {
+            this.roomX++;
+            this.positionCameraAccordingToRoom();
+        }
     }
     update(time, delta) {
         // tick the physics
         this.movementSystem(this.world)
         this.inputSystem(this.world)
-        this.cameraController.update(delta);
+        //this.cameraController.update(delta);
 
-        this.events.emit("screenmov", this.roomX);
+        this.updateInput();
+
         // tick the input system and other systems maybe
 
     }
