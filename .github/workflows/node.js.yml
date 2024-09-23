@@ -13,7 +13,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: ./v2/spellbound-phaser
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
@@ -26,7 +28,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: cd v2/spellbound-phaser
+      
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
