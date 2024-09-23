@@ -22,8 +22,9 @@ export class Hud extends Phaser.Scene {
     updateRoomLocation(xy: object) {
         const x = xy.x;
         const y = xy.y;
+        const name = xy.name;
         if (!this.roomLocationControl) return;
-        this.roomLocationControl.setText(`Room: (${x},${y})`);
+        this.roomLocationControl.setText(`Room: (${x},${y}) - [${name}]`);
     }
 
     constructor() {

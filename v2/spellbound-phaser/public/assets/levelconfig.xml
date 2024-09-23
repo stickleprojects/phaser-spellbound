@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- To change this license header, choose License Headers in Project Properties. 
+	To change this template file, choose Tools | Templates and open the template 
+	in the editor. -->
+
+<config>
+	<characters>
+		<character id="orik">
+			<stats>
+				<fullname>orik the clerik</fullname>
+			</stats>
+			<images>
+				<image id="right" x="6" y="1" />
+				<image id="left" x="7" y="1" />
+			</images>
+		</character>
+		<character id="ladyrosmar">
+			<stats>
+				<fullname>Lady Rosma</fullname>
+			</stats>
+			<images>
+				<image id="right" x="4" y="0" />
+				<image id="left" x="5" y="0" />
+			</images>
+		</character>
+		<character id="thor">
+			<images>
+				<image id="right" x="6" y="0" />
+				<image id="left" x="7" y="0" />
+			</images>
+		</character>
+		<character id="florin">
+			<stats>
+				<fullname>Florin the dwarf</fullname>
+			</stats>
+			<images>
+				<image id="right" x="8" y="0" />
+				<image id="left" x="9" y="0" />
+			</images>
+		</character>
+		<character id="the banshee">
+			<images>
+				<image id="right" x="10" y="0" />
+				<image id="left" x="11" y="0" />
+			</images>
+		</character>
+		<character id="samsun">
+			<stats>
+				<fullname>samsun the strong</fullname>
+			</stats>
+			<images>
+				<image id="right" x="12" y="0" />
+				<image id="left" x="13" y="0" />
+			</images>
+		</character>
+		<character id="elrand">
+			<stats>
+				<fullname>Elrand halfelven</fullname>
+			</stats>
+			<images>
+				<image id="right" x="14" y="0" />
+				<image id="left" x="15" y="0" />
+			</images>
+		</character>
+		<character id="gimball the wizard">
+			<images>
+				<image id="right" x="4" y="1" />
+				<image id="left" x="5" y="1" />
+			</images>
+		</character>
+	</characters>
+	<items>
+		<item id="spear">
+			<stats>
+				<fullname>Javelin</fullname>
+			</stats>
+			<images>
+				<image x="16" y="25" />
+			</images>
+		</item>
+		<item id="redgem">
+			<stats>
+				<fullname>Red Crystal</fullname>
+			</stats>
+			<images>
+				<image x="19" y="25" />
+			</images>
+		</item>
+		<item id="bluegem">
+			<stats>
+				<fullname>Blue Crystal</fullname>
+			</stats>
+			<images>
+				<image x="8" y="25" />
+			</images>
+
+		</item>
+		<item id="crystalball">
+			<stats>
+				<fullname>Crystal Ball</fullname>
+			</stats>
+			<images>
+				<image x="20" y="25" />
+			</images>
+		</item>
+		<item id="greengem">
+			<stats>
+				<fullname>Green Crystal</fullname>
+			</stats>
+			<images>
+				<image x="17" y="25" />
+			</images>
+		</item>
+		<item id="whiteadvert">
+			<images>
+				<image x="18" y="25" />
+			</images>
+		</item>
+		<item id="glowingbottle">
+			<stats>
+				<fullname>Glowing Bottle</fullname>
+			</stats>
+			<images>
+				<image x="11" y="25" />
+			</images>
+		</item>
+		<item id="fourleafclover">
+			<stats>
+				<fullname>Four leaf clover</fullname>
+			</stats>
+			<images>
+				<image x="12" y="25" />
+			</images>
+		</item>
+		<item id="saxophone">
+			<stats>
+				<fullname>Saxophone</fullname>
+			</stats>
+			<images>
+				<image x="10" y="25" />
+			</images>
+		</item>
+		<item id="greenbottle">
+			<stats>
+				<fullname>bottle of liquid</fullname>
+			</stats>
+			<images>
+				<image x="13" y="25" />
+			</images>
+		</item>
+		<item id="yellowadvert">
+			<images>
+				<image x="14" y="25" />
+			</images>
+		</item>
+		<item id="prism">
+			<images>
+				<image x="15" y="25" />
+			</images>
+		</item>
+		<item id="wand">
+			<stats>
+				<fullname>Wand of command</fullname>
+			</stats>
+			<images>
+				<image x="7" y="25" />
+			</images>
+		</item>
+		<item id="engravedcandle">
+			<stats>
+				<fullname>Engraved Candle</fullname>
+			</stats>
+			<images>
+				<image x="21" y="25" />
+			</images>
+		</item>
+		<item id="yellowkey">
+			<images>
+				<image x="22" y="25" />
+			</images>
+		</item>
+		<item id="urn">
+			<images>
+				<image x="23" y="25" />
+			</images>
+		</item>
+		<item id="goldbrick">
+			<images>
+				<image x="24" y="25" />
+			</images>
+		</item>
+		<item id="teleportkey">
+			<stats>
+				<fullname>Teleport Key</fullname>
+			</stats>
+			<images>
+				<image x="25" y="25" />
+			</images>
+		</item>
+		<item id="teleportpad">
+			<images>
+				<image x="26" y="25" />
+			</images>
+		</item>
+		<item id="masonry">
+			<images>
+				<image x="27" y="25" />
+			</images>
+		</item>
+		<item id="bluebottle">
+			<images>
+				<image x="28" y="25" />
+			</images>
+		</item>
+		<item id="goldbrick2">
+			<images>
+				<image x="29" y="25" />
+			</images>
+		</item>
+		<item id="blueball">
+			<images>
+				<image x="30" y="25" />
+			</images>
+		</item>
+		<item id="advert">
+			<images>
+				<image x="0" y="25" />
+			</images>
+		</item>
+		<item id="mirror">
+			<images>
+				<image x="5" y="25" />
+			</images>
+		</item>
+		<item id="redherring">
+			<stats>
+				<fullname>red herring</fullname>
+			</stats>
+			<images>
+				<image x="4" y="25" />
+			</images>
+		</item>
+		<item id="whitegoldring">
+			<stats>
+				<fullname>white gold ring   </fullname>
+			</stats>
+			<images>
+				<image x="31" y="25" />
+			</images>
+		</item>
+		<item id="stickybun">
+			<images>
+				<image x="0" y="27" />
+			</images>
+		</item>
+		<item id="shadows">
+			<stats>
+				<fullname>book of shadows</fullname>
+			</stats>
+			<images>
+				<image x="1" y="27" />
+			</images>
+		</item>
+		<item id="goblet">
+			<images>
+				<image x="2" y="27" />
+			</images>
+		</item>
+		<item id="glue">
+			<images>
+				<image x="3" y="27" />
+			</images>
+		</item>
+		<item id="trumpet">
+			<images>
+				<image x="4" y="27" />
+			</images>
+		</item>
+		<item id="puddle">
+			<stats>
+				<fullname>strange liquid</fullname>
+			</stats>
+			<images>
+				<image x="5" y="27" />
+			</images>
+		</item>
+		<item id="lazer">
+			<stats>
+				<fullname>pocket lazer</fullname>
+			</stats>
+			<images>
+				<image x="6" y="27" />
+			</images>
+		</item>
+		<item id="brokentalisman">
+			<stats>
+				<fullname>broken talisman</fullname>
+			</stats>
+			<images>
+				<image x="7" y="27" />
+			</images>
+		</item>
+		<item id="powerpongplant">
+			<stats>
+				<fullname>power pong plant</fullname>
+			</stats>
+			<images>
+				<image x="8" y="27" />
+			</images>
+		</item>
+		<item id="shield">
+			<stats>
+				<fullname>shield</fullname>
+			</stats>
+			<images>
+				<image x="9" y="27" />
+			</images>
+		</item>
+	</items>
+	<rooms>
+		<room x="0" y="0" name="The Lift" />
+		<room x="1" y="0" name="The Roof Garden" />
+		<room x="2" y="0" name="The Roof Garden" />
+		<room x="3" y="0" name="The Roof Garden" />
+		<room x="4" y="0" name="The Roof Garden" />
+		<room x="5" y="0" name="The Roof Garden" />
+		<room x="6" y="0" name="The Roof Garden" />
+		<room x="7" y="0" name="The Roof Garden" />
+		<room x="8" y="0" name="The Roof Garden" />
+
+		<room x="1" y="1" name="The Tower" />
+		<room x="2" y="1" name="Beyond The Tower" />
+		<room x="3" y="1" name="Further Beyond The Tower" />
+		<room x="4" y="1" name="The Ballroom" />
+		<room x="5" y="1" name="The tree of karn" />
+		<room x="6" y="1" name="the stalagmites" />
+		<room x="7" y="1" name="the big bottle" />
+		<room x="8" y="1" name="" />
+
+		<room x="1" y="2" name="the library" />
+		<room x="2" y="2" name="the large bottle" />
+		<room x="3" y="2" name="the odd ball" />
+		<room x="4" y="2" name="" />
+		<room x="5" y="2" name="the start room" />
+		<room x="6" y="2" name="the l-shaped room" />
+		<room x="7" y="2" name="the plant room" />
+		<room x="8" y="2" name="more plant room" />
+
+		<room x="1" y="3" name="" />
+		<room x="2" y="3" name="" />
+		<room x="3" y="3" name="" />
+		<room x="4" y="3" name="" />
+		<room x="5" y="3" name="the wall" />
+		<room x="6" y="3" name="the gallery" />
+		<room x="7" y="3" name="the gallery" />
+		<room x="8" y="3" name="the gallery" />
+
+		<room x="1" y="4" name="the mush room" />
+		<room x="2" y="4" name="the gas room" />
+		<room x="3" y="4" name="" />
+		<room x="4" y="4" name="" />
+		<room x="5" y="4" name="the spare ballroom" />
+		<room x="6" y="4" name="" />
+		<room x="7" y="4" name="the trophy room" />
+		<room x="8" y="4" name="" />
+
+		<room x="1" y="5" name="" />
+		<room x="2" y="5" name="secret tunnel entrance" />
+		<room x="3" y="5" name="gimbal's secret study" />
+		<room x="4" y="5" name="the secret tunnel" />
+		<room x="5" y="5" name="more secret tunnel" />
+		<room x="6" y="5" name="the pit" />
+		<room x="7" y="5" name="" />
+		<room x="8" y="5" name="the most magic room" />
+
+		<room x="1" y="6" name="the basement" />
+		<room x="2" y="6" name="boing!" />
+		<room x="3" y="6" name="boing,boing,boing,boing!" />
+		<room x="4" y="6" name="the deadly trap!" />
+		<room x="5" y="6" name="mirror mirror on the wall!" />
+		<room x="6" y="6" name="the shifting floor" />
+		<room x="7" y="6" name="welcome stranger" />
+		<room x="8" y="6" name="the very last room" />
+
+	</rooms>
+	<doors>
+		<door id="cellardoor" type="Lift">
+			<images>
+				<image id="closed" x="8" y="1" />
+				<image id="open" x="6" y="1" />
+			</images>
+		</door>
+		<door id="4thfloor" type="Lift">
+			<images>
+				<image id="closed" x="8" y="1" />
+				<image id="open" x="6" y="1" />
+			</images>
+		</door>
+		<door id="3rdfloor" type="Lift">
+			<images>
+				<image id="closed" x="8" y="1" />
+				<image id="open" x="6" y="1" />
+			</images>
+		</door>
+		<door id="2ndfloor" type="Lift">
+			<images>
+				<image id="closed" x="8" y="1" />
+				<image id="open" x="6" y="1" />
+			</images>
+		</door>
+		<door id="1stfloor" type="Lift">
+			<images>
+				<image id="closed" x="8" y="1" />
+				<image id="open" x="6" y="1" />
+			</images>
+		</door>
+		<door id="groundfloor" type="Lift">
+			<images>
+				<image id="closed" x="8" y="1" />
+				<image id="open" x="6" y="1" />
+			</images>
+		</door>
+		<door id="basement" type="Lift">
+			<images>
+				<image id="closed" x="8" y="1" />
+				<image id="open" x="6" y="1" />
+			</images>
+		</door>
+		<door id="roof" type="Lift">
+			<images>
+				<image id="closed" x="8" y="1" />
+				<image id="open" x="6" y="1" />
+			</images>
+		</door>
+		<door id="thewall">
+			<images>
+				<image id="closed" x="8" y="1" />
+				<image id="open" x="6" y="1" />
+			</images>
+		</door>
+		<door id="secretentrance">
+			<images>
+				<image id="closed" x="8" y="1" />
+				<image id="open" x="6" y="1" />
+			</images>
+		</door>
+	</doors>
+</config>

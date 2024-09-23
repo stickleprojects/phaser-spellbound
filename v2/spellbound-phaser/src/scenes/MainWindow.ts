@@ -12,7 +12,7 @@ export class MainWindow extends Scene {
 
         // everything is loaded, so display stuff
         // data is the params passed to this scene with this.scene.start(key,data)
-        var hudData = new HudParameters(this, 0, 0, 150, 20);
+        var hudData = new HudParameters(this, 0, 0, 650, 20);
 
         const hudScene = this.scene.launch('hud', hudData);
 

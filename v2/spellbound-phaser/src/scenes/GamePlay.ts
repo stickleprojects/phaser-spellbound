@@ -13,6 +13,15 @@ class RoomData {
     y: number;
     width: number;
     height: number;
+    name: string;
+
+    constructor(x: number, y: number, width: number, height: number, name: string) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.name = name;
+    }
 }
 
 export class GamePlayWindowConfig {
@@ -72,7 +81,24 @@ export class GamePlay extends Phaser.Scene {
     }
 
 
+    getRoomConfig() {
+        const xml = this.cache.xml.get('levelconfig');
+        const roomsAndNames = xml.getElementsByTagName("room");
+
+
+        var ret: RoomData[] = [];
+
+        Array.from(roomsAndNames).forEach(element => {
+            const x = element.getAttribute('x');
+            const y = element.getAttribute('y');
+            const name = element.getAttribute('name');
+            ret.push(new RoomData(x, y, 0, 0, name));
+        });
+        return ret;
+    }
     splitTileMapIntoRooms(map: Tilemaps.Tilemap) {
+
+        const roomConfig = this.getRoomConfig();
 
 
         // map.width is in tiles, map.height is in tiles
@@ -89,11 +115,17 @@ export class GamePlay extends Phaser.Scene {
                 const i = x * this.roomWidthInTiles
                 const j = y * this.roomHeightInTiles
 
+
+                var foundRoom = roomConfig.find(r => (r.x == x && r.y == y))
+
+                const name = foundRoom?.name;
+
                 const roomData = {
                     x: i * map.tileWidth,
                     y: j * map.tileHeight,
                     width: this.roomWidthInTiles * map.tileWidth,
-                    height: this.roomHeightInTiles * map.tileHeight
+                    height: this.roomHeightInTiles * map.tileHeight,
+                    name: name
                 }
 
                 rooms.push(roomData)
@@ -206,7 +238,7 @@ export class GamePlay extends Phaser.Scene {
             console.log("Failed to find room!");
         } else {
 
-            this.events.emit("screenmov", { x: this.roomX, y: this.roomY });
+            this.events.emit("screenmov", { x: this.roomX, y: this.roomY, name: roomData.name });
             this.camera.setBounds(roomData.x, roomData.y, roomData.width, roomData.height, false);
         }
     }
