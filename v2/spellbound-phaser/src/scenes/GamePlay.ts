@@ -75,6 +75,10 @@ export class GamePlay extends Phaser.Scene {
     verticalRooms: number;
     inputTimer: Phaser.Time.TimerEvent;
     parentScene: Scene;
+    NavigationUp: Phaser.Input.Keyboard.Key | undefined;
+    NavigationLeft: Phaser.Input.Keyboard.Key | undefined;
+    NavigationRight: Phaser.Input.Keyboard.Key | undefined;
+    NavigationDown: Phaser.Input.Keyboard.Key | undefined;
 
     constructor() {
         super('GamePlay')
@@ -139,6 +143,11 @@ export class GamePlay extends Phaser.Scene {
     }
     create() {
         this.camera = this.cameras.main
+        this.NavigationUp = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_EIGHT);
+        this.NavigationLeft = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_FOUR);
+        this.NavigationRight = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_SIX);
+        this.NavigationDown = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_TWO);
+
         this.cursors = this.input.keyboard?.createCursorKeys()
 
         this.movementSystem = createMovementSystem()
@@ -259,19 +268,19 @@ export class GamePlay extends Phaser.Scene {
     }
     updateInput() {
 
-        if (Phaser.Input.Keyboard.JustDown(this.cursors!.down)) {
+        if (Phaser.Input.Keyboard.JustDown(this.NavigationDown!)) {
             this.roomY++;
             this.positionCameraAccordingToRoom();
         }
-        if (Phaser.Input.Keyboard.JustDown(this.cursors!.up)) {
+        if (Phaser.Input.Keyboard.JustDown(this.NavigationUp!)) {
             this.roomY--;
             this.positionCameraAccordingToRoom();
         }
-        if (Phaser.Input.Keyboard.JustDown(this.cursors!.left)) {
+        if (Phaser.Input.Keyboard.JustDown(this.NavigationLeft!)) {
             this.roomX--;
             this.positionCameraAccordingToRoom();
         }
-        if (Phaser.Input.Keyboard.JustDown(this.cursors!.right)) {
+        if (Phaser.Input.Keyboard.JustDown(this.NavigationRight!)) {
             this.roomX++;
             this.positionCameraAccordingToRoom();
         }
