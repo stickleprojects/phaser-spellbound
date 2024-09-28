@@ -100,7 +100,7 @@ export class GamePlay extends Phaser.Scene {
         this.verticalRooms = Phaser.Math.RoundTo(map.height / this.roomHeightInTiles, 0);
 
 
-        var rooms = [];
+        var rooms = Array<RoomData>();
 
         for (var y = 0; y < this.verticalRooms; y++)
             for (var x = 0; x < this.horizontalRooms; x++) {
@@ -112,15 +112,15 @@ export class GamePlay extends Phaser.Scene {
 
                 var foundRoom = roomConfig.find(r => (r.x == x && r.y == y))
 
-                const name = foundRoom?.name;
+                const name = foundRoom?.name!;
 
-                const roomData = {
-                    x: i * map.tileWidth,
-                    y: j * map.tileHeight,
-                    width: this.roomWidthInTiles * map.tileWidth,
-                    height: this.roomHeightInTiles * map.tileHeight,
-                    name: name
-                }
+                const roomData = new RoomData(
+                    i * map.tileWidth,
+                    j * map.tileHeight,
+                    this.roomWidthInTiles * map.tileWidth,
+                    this.roomHeightInTiles * map.tileHeight,
+                    name
+                );
 
                 rooms.push(roomData)
             }
@@ -250,8 +250,8 @@ export class GamePlay extends Phaser.Scene {
 
         const roomCoords = this.RoomNavigator.GetRoomCoords();
 
-        let roomX = Phaser.Math.Clamp(roomCoords.x, 0, this.horizontalRooms - 1);
-        let roomY = Phaser.Math.Clamp(roomCoords.y, 0, this.verticalRooms - 1);
+        let roomX = roomCoords.x;
+        let roomY = roomCoords.y;
         const roomIndex = roomX + (roomY * this.horizontalRooms);
         const roomData = this.rooms[roomIndex];
 
@@ -282,8 +282,6 @@ export class GamePlay extends Phaser.Scene {
         // tick the input system and other systems maybe
 
     }
-    drawPlayer() {
 
-    }
 }
 
