@@ -3,7 +3,7 @@ import { Physics } from "phaser";
 export default class Player {
     sprite: Phaser.GameObjects.Sprite;
     private speed: number = 150;
-    private jumpSpeed: number = -200;
+    private jumpSpeed: number = -250;
     private gravity: number = 600;
     private cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys
 
@@ -46,7 +46,7 @@ export default class Player {
         } else {
             this.getBody().setVelocityX(0);
         }
-        if (this.cursorKeys.up.isDown) {
+        if (this.cursorKeys.up.isDown && this.getBody().onFloor()) {
             // move sprite 
             this.jump();
         }
