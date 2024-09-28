@@ -4,6 +4,7 @@ import { addComponent, addEntity, createWorld, IWorld, System } from "bitecs";
 import createCharacterMap from '../maps/characters';
 import createObjectMap from '../maps/objects';
 import { Hud, HudParameters } from './Hud';
+import { RoomNavigator } from '../roomnavigator';
 
 class RoomData {
     x: number;
@@ -56,8 +57,6 @@ export class GamePlay extends Phaser.Scene {
     private characterLayer: Phaser.Types.Tilemaps.TiledObject[];
     private doorLayer: Phaser.Types.Tilemaps.TiledObject[];
     private objectLayer: Phaser.Types.Tilemaps.TiledObject[];
-    private roomX: number = 0;
-    private roomY: number = 0;
     private rooms: RoomData[];
     private roomWidthInTiles: number = 16;
     private roomHeightInTiles: number = 10;
@@ -69,11 +68,7 @@ export class GamePlay extends Phaser.Scene {
     private verticalRooms: number;
     private inputTimer: Phaser.Time.TimerEvent;
     private parentScene: Scene;
-    private NavigationUp: Phaser.Input.Keyboard.Key | undefined;
-    private NavigationLeft: Phaser.Input.Keyboard.Key | undefined;
-    private NavigationRight: Phaser.Input.Keyboard.Key | undefined;
-    private NavigationDown: Phaser.Input.Keyboard.Key | undefined;
-    knight: number;
+    RoomNavigator: RoomNavigator;
 
     constructor() {
         super('GamePlay')
@@ -136,14 +131,16 @@ export class GamePlay extends Phaser.Scene {
     preload() {
 
     }
+    onRoomChanged() {
+
+        this.positionCameraAccordingToRoom();
+
+    }
     create() {
         this.camera = this.cameras.main
-        this.NavigationUp = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-        this.NavigationLeft = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-        this.NavigationRight = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-        this.NavigationDown = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.S);
 
         this.cursors = this.input.keyboard?.createCursorKeys()
+
 
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor(0x000000);
@@ -151,6 +148,10 @@ export class GamePlay extends Phaser.Scene {
 
         this.map = this.make.tilemap({ key: 'levels', tileWidth: 16, tileHeight: 16 });
         this.rooms = this.splitTileMapIntoRooms(this.map);
+
+        this.RoomNavigator = new RoomNavigator(this.input,
+            this.horizontalRooms, this.verticalRooms,
+            () => this.positionCameraAccordingToRoom());
 
 
         this.map_alltiles = this.map.addTilesetImage('alltiles', 'map_background')!
@@ -249,17 +250,18 @@ export class GamePlay extends Phaser.Scene {
     }
     positionCameraAccordingToRoom() {
 
+        const roomCoords = this.RoomNavigator.GetRoomCoords();
 
-        this.roomX = Phaser.Math.Clamp(this.roomX, 0, this.horizontalRooms - 1);
-        this.roomY = Phaser.Math.Clamp(this.roomY, 0, this.verticalRooms - 1);
-        const roomIndex = this.roomX + (this.roomY * this.horizontalRooms);
+        let roomX = Phaser.Math.Clamp(roomCoords.x, 0, this.horizontalRooms - 1);
+        let roomY = Phaser.Math.Clamp(roomCoords.y, 0, this.verticalRooms - 1);
+        const roomIndex = roomX + (roomY * this.horizontalRooms);
         const roomData = this.rooms[roomIndex];
 
         if (!roomData) {
             console.log("Failed to find room!");
         } else {
 
-            this.events.emit("screenmov", { x: this.roomX, y: this.roomY, name: roomData.name });
+            this.events.emit("screenmov", { x: roomX, y: roomY, name: roomData.name });
             this.camera.setBounds(roomData.x, roomData.y, roomData.width, roomData.height, false);
         }
     }
@@ -273,28 +275,11 @@ export class GamePlay extends Phaser.Scene {
 
 
     }
-    updateInput() {
 
-        if (Phaser.Input.Keyboard.JustDown(this.NavigationDown!)) {
-            this.roomY++;
-            this.positionCameraAccordingToRoom();
-        }
-        if (Phaser.Input.Keyboard.JustDown(this.NavigationUp!)) {
-            this.roomY--;
-            this.positionCameraAccordingToRoom();
-        }
-        if (Phaser.Input.Keyboard.JustDown(this.NavigationLeft!)) {
-            this.roomX--;
-            this.positionCameraAccordingToRoom();
-        }
-        if (Phaser.Input.Keyboard.JustDown(this.NavigationRight!)) {
-            this.roomX++;
-            this.positionCameraAccordingToRoom();
-        }
-    }
     update(time, delta) {
 
-        this.updateInput();
+        this.RoomNavigator.UpdateInput();
+
 
         // tick the input system and other systems maybe
 
