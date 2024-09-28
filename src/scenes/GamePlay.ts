@@ -1,17 +1,9 @@
 import Phaser, { Scene, Tilemaps } from 'phaser';
 
 import { addComponent, addEntity, createWorld, IWorld, System } from "bitecs";
-import createMovementSystem from "../systems/movement";
-import createInputSystem from "../systems/input";
-import createSpriteSystem from "../systems/sprite";
 import createCharacterMap from '../maps/characters';
 import createObjectMap from '../maps/objects';
 import { Hud, HudParameters } from './Hud';
-import Player from '../components/player';
-import Sprite from '../components/sprite';
-import Input from '../components/input';
-import Velocity from '../components/velocity';
-import Position from '../components/position';
 
 class RoomData {
     x: number;
@@ -50,9 +42,6 @@ export class GamePlay extends Phaser.Scene {
 
     private camera: Phaser.Cameras.Scene2D.Camera;
     private world: IWorld;
-    private movementSystem: System;
-    private inputSystem: System;
-    private spriteSystem: System;
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys
     private map: Phaser.Tilemaps.Tilemap;
 
@@ -156,10 +145,6 @@ export class GamePlay extends Phaser.Scene {
 
         this.cursors = this.input.keyboard?.createCursorKeys()
 
-        this.movementSystem = createMovementSystem()
-        this.spriteSystem = createSpriteSystem(this, ["characters"])
-
-        this.inputSystem = createInputSystem(this.cursors)
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor(0x000000);
         this.camera.setZoom(3.5);
@@ -259,18 +244,6 @@ export class GamePlay extends Phaser.Scene {
     }
     createKnight(addedSprite: Phaser.GameObjects.Sprite) {
 
-        this.knight = addEntity(this.world);
-
-        addComponent(this.world, Player, this.knight);
-        addComponent(this.world, Sprite, this.knight);
-
-        addComponent(this.world, Input, this.knight);
-        Input.speed[this.knight] = 10;
-
-        addComponent(this.world, Velocity, this.knight);
-        addComponent(this.world, Position, this.knight);
-
-        Sprite.texture[this.knight] = 5;
 
 
     }
@@ -320,21 +293,10 @@ export class GamePlay extends Phaser.Scene {
         }
     }
     update(time, delta) {
-        // tick the physics
-        this.movementSystem(this.world)
-        this.inputSystem(this.world)
-        //this.cameraController.update(delta);
-        this.spriteSystem(this.world);
 
         this.updateInput();
 
         // tick the input system and other systems maybe
-
-    }
-    drawRoom() {
-
-    }
-    drawObjects() {
 
     }
     drawPlayer() {
