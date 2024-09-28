@@ -169,35 +169,19 @@ export class GamePlay extends Phaser.Scene {
 
         this.objectMap = createObjectMap();
 
+        this.createObjectSprites();
 
+        this.createCharacterSprites();
 
-        const objectTileHeight = 16;
-        const objectTileWidth = 16;
-        const objectTilemapWidth = 16;
+        const w = this.roomWidthInTiles * this.map.tileWidth * this.cameras.main.zoomX;
+        const h = this.roomHeightInTiles * this.map.tileHeight * this.cameras.main.zoomY;
+        this.cameras.main.setSize(w, h);
 
-        const objecthalfW = objectTileWidth / 2;
-        const objecthalfH = objectTileHeight / 2;
+        // set the start room
+        this.RoomNavigator.SetRoomCoordinates({ x: 5, y: 2 });
 
-        // create the objets
-        this.objectLayer.forEach(o => {
-            const objectName = o.name;
-            const objectTilePosition = this.objectMap.get(objectName);
-
-            const mapWidth = objectTilemapWidth;
-            if (!objectTilePosition) {
-                console.log("Failed to find object " + objectName)
-            } else {
-
-                const index = (objectTilePosition.y * mapWidth) + objectTilePosition.x;
-                const pixelX = Math.ceil(o.x! / 16) * 16;
-                const pixelY = Math.ceil(o.y! / 16) * 16;
-
-                const addedSprite = this.add.sprite(pixelX, pixelY + objecthalfH, 'objects', index);
-
-
-            }
-        })
-
+    }
+    private createCharacterSprites() {
         const characterTileHeight = 32;
         const charaterTileWidth = 16;
         const characterTilemapWidth = 16;
@@ -219,30 +203,44 @@ export class GamePlay extends Phaser.Scene {
                 const pixelY = Math.ceil(o.y! / 16) * 16;
 
                 // in theory we create the player here
-
                 const addedSprite = this.add.sprite(pixelX + characterhalfW, pixelY + characterhalfH, 'characters', index);
 
                 if (o.name == "knight") {
                     // create the knight and add to the world
                     this.createKnight(addedSprite);
                 } else {
-
                 }
             }
-        })
-
-        const w = this.roomWidthInTiles * this.map.tileWidth * this.cameras.main.zoomX;
-        const h = this.roomHeightInTiles * this.map.tileHeight * this.cameras.main.zoomY;
-        this.cameras.main.setSize(w, h);
-
-        // set the start room
-        this.roomX = 5;
-        this.roomY = 2;
-
-
-        this.positionCameraAccordingToRoom();
-
+        });
     }
+
+    private createObjectSprites() {
+        const objectTileHeight = 16;
+        const objectTileWidth = 16;
+        const objectTilemapWidth = 16;
+
+        const objecthalfH = objectTileHeight / 2;
+
+        // create the objets
+        this.objectLayer.forEach(o => {
+            const objectName = o.name;
+            const objectTilePosition = this.objectMap.get(objectName);
+
+            const mapWidth = objectTilemapWidth;
+            if (!objectTilePosition) {
+                console.log("Failed to find object " + objectName);
+            } else {
+
+                const index = (objectTilePosition.y * mapWidth) + objectTilePosition.x;
+                const pixelX = Math.ceil(o.x! / objectTileWidth) * objectTileWidth;
+                const pixelY = Math.ceil(o.y! / objectTileHeight) * objectTileHeight;
+
+                this.add.sprite(pixelX, pixelY + objecthalfH, 'objects', index);
+
+            }
+        });
+    }
+
     createKnight(addedSprite: Phaser.GameObjects.Sprite) {
 
 

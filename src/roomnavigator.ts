@@ -1,4 +1,10 @@
 export class RoomNavigator {
+    SetRoomCoordinates(coords: { x: number; y: number; }) {
+        this.roomX = coords.x;
+        this.roomY = coords.y;
+        this.clampAndRaiseRoomChanged();
+
+    }
 
     private NavigationUp: Phaser.Input.Keyboard.Key | undefined;
     private NavigationLeft: Phaser.Input.Keyboard.Key | undefined;
