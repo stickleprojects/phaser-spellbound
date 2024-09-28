@@ -5,6 +5,7 @@ import createCharacterMap from '../maps/characters';
 import createObjectMap from '../maps/objects';
 import { Hud, HudParameters } from './Hud';
 import { RoomNavigator } from '../roomnavigator';
+import Player from '../player';
 
 class RoomData {
     x: number;
@@ -69,6 +70,7 @@ export class GamePlay extends Phaser.Scene {
     private inputTimer: Phaser.Time.TimerEvent;
     private parentScene: Scene;
     RoomNavigator: RoomNavigator;
+    Player: Player;
 
     constructor() {
         super('GamePlay')
@@ -142,6 +144,7 @@ export class GamePlay extends Phaser.Scene {
         this.cursors = this.input.keyboard?.createCursorKeys()
 
 
+
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor(0x000000);
         this.camera.setZoom(3.5);
@@ -163,6 +166,8 @@ export class GamePlay extends Phaser.Scene {
         this.characterLayer = this.map.getObjectLayer('characters')?.objects!
         this.doorLayer = this.map.getObjectLayer('doorobjects')?.objects!
         this.objectLayer = this.map.getObjectLayer('objects')?.objects!
+
+        this.map.setCollisionBetween(0, 1000, true, true, 'solid');
 
 
         this.characterMap = createCharacterMap();
@@ -203,12 +208,14 @@ export class GamePlay extends Phaser.Scene {
                 const pixelY = Math.ceil(o.y! / 16) * 16;
 
                 // in theory we create the player here
-                const addedSprite = this.add.sprite(pixelX + characterhalfW, pixelY + characterhalfH, 'characters', index);
+
 
                 if (o.name == "knight") {
                     // create the knight and add to the world
-                    this.createKnight(addedSprite);
+                    this.createKnight(pixelX + characterhalfW, pixelY + characterhalfH, index);
                 } else {
+                    this.add.sprite(pixelX + characterhalfW, pixelY + characterhalfH, 'characters', index);
+
                 }
             }
         });
@@ -241,10 +248,14 @@ export class GamePlay extends Phaser.Scene {
         });
     }
 
-    createKnight(addedSprite: Phaser.GameObjects.Sprite) {
+    createKnight(x: number, y: number, index: number) {
 
 
+        const sprite = this.physics.add.sprite(x, y, 'characters', index);
 
+        this.Player = new Player(sprite, this.cursors!);
+
+        this.physics.add.collider(sprite, this.solidLayer);
     }
     positionCameraAccordingToRoom() {
 
@@ -276,8 +287,12 @@ export class GamePlay extends Phaser.Scene {
 
     update(time, delta) {
 
+        //const sprite = this.Player.sprite;
+        //this.physics.collide(sprite, this.solidLayer,);
+
         this.RoomNavigator.UpdateInput();
 
+        this.Player.UpdateInput();
 
         // tick the input system and other systems maybe
 
