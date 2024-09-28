@@ -33,9 +33,8 @@ export default class Player {
     jump() {
         this.getBody().setVelocityY(this.jumpSpeed);
     }
-    UpdateInput() {
+    Update() {
 
-        //        this.getBody().setVelocity(0);
 
         if (this.cursorKeys.right.isDown) {
             // move sprite 

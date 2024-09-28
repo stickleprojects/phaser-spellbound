@@ -292,9 +292,21 @@ export class GamePlay extends Phaser.Scene {
 
         this.RoomNavigator.UpdateInput();
 
-        this.Player.UpdateInput();
+        this.Player.Update();
 
         // tick the input system and other systems maybe
+
+        // check if  player wandered off screen
+
+        const b = this.cameras.main.getBounds();
+        if (this.Player.sprite.x > b.right) {
+            // offright
+            this.RoomNavigator.SetRoomCoordinates({ x: this.RoomNavigator.GetRoomCoords().x + 1, y: this.RoomNavigator.GetRoomCoords().y })
+        } else if (this.Player.sprite.x < b.left) {
+            // offleft
+            this.RoomNavigator.SetRoomCoordinates({ x: this.RoomNavigator.GetRoomCoords().x - 1, y: this.RoomNavigator.GetRoomCoords().y })
+
+        }
 
     }
 
