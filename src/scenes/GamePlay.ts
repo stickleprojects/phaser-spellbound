@@ -3,7 +3,7 @@ import Phaser, { Scene, Tilemaps } from 'phaser';
 import { addComponent, addEntity, createWorld, IWorld, System } from "bitecs";
 import createCharacterMap from '../maps/characters';
 import createObjectMap from '../maps/objects';
-import { Hud, HudFlags, HudParameters } from './Hud';
+import { Hud, HudFlags, HudParameters, HudRoomInfo } from './Hud';
 import { RoomNavigator } from '../roomnavigator';
 import Player from '../player';
 
@@ -309,7 +309,7 @@ export class GamePlay extends Phaser.Scene {
             console.log("Failed to find room!");
         } else {
 
-            this.events.emit("screenmov", { x: roomX, y: roomY, name: roomData.name });
+            this.events.emit("screenmov", new HudRoomInfo(roomX, roomY, roomData.name));
             this.camera.setBounds(roomData.x, roomData.y, roomData.width, roomData.height, false);
         }
     }

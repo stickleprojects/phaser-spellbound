@@ -22,7 +22,17 @@ export class HudFlags {
         this.FollowingPlayer = followingPlayer;
     }
 }
+export class HudRoomInfo {
+    x: number;
+    y: number;
+    name: string;
 
+    constructor(x: number, y: number, name: string) {
+        this.x = x;
+        this.y = y;
+        this.name = name;
+    }
+}
 export class Hud extends Phaser.Scene {
     parentScene: Phaser.Scene;
     roomLocationControl: Phaser.GameObjects.Text;
@@ -54,7 +64,7 @@ export class Hud extends Phaser.Scene {
 
         this.cameras.main.setViewport(data.x, data.y, data.width, data.height);
 
-        this.parentScene.events.on('screenmov', (args: object) => {
+        this.parentScene.events.on('screenmov', (args: HudRoomInfo) => {
             this.updateRoomLocation(args);
 
         }, this)
