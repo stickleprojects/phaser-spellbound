@@ -1,8 +1,15 @@
 export class RoomNavigator {
     SetRoomCoordinates(coords: { x: number; y: number; }) {
-        this.roomX = coords.x;
-        this.roomY = coords.y;
-        this.clampAndRaiseRoomChanged();
+        let changed = false;
+        if (coords.x != this.roomX) {
+            this.roomX = coords.x;
+            changed = true;
+        }
+        if (coords.y != this.roomY) {
+            this.roomY = coords.y;
+            changed = true;
+        }
+        if (changed) this.clampAndRaiseRoomChanged();
 
     }
 

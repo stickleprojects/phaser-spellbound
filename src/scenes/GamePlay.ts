@@ -3,7 +3,7 @@ import Phaser, { Scene, Tilemaps } from 'phaser';
 import { addComponent, addEntity, createWorld, IWorld, System } from "bitecs";
 import createCharacterMap from '../maps/characters';
 import createObjectMap from '../maps/objects';
-import { Hud, HudParameters } from './Hud';
+import { Hud, HudFlags, HudParameters } from './Hud';
 import { RoomNavigator } from '../roomnavigator';
 import Player from '../player';
 
@@ -23,6 +23,27 @@ class RoomData {
     }
 }
 
+class GameFlags {
+    private _followingPlayer: boolean;
+    private _callback: (values: GameFlags, propertyName: string, oldValue: any) => void;
+    private _context: any;
+
+    constructor(callback: (values: GameFlags) => void, context: any) {
+        this._callback = callback;
+        this._context = context;
+    }
+
+    set FollowingPlayer(newvalue: boolean) {
+        let oldValue = this._followingPlayer;
+        if (oldValue == newvalue) return;
+
+        this._followingPlayer = newvalue;
+        this._callback.call(this._context, this, "FollowingPlayer", oldValue);
+    }
+    get FollowingPlayer() { return this._followingPlayer; }
+
+
+}
 export class GamePlayWindowConfig {
     parent: Scene;
     x: number;
@@ -71,6 +92,9 @@ export class GamePlay extends Phaser.Scene {
     private parentScene: Scene;
     RoomNavigator: RoomNavigator;
     Player: Player;
+    followingPlayer: boolean;
+    ToggleFollowingPlayerKey: Phaser.Input.Keyboard.Key | undefined;
+    flags: GameFlags;
 
     constructor() {
         super('GamePlay')
@@ -138,12 +162,28 @@ export class GamePlay extends Phaser.Scene {
         this.positionCameraAccordingToRoom();
 
     }
+    onFlagsChanged(args: GameFlags, propertyName: string, oldValue: any) {
+
+
+        if (propertyName == 'FollowingPlayer') {
+            // move the screen to the player
+            this.showRoomThatThePlayerIsIn();
+        }
+        var newhudFlags = new HudFlags(args.FollowingPlayer);
+        this.events.emit('updateflags', newhudFlags);
+        console.log(this.events.listeners("updateflags"));
+
+
+    }
     create() {
         this.camera = this.cameras.main
 
+
         this.cursors = this.input.keyboard?.createCursorKeys()
 
+        this.ToggleFollowingPlayerKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.F);
 
+        this.flags = new GameFlags(this.onFlagsChanged, this);
 
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor(0x000000);
@@ -168,7 +208,6 @@ export class GamePlay extends Phaser.Scene {
         this.objectLayer = this.map.getObjectLayer('objects')?.objects!
 
         this.map.setCollisionBetween(0, 1000, true, true, 'solid');
-
 
         this.characterMap = createCharacterMap();
 
@@ -285,6 +324,21 @@ export class GamePlay extends Phaser.Scene {
 
     }
 
+    showRoomThatThePlayerIsIn() {
+        const px = this.Player.sprite.x;
+        const py = this.Player.sprite.y;
+
+        const cw = this.camera.displayWidth;
+        const ch = this.camera.displayHeight;
+
+        const rx = Math.trunc(px / cw);
+        const ry = Math.trunc(py / ch);
+
+        const newCoords = { x: rx, y: ry };
+
+        this.RoomNavigator.SetRoomCoordinates(newCoords);
+
+    }
     update(time, delta) {
 
         //const sprite = this.Player.sprite;
@@ -298,14 +352,12 @@ export class GamePlay extends Phaser.Scene {
 
         // check if  player wandered off screen
 
-        const b = this.cameras.main.getBounds();
-        if (this.Player.sprite.x > b.right) {
-            // offright
-            this.RoomNavigator.SetRoomCoordinates({ x: this.RoomNavigator.GetRoomCoords().x + 1, y: this.RoomNavigator.GetRoomCoords().y })
-        } else if (this.Player.sprite.x < b.left) {
-            // offleft
-            this.RoomNavigator.SetRoomCoordinates({ x: this.RoomNavigator.GetRoomCoords().x - 1, y: this.RoomNavigator.GetRoomCoords().y })
+        if (Phaser.Input.Keyboard.JustDown(this.ToggleFollowingPlayerKey!)) {
+            this.flags.FollowingPlayer = !this.flags.FollowingPlayer;
 
+        }
+        if (this.flags.FollowingPlayer) {
+            this.showRoomThatThePlayerIsIn();
         }
 
     }

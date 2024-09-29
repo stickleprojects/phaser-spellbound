@@ -26,6 +26,10 @@ export class MainWindow extends Scene {
 
         })
 
+        scn.events.on('updateflags', (args: object) => {
+            hudScene.scene.events.emit('updateflags', args);
+        })
+
     }
     create() {
 
