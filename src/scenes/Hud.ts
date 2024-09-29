@@ -26,8 +26,10 @@ export class HudFlags {
 export class Hud extends Phaser.Scene {
     parentScene: Phaser.Scene;
     roomLocationControl: Phaser.GameObjects.Text;
-    instructions: Phaser.GameObjects.Text;
+
     Flags_FollowingPlayer: Phaser.GameObjects.Text;
+    NotFollowing_instructions: Phaser.GameObjects.Text;
+    Following_instructions: Phaser.GameObjects.Text;
 
     updateRoomLocation(xy: object) {
         const x = xy.x;
@@ -44,6 +46,8 @@ export class Hud extends Phaser.Scene {
 
     updateFlags(flags: HudFlags) {
         this.Flags_FollowingPlayer.setText(flags.FollowingPlayer ? "FOLLOWING" : "");
+        this.Following_instructions.setVisible(flags.FollowingPlayer);
+        this.NotFollowing_instructions.setVisible(!flags.FollowingPlayer);
     }
     init(data: HudParameters) {
         this.parentScene = data.parent;
@@ -66,12 +70,17 @@ export class Hud extends Phaser.Scene {
     create() {
         this.roomLocationControl = this.add.text(0, 0, "Room: (0,0)");
 
-        const instructionText = [
+        const NotFollowing_instructionText = [
             'Instructions: Use WASD to explore theres only 8x6 rooms or so, and the characters dont move',
             '              The Room name and position will be displayed in topleft hand corner'
         ];
+        const Following_instructionText = [
+            'Instructions: Use Arrow Keys to walk about, Press F to toggle walking/screens'
 
-        this.instructions = this.add.text(0, 15, instructionText);
+        ];
+
+        this.NotFollowing_instructions = this.add.text(0, 15, NotFollowing_instructionText);
+        this.Following_instructions = this.add.text(0, 15, Following_instructionText);
 
         // flags
 
