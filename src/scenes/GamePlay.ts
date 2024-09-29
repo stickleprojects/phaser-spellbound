@@ -28,7 +28,7 @@ class GameFlags {
     private _callback: (values: GameFlags, propertyName: string, oldValue: any) => void;
     private _context: any;
 
-    constructor(callback: (values: GameFlags) => void, context: any) {
+    constructor(callback: (values: GameFlags, propertyName: string, oldValue: any) => void, context: any) {
         this._callback = callback;
         this._context = context;
     }
@@ -171,7 +171,6 @@ export class GamePlay extends Phaser.Scene {
         }
         var newhudFlags = new HudFlags(args.FollowingPlayer);
         this.events.emit('updateflags', newhudFlags);
-        console.log(this.events.listeners("updateflags"));
 
 
     }
@@ -223,6 +222,8 @@ export class GamePlay extends Phaser.Scene {
 
         // set the start room
         this.RoomNavigator.SetRoomCoordinates({ x: 5, y: 2 });
+        this.flags.FollowingPlayer = true;
+
 
     }
     private createCharacterSprites() {
