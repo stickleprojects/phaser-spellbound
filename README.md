@@ -30,6 +30,58 @@ The local development server runs on `http://localhost:8080` by default. Please 
 Once the server is running you can edit any of the files in the `src` folder. Vite will automatically recompile your code and then reload the browser.
 
 
+# Outstanding features
+
+## Inventory
+Allows you to carry 5 items
+
+## Colourful fonts
+Need to figure out how to colour the fonts for the various panels/etc
+
+
+## NPCs should walk around
+## Lift should move by itself
+## NPCs can walk into the lift
+## Menu system for overlapping menus and showing available commands
+Choose the Verb "give"
+Choose the Subject "give [ITEM]"
+Choose the Object "give [ITEM] to [PERSON]"
+
+## Menu for doing commands (pick up XXX, talk to XXX, drop object XXX, call lift, cast spell, give item to XXX, take item from XXX, teleport)
+## Menu for inventory (drop XXX, pick up XXX)
+## Menu for ordering people (command florin to blow the horn)
+## Mirror + Inventory panel at bottom of the screen
+Whilst you are carrying the mirror, the inventory panel appears at bottom of the screen
+
+## panel at bottom of screen
+Shows copyright message usually - DONE
+Can show inventory if mirror is carried
+
+## Teleport
+Whilst you are carrying the teleportkey
+New menuitem for "teleport"
+When you select "teleport" it takes you to the telepad
+
+## Glowing bottle
+Whilst you are carrying the glowingbottle
+DarkRooms wont kill you
+
+## Powerpong plant
+Whilst you are carrying the PowerPong plant
+Poisouns rooms wont kill you
+
+## Room Poperties
+* Dark - kills you with tripping over
+* Lift - Allows you to move between floors (enables the menu item)
+* Poisonous - Kills you with gas
+## Health bar
+Should decrease as you walk between screens or run a command
+
+## Sound
+* Sound on menu item
+* Background Music
+
+
 ## Join the Phaser Community!
 
 We love to see what developers like you create with Phaser! It really motivates us to keep improving. So please join our community and show-off your work 😄

@@ -1,4 +1,5 @@
 import { Boot } from './scenes/Boot';
+import { CopyrightPanel } from './scenes/CopyrightPanel';
 // import { Game as MainGame } from './scenes/Game';
 // import { GameOver } from './scenes/GameOver';
 import { GamePlay } from './scenes/GamePlay';
@@ -34,7 +35,8 @@ const config: Types.Core.GameConfig = {
         Preloader,
         GamePlay,
         Hud,
-        MainWindow
+        MainWindow,
+        CopyrightPanel
         // MainMenu,
         // MainGame,
         // GameOver
