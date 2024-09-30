@@ -57,6 +57,13 @@ Whilst you are carrying the mirror, the inventory panel appears at bottom of the
 Shows copyright message usually - DONE
 Can show inventory if mirror is carried
 
+## knight animation
+* Knight should face the direction of travel
+* Knight should animate walking
+* Teleport animation disappear
+* Teleport animation appear
+
+
 ## Teleport
 Whilst you are carrying the teleportkey
 New menuitem for "teleport"
