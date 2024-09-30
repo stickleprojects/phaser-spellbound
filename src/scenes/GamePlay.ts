@@ -174,9 +174,14 @@ export class GamePlay extends Phaser.Scene {
 
 
     }
+    setupPhysics() {
+        this.physics.world.gravity.y = 1500;
+
+    }
     create() {
         this.camera = this.cameras.main
 
+        this.setupPhysics();
 
         this.cursors = this.input.keyboard?.createCursorKeys()
 
@@ -293,7 +298,9 @@ export class GamePlay extends Phaser.Scene {
 
         const sprite = this.physics.add.sprite(x, y, 'characters', index);
 
-        this.Player = new Player(sprite, this.cursors!);
+        const currentGravity = this.physics.world.gravity.y;
+        const playerGravity = currentGravity * -0.35;
+        this.Player = new Player(sprite, this.cursors!, playerGravity);
 
         this.physics.add.collider(sprite, this.solidLayer);
     }

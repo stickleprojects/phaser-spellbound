@@ -7,9 +7,12 @@ export default class Player {
     private gravity: number = 600;
     private cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys
 
-    constructor(sprite: Phaser.GameObjects.Sprite, cursors: Phaser.Types.Input.Keyboard.CursorKeys) {
+    constructor(sprite: Phaser.GameObjects.Sprite,
+        cursors: Phaser.Types.Input.Keyboard.CursorKeys
+        , jumpSpeed: number = -250) {
         this.sprite = sprite;
 
+        this.jumpSpeed = jumpSpeed;
         this.getBody().allowGravity = true;
         this.getBody().setMass(1)
         this.getBody().setGravityY(this.gravity);
