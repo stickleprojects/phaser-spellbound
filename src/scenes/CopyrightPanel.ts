@@ -21,7 +21,7 @@ export class CopyrightPanel extends Phaser.Scene {
     private _copyrightText: Phaser.GameObjects.Text;
     private _titleText: Phaser.GameObjects.Text;
 
-    private _titleSyle: Phaser.Types.GameObjects.Text.TextStyle = Phaser.Types.GameObjects.Text.TextStyle()
+
     constructor() {
         super('copyright');
     }
