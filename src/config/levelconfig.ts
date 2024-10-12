@@ -38,10 +38,9 @@ export class LevelConfig {
     Items: Item[];
     constructor(cacheManager: Phaser.Cache.CacheManager, roomWidthInTiles: number, tileWidth: number, roomHeightInTiles: number, tileHeight: number) {
 
-        const xml = cacheManager.xml.get('levelconfig');
-        const j = cacheManager.json.get('levelconfigJSON');
+        const configFile = cacheManager.json.get('levelconfig');
 
-        let o = plainToInstance(Root, j);
+        let o = plainToInstance(Root, configFile);
 
         this.Rooms = this.updateRoomWorldLocations(o.rooms, roomWidthInTiles, tileWidth, roomHeightInTiles, tileHeight);
         this.Characters = o.characters;
