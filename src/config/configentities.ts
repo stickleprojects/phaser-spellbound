@@ -16,7 +16,9 @@ export class Image {
 
 export class CharacterStats extends Stats { }
 export class RoomStats extends Stats { }
-export class ItemStats extends Stats { }
+export class ItemStats extends Stats {
+    weight: number
+}
 
 export class Character {
 
