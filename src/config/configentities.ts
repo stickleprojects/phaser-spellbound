@@ -14,7 +14,10 @@ export class Image {
     y: number
 }
 
-export class CharacterStats extends Stats { }
+export class CharacterStats extends Stats {
+    maxnumberofitems: number
+    maxweightperitem: number
+}
 export class RoomStats extends Stats { }
 export class ItemStats extends Stats {
     weight: number
