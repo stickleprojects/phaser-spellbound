@@ -1,7 +1,7 @@
 import Phaser, { Scene } from 'phaser';
 
 import { createWorld, IWorld } from "bitecs";
-import createObjectMap from '../maps/objects';
+
 import { HudFlags, HudRoomInfo } from './Hud';
 import { RoomNavigator } from '../roomnavigator';
 import Player from '../player';
@@ -69,7 +69,7 @@ export class GamePlay extends Phaser.Scene {
     private roomWidthInTiles: number = 16;
     private roomHeightInTiles: number = 10;
 
-    private objectMap: Map<String, { x: integer; y: integer; }>;
+
     private cameraController: any;
     private hud: any;
     private horizontalRooms: number;
@@ -156,9 +156,6 @@ export class GamePlay extends Phaser.Scene {
         this.map.setCollisionBetween(0, 1000, true, true, 'solid');
 
 
-
-        this.objectMap = createObjectMap();
-
         this.createObjectSprites();
 
         this.createCharacterSprites();
@@ -226,7 +223,7 @@ export class GamePlay extends Phaser.Scene {
         // create the objets
         this.objectLayer.forEach(o => {
             const objectName = o.name;
-            //const objectTilePosition = this.objectMap.get(objectName);
+
             let itemInfo = this.getItemInfo(objectName);
 
             const mapWidth = objectTilemapWidth;
