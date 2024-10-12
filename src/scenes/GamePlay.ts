@@ -1,9 +1,8 @@
-import Phaser, { Scene, Tilemaps } from 'phaser';
+import Phaser, { Scene } from 'phaser';
 
-import { addComponent, addEntity, createWorld, IWorld, System } from "bitecs";
-import createCharacterMap from '../maps/characters';
+import { createWorld, IWorld } from "bitecs";
 import createObjectMap from '../maps/objects';
-import { Hud, HudFlags, HudParameters, HudRoomInfo } from './Hud';
+import { HudFlags, HudRoomInfo } from './Hud';
 import { RoomNavigator } from '../roomnavigator';
 import Player from '../player';
 import { LevelConfig } from '../config/levelconfig';
@@ -69,7 +68,7 @@ export class GamePlay extends Phaser.Scene {
 
     private roomWidthInTiles: number = 16;
     private roomHeightInTiles: number = 10;
-    private characterMap: Map<String, { x: integer; y: integer; }>;
+
     private objectMap: Map<String, { x: integer; y: integer; }>;
     private cameraController: any;
     private hud: any;
@@ -156,7 +155,7 @@ export class GamePlay extends Phaser.Scene {
 
         this.map.setCollisionBetween(0, 1000, true, true, 'solid');
 
-        this.characterMap = createCharacterMap();
+
 
         this.objectMap = createObjectMap();
 
@@ -189,7 +188,7 @@ export class GamePlay extends Phaser.Scene {
 
         this.characterLayer.forEach(o => {
             const characterName = o.name; // + "_right";
-            //const characterTileCoords = this.characterMap.get(characterName);
+
             let characterInfo = this.getCharacter(characterName);
 
             const mapWidth = characterTilemapWidth;
@@ -202,9 +201,6 @@ export class GamePlay extends Phaser.Scene {
 
                 const pixelX = Math.ceil(o.x! / 16) * 16;
                 const pixelY = Math.ceil(o.y! / 16) * 16;
-
-                // in theory we create the player here
-
 
                 if (o.name == "knight") {
                     // create the knight and add to the world
