@@ -7,7 +7,7 @@ import { Hud, HudFlags, HudParameters, HudRoomInfo } from './Hud';
 import { RoomNavigator } from '../roomnavigator';
 import Player from '../player';
 import { LevelConfig } from '../config/levelconfig';
-import { RoomData } from '../config/RoomData';
+//import { RoomData } from '../config/RoomData';
 
 
 class GameFlags {
@@ -55,6 +55,7 @@ export class GamePlay extends Phaser.Scene {
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys
     private map: Phaser.Tilemaps.Tilemap;
 
+    private _levelConfig: LevelConfig;
 
     private map_alltiles: Phaser.Tilemaps.Tileset;
     private map_foregroundtiles: Phaser.Tilemaps.Tileset;
@@ -66,7 +67,7 @@ export class GamePlay extends Phaser.Scene {
     private characterLayer: Phaser.Types.Tilemaps.TiledObject[];
     private doorLayer: Phaser.Types.Tilemaps.TiledObject[];
     private objectLayer: Phaser.Types.Tilemaps.TiledObject[];
-    private rooms: RoomData[];
+    //private rooms: RoomData[];
     private roomWidthInTiles: number = 16;
     private roomHeightInTiles: number = 10;
     private characterMap: Map<String, { x: integer; y: integer; }>;
@@ -88,63 +89,6 @@ export class GamePlay extends Phaser.Scene {
     }
 
 
-    getRoomConfig() {
-
-        const c = new LevelConfig(this.cache);
-
-        return c.RoomData;
-
-        // const xml = this.cache.xml.get('levelconfig');
-        // const roomsAndNames = xml.getElementsByTagName("room");
-
-
-        // var ret: RoomData[] = [];
-
-        // Array.from(roomsAndNames).forEach(element => {
-        //     const x = element.getAttribute('x');
-        //     const y = element.getAttribute('y');
-        //     const name = element.getAttribute('name');
-        //     ret.push(new RoomData(x, y, 0, 0, name));
-        // });
-        // return ret;
-    }
-    splitTileMapIntoRooms(map: Tilemaps.Tilemap) {
-
-        const roomConfig = this.getRoomConfig();
-
-
-        // map.width is in tiles, map.height is in tiles
-        this.horizontalRooms = Phaser.Math.RoundTo(map.width / this.roomWidthInTiles, 0);
-        this.verticalRooms = Phaser.Math.RoundTo(map.height / this.roomHeightInTiles, 0);
-
-
-        var rooms = Array<RoomData>();
-
-        for (var y = 0; y < this.verticalRooms; y++)
-            for (var x = 0; x < this.horizontalRooms; x++) {
-                // copy the data
-
-                const i = x * this.roomWidthInTiles
-                const j = y * this.roomHeightInTiles
-
-
-                var foundRoom = roomConfig.find(r => (r.x == x && r.y == y))
-
-                const name = foundRoom?.name!;
-
-                const roomData = new RoomData(
-                    i * map.tileWidth,
-                    j * map.tileHeight,
-                    this.roomWidthInTiles * map.tileWidth,
-                    this.roomHeightInTiles * map.tileHeight,
-                    name
-                );
-
-                rooms.push(roomData)
-            }
-
-        return rooms;
-    }
 
     preload() {
 
@@ -173,6 +117,7 @@ export class GamePlay extends Phaser.Scene {
     create() {
         this.camera = this.cameras.main
 
+
         this.setupPhysics();
 
         this.cursors = this.input.keyboard?.createCursorKeys()
@@ -186,7 +131,14 @@ export class GamePlay extends Phaser.Scene {
         this.camera.setZoom(3.5);
 
         this.map = this.make.tilemap({ key: 'levels', tileWidth: 16, tileHeight: 16 });
-        this.rooms = this.splitTileMapIntoRooms(this.map);
+
+        this._levelConfig = new LevelConfig(this.cache, this.roomWidthInTiles, this.map.tileWidth, this.roomHeightInTiles, this.map.tileHeight);
+
+        const boundaries = this._levelConfig.getRoomBoundaries();
+        this.horizontalRooms = boundaries.x + 1;
+        this.verticalRooms = boundaries.y + 1;
+
+        //this.rooms = this.splitTileMapIntoRooms(this.map);
 
         this.RoomNavigator = new RoomNavigator(this.input,
             this.horizontalRooms, this.verticalRooms,
@@ -296,21 +248,25 @@ export class GamePlay extends Phaser.Scene {
 
         this.physics.add.collider(sprite, this.solidLayer);
     }
+    getRoomData(x: number, y: number): Room {
+
+        let roomData = this._levelConfig.Rooms.find(r => r.x == x && r.y == y);
+        return roomData;
+    }
     positionCameraAccordingToRoom() {
 
         const roomCoords = this.RoomNavigator.GetRoomCoords();
 
-        let roomX = roomCoords.x;
-        let roomY = roomCoords.y;
-        const roomIndex = roomX + (roomY * this.horizontalRooms);
-        const roomData = this.rooms[roomIndex];
+        const roomData = this.getRoomData(roomCoords.x, roomCoords.y);
+
 
         if (!roomData) {
-            console.log("Failed to find room!");
+            console.log(`Failed to find room! ${roomCoords}`);
         } else {
 
-            this.events.emit("screenmov", new HudRoomInfo(roomX, roomY, roomData.name));
-            this.camera.setBounds(roomData.x, roomData.y, roomData.width, roomData.height, false);
+            this.events.emit("screenmov", new HudRoomInfo(roomCoords.x, roomCoords.y, roomData.name));
+            this.camera.setBounds(roomData.WorldLocation.x, roomData.WorldLocation.y,
+                roomData.WorldLocation.width, roomData.WorldLocation.height, false);
         }
     }
     init(data: GamePlayWindowConfig) {

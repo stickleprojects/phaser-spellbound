@@ -1,4 +1,4 @@
-export class RoomData {
+export class RoomDatazz {
     x: number;
     y: number;
     width: number;

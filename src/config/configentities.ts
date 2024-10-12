@@ -10,8 +10,8 @@ export class Stats {
 
 export class Image {
     id: string
-    x: string
-    y: string
+    x: number
+    y: number
 }
 
 export class CharacterStats extends Stats { }
@@ -31,12 +31,15 @@ export class Character {
 
 
 export class Room {
-    x: string
-    y: string
+    x: number
+    y: number
     name: string
+
 
     @Type(() => RoomStats)
     stats: RoomStats
+
+
 }
 
 
