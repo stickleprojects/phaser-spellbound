@@ -1,0 +1,221 @@
+{
+  "definitions": {
+    "Character": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "images": {
+          "items": {
+            "$ref": "#/definitions/Image"
+          },
+          "type": "array"
+        },
+        "stats": {
+          "$ref": "#/definitions/CharacterStats"
+        }
+      },
+      "required": [
+        "images",
+        "id"
+      ],
+      "type": "object"
+    },
+    "CharacterStats": {
+      "additionalProperties": false,
+      "properties": {
+        "energy": {
+          "type": "number"
+        },
+        "fullname": {
+          "type": "string"
+        },
+        "maxenergy": {
+          "type": "number"
+        },
+        "maxnumberofitems": {
+          "type": "number"
+        },
+        "maxweightperitem": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "energy",
+        "fullname",
+        "maxenergy",
+        "maxnumberofitems",
+        "maxweightperitem"
+      ],
+      "type": "object"
+    },
+    "Door": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "images": {
+          "items": {
+            "$ref": "#/definitions/Image"
+          },
+          "type": "array"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "images",
+        "id"
+      ],
+      "type": "object"
+    },
+    "Image": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ],
+      "type": "object"
+    },
+    "Item": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "images": {
+          "items": {
+            "$ref": "#/definitions/Image"
+          },
+          "type": "array"
+        },
+        "stats": {
+          "$ref": "#/definitions/ItemStats"
+        }
+      },
+      "required": [
+        "images",
+        "id"
+      ],
+      "type": "object"
+    },
+    "ItemStats": {
+      "additionalProperties": false,
+      "properties": {
+        "fullname": {
+          "type": "string"
+        },
+        "weight": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "fullname",
+        "weight"
+      ],
+      "type": "object"
+    },
+    "Room": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "stats": {
+          "$ref": "#/definitions/RoomStats"
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "name"
+      ],
+      "type": "object"
+    },
+    "RoomStats": {
+      "additionalProperties": false,
+      "properties": {
+        "fullname": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "fullname"
+      ],
+      "type": "object"
+    },
+    "Root": {
+      "additionalProperties": false,
+      "properties": {
+        "characters": {
+          "items": {
+            "$ref": "#/definitions/Character"
+          },
+          "type": "array"
+        },
+        "doors": {
+          "items": {
+            "$ref": "#/definitions/Door"
+          },
+          "type": "array"
+        },
+        "items": {
+          "items": {
+            "$ref": "#/definitions/Item"
+          },
+          "type": "array"
+        },
+        "rooms": {
+          "items": {
+            "$ref": "#/definitions/Room"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "characters",
+        "items",
+        "rooms",
+        "doors"
+      ],
+      "type": "object"
+    },
+    "Stats": {
+      "additionalProperties": false,
+      "properties": {
+        "fullname": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "fullname"
+      ],
+      "type": "object"
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/definitions/Root"
+    }
+  ]
+}
