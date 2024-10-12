@@ -575,287 +575,515 @@
         {
             "x": 0,
             "y": 0,
-            "name": "The Lift"
+            "name": "The Lift",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 1,
             "y": 0,
-            "name": "The Roof Garden"
+            "name": "The Roof Garden",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 2,
             "y": 0,
-            "name": "The Roof Garden"
+            "name": "The Roof Garden",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 3,
             "y": 0,
-            "name": "The Roof Garden"
+            "name": "The Roof Garden",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 4,
             "y": 0,
-            "name": "The Roof Garden"
+            "name": "The Roof Garden",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 5,
             "y": 0,
-            "name": "The Roof Garden"
+            "name": "The Roof Garden",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 6,
             "y": 0,
-            "name": "The Roof Garden"
+            "name": "The Roof Garden",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 7,
             "y": 0,
-            "name": "The Roof Garden"
+            "name": "The Roof Garden",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 8,
             "y": 0,
-            "name": "The Roof Garden"
+            "name": "The Roof Garden",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 1,
             "y": 1,
-            "name": "The Tower"
+            "name": "The Tower",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 2,
             "y": 1,
-            "name": "Beyond The Tower"
+            "name": "Beyond The Tower",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 3,
             "y": 1,
-            "name": "Further Beyond The Tower"
+            "name": "Further Beyond The Tower",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 4,
             "y": 1,
-            "name": "The Ballroom"
+            "name": "The Ballroom",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 5,
             "y": 1,
-            "name": "The tree of karn"
+            "name": "The tree of karn",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 6,
             "y": 1,
-            "name": "the stalagmites"
+            "name": "the stalagmites",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 7,
             "y": 1,
-            "name": "the big bottle"
+            "name": "the big bottle",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 8,
             "y": 1,
-            "name": ""
+            "name": "",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 1,
             "y": 2,
-            "name": "the library"
+            "name": "the library",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 2,
             "y": 2,
-            "name": "the large bottle"
+            "name": "the large bottle",
+            "stats": {
+                "poisonous": false,
+                "dark": true
+            }
         },
         {
             "x": 3,
             "y": 2,
-            "name": "the odd ball"
+            "name": "the odd ball",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 4,
             "y": 2,
-            "name": ""
+            "name": "",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 5,
             "y": 2,
-            "name": "the start room"
+            "name": "the start room",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 6,
             "y": 2,
-            "name": "the l-shaped room"
+            "name": "the l-shaped room",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 7,
             "y": 2,
-            "name": "the plant room"
+            "name": "the plant room",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 8,
             "y": 2,
-            "name": "more plant room"
+            "name": "more plant room",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 1,
             "y": 3,
-            "name": ""
+            "name": "",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 2,
             "y": 3,
-            "name": ""
+            "name": "",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 3,
             "y": 3,
-            "name": ""
+            "name": "",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 4,
             "y": 3,
-            "name": ""
+            "name": "",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 5,
             "y": 3,
-            "name": "the wall"
+            "name": "the wall",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 6,
             "y": 3,
-            "name": "the gallery"
+            "name": "the gallery",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 7,
             "y": 3,
-            "name": "the gallery"
+            "name": "the gallery",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 8,
             "y": 3,
-            "name": "the gallery"
+            "name": "the gallery",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 1,
             "y": 4,
-            "name": "the mush room"
+            "name": "the mush room",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 2,
             "y": 4,
-            "name": "the gas room"
+            "name": "the gas room",
+            "stats": {
+                "poisonous": true,
+                "dark": false
+            }
         },
         {
             "x": 3,
             "y": 4,
-            "name": ""
+            "name": "",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 4,
             "y": 4,
-            "name": ""
+            "name": "",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 5,
             "y": 4,
-            "name": "the spare ballroom"
+            "name": "the spare ballroom",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 6,
             "y": 4,
-            "name": ""
+            "name": "",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 7,
             "y": 4,
-            "name": "the trophy room"
+            "name": "the trophy room",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 8,
             "y": 4,
-            "name": ""
+            "name": "",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 1,
             "y": 5,
-            "name": ""
+            "name": "",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 2,
             "y": 5,
-            "name": "secret tunnel entrance"
+            "name": "secret tunnel entrance",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 3,
             "y": 5,
-            "name": "gimbal's secret study"
+            "name": "gimbal's secret study",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 4,
             "y": 5,
-            "name": "the secret tunnel"
+            "name": "the secret tunnel",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 5,
             "y": 5,
-            "name": "more secret tunnel"
+            "name": "more secret tunnel",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 6,
             "y": 5,
-            "name": "the pit"
+            "name": "the pit",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 7,
             "y": 5,
-            "name": ""
+            "name": "",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 8,
             "y": 5,
-            "name": "the most magic room"
+            "name": "the most magic room",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 1,
             "y": 6,
-            "name": "the basement"
+            "name": "the basement",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 2,
             "y": 6,
-            "name": "boing!"
+            "name": "boing!",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 3,
             "y": 6,
-            "name": "boing,boing,boing,boing!"
+            "name": "boing,boing,boing,boing!",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 4,
             "y": 6,
-            "name": "the deadly trap!"
+            "name": "the deadly trap!",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 5,
             "y": 6,
-            "name": "mirror mirror on the wall!"
+            "name": "mirror mirror on the wall!",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 6,
             "y": 6,
-            "name": "the shifting floor"
+            "name": "the shifting floor",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 7,
             "y": 6,
-            "name": "welcome stranger"
+            "name": "welcome stranger",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         },
         {
             "x": 8,
             "y": 6,
-            "name": "the very last room"
+            "name": "the very last room",
+            "stats": {
+                "poisonous": false,
+                "dark": false
+            }
         }
     ],
     "doors": [

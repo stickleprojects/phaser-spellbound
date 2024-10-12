@@ -148,19 +148,30 @@
       "required": [
         "x",
         "y",
-        "name"
+        "name",
+        "stats"
       ],
       "type": "object"
     },
     "RoomStats": {
       "additionalProperties": false,
       "properties": {
-        "fullname": {
-          "type": "string"
+        "poisonous": {
+          "enum": [
+            true,
+            false
+          ]
+        },
+        "dark": {
+          "enum": [
+            true,
+            false
+          ]
         }
       },
       "required": [
-        "fullname"
+        "poisonous",
+        "dark"
       ],
       "type": "object"
     },
@@ -208,7 +219,7 @@
         }
       },
       "required": [
-        "fullname"
+        "fullname",
       ],
       "type": "object"
     }
