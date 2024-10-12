@@ -7,6 +7,7 @@ import { Hud, HudFlags, HudParameters, HudRoomInfo } from './Hud';
 import { RoomNavigator } from '../roomnavigator';
 import Player from '../player';
 import { LevelConfig } from '../config/levelconfig';
+import { Character } from '../config/configentities';
 
 class GameFlags {
     private _followingPlayer: boolean;
@@ -173,6 +174,11 @@ export class GamePlay extends Phaser.Scene {
 
 
     }
+    private getCharacter(name: string): Character | undefined {
+        let character = this._levelConfig.Characters.find(c => c.id == name);
+
+        return character;
+    }
     private createCharacterSprites() {
         const characterTileHeight = 32;
         const charaterTileWidth = 16;
@@ -182,14 +188,17 @@ export class GamePlay extends Phaser.Scene {
         const characterhalfW = charaterTileWidth / 2;
 
         this.characterLayer.forEach(o => {
-            const characterName = o.name + "_right";
-            const characterTileCoords = this.characterMap.get(characterName);
+            const characterName = o.name; // + "_right";
+            //const characterTileCoords = this.characterMap.get(characterName);
+            let characterInfo = this.getCharacter(characterName);
+
             const mapWidth = characterTilemapWidth;
 
-            if (!characterTileCoords) {
+            if (!characterInfo) {
                 console.log("Cannot find character texture for " + characterName);
             } else {
-                const index = (characterTileCoords.y * mapWidth) + characterTileCoords.x;
+                let firstImage = characterInfo.images[0];
+                const index = (firstImage.y * mapWidth) + firstImage.x;
 
                 const pixelX = Math.ceil(o.x! / 16) * 16;
                 const pixelY = Math.ceil(o.y! / 16) * 16;

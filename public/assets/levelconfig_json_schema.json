@@ -18,7 +18,8 @@
       },
       "required": [
         "images",
-        "id"
+        "id",
+        "stats"
       ],
       "type": "object"
     },
@@ -219,7 +220,7 @@
         }
       },
       "required": [
-        "fullname",
+        "fullname"
       ],
       "type": "object"
     }

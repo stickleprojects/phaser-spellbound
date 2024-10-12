@@ -45,6 +45,13 @@
             "id": "ladyrosmar"
         },
         {
+            "stats": {
+                "fullname": "Thor",
+                "energy": 50,
+                "maxenergy": 50,
+                "maxnumberofitems": 2,
+                "maxweightperitem": 1.4
+            },
             "images": [
                 {
                     "id": "right",
@@ -82,6 +89,13 @@
             "id": "florin"
         },
         {
+            "stats": {
+                "fullname": "The Banshee",
+                "energy": 100,
+                "maxenergy": 100,
+                "maxnumberofitems": 0,
+                "maxweightperitem": 0
+            },
             "images": [
                 {
                     "id": "right",
@@ -141,6 +155,13 @@
             "id": "elrand"
         },
         {
+            "stats": {
+                "fullname": "Gimball",
+                "energy": 100,
+                "maxenergy": 100,
+                "maxnumberofitems": 10,
+                "maxweightperitem": 10
+            },
             "images": [
                 {
                     "id": "right",
@@ -154,6 +175,28 @@
                 }
             ],
             "id": "gimball the wizard"
+        },
+        {
+            "stats": {
+                "fullname": "The Knight",
+                "energy": 100,
+                "maxenergy": 100,
+                "maxnumberofitems": 5,
+                "maxweightperitem": 2
+            },
+            "images": [
+                {
+                    "id": "right",
+                    "x": 0,
+                    "y": 0
+                },
+                {
+                    "id": "left",
+                    "x": 1,
+                    "y": 0
+                }
+            ],
+            "id": "knight"
         }
     ],
     "items": [
