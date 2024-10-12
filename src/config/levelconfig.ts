@@ -1,6 +1,7 @@
 import { plainToInstance } from "class-transformer";
-//import { RoomData } from "./RoomData";
-import { Root, Character, Room, Door, Item, Rectangle } from "./configentities";
+
+import { Root, Character, Room, Door, Item } from "./configentities";
+import { Coordinate } from "../roomnavigator";
 
 export class Rectangle {
     x: number
@@ -30,7 +31,6 @@ class RoomWithWorldLocation extends Room {
 }
 
 export class LevelConfig {
-    //RoomData: RoomData[];
 
     Rooms: RoomWithWorldLocation[];
     Characters: Character[];
@@ -38,18 +38,15 @@ export class LevelConfig {
     Items: Item[];
     constructor(cacheManager: Phaser.Cache.CacheManager, roomWidthInTiles: number, tileWidth: number, roomHeightInTiles: number, tileHeight: number) {
 
-        const xml = cacheManager.xml.get('levelconfig');
-        const j = cacheManager.json.get('levelconfigJSON');
+        const configFile = cacheManager.json.get('levelconfig');
 
-        let o = plainToInstance(Root, j);
+        let o = plainToInstance(Root, configFile);
 
         this.Rooms = this.updateRoomWorldLocations(o.rooms, roomWidthInTiles, tileWidth, roomHeightInTiles, tileHeight);
         this.Characters = o.characters;
         this.Doors = o.doors;
         this.Items = o.items;
 
-
-        //  this.RoomData = this.readRoomData(xml);
     }
 
     updateRoomWorldLocations(rooms: Room[], roomWidthInTiles: number, tileWidth: number, roomHeightInTiles: number, tileHeight: number): RoomWithWorldLocation[] {
@@ -76,22 +73,9 @@ export class LevelConfig {
 
         }
     }
-    private readCharacterData(xml) {
 
-    }
-
-    private readRoomData(xml) {
-
-        const roomsAndNames = xml.getElementsByTagName("room");
-
-        var ret: RoomData[] = [];
-
-        Array.from(roomsAndNames).forEach(element => {
-            const x = element.getAttribute('x');
-            const y = element.getAttribute('y');
-            const name = element.getAttribute('name');
-            ret.push(new RoomData(x, y, 0, 0, name));
-        });
-        return ret;
+    findRoom(x: number, y: number) {
+        let room = this.Rooms.find(r => r.x == x && r.y == y);
+        return room;
     }
 }
