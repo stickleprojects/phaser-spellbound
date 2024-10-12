@@ -1,4 +1,4 @@
-export class RoomData {
+export class RoomDatazz {
     x: number;
     y: number;
     width: number;
@@ -12,4 +12,21 @@ export class RoomData {
         this.height = height;
         this.name = name;
     }
+}
+
+
+export class CharacterStats {
+    fullname: string;
+}
+export class ImageInfo {
+    id: string;
+    x: number;
+    y: number;
+}
+export class CharacterData {
+    id: string;
+
+    stats: CharacterStats;
+
+
 }

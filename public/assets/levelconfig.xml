@@ -9,64 +9,64 @@
 			<stats>
 				<fullname>orik the clerik</fullname>
 			</stats>
-			<images>
-				<image id="right" x="6" y="1" />
-				<image id="left" x="7" y="1" />
-			</images>
+			
+				<images id="right" x="6" y="1" />
+				<images id="left" x="7" y="1" />
+			
 		</character>
 		<character id="ladyrosmar">
 			<stats>
 				<fullname>Lady Rosma</fullname>
 			</stats>
-			<images>
-				<image id="right" x="4" y="0" />
-				<image id="left" x="5" y="0" />
-			</images>
+			
+				<images id="right" x="4" y="0" />
+				<images id="left" x="5" y="0" />
+			
 		</character>
 		<character id="thor">
-			<images>
-				<image id="right" x="6" y="0" />
-				<image id="left" x="7" y="0" />
-			</images>
+			
+				<images id="right" x="6" y="0" />
+				<images id="left" x="7" y="0" />
+			
 		</character>
 		<character id="florin">
 			<stats>
 				<fullname>Florin the dwarf</fullname>
 			</stats>
-			<images>
-				<image id="right" x="8" y="0" />
-				<image id="left" x="9" y="0" />
-			</images>
+			
+				<images id="right" x="8" y="0" />
+				<images id="left" x="9" y="0" />
+			
 		</character>
 		<character id="the banshee">
-			<images>
-				<image id="right" x="10" y="0" />
-				<image id="left" x="11" y="0" />
-			</images>
+			
+				<images id="right" x="10" y="0" />
+				<images id="left" x="11" y="0" />
+			
 		</character>
 		<character id="samsun">
 			<stats>
 				<fullname>samsun the strong</fullname>
 			</stats>
-			<images>
-				<image id="right" x="12" y="0" />
-				<image id="left" x="13" y="0" />
-			</images>
+			
+				<images id="right" x="12" y="0" />
+				<images id="left" x="13" y="0" />
+			
 		</character>
 		<character id="elrand">
 			<stats>
 				<fullname>Elrand halfelven</fullname>
 			</stats>
-			<images>
-				<image id="right" x="14" y="0" />
-				<image id="left" x="15" y="0" />
-			</images>
+			
+				<images id="right" x="14" y="0" />
+				<images id="left" x="15" y="0" />
+			
 		</character>
 		<character id="gimball the wizard">
-			<images>
-				<image id="right" x="4" y="1" />
-				<image id="left" x="5" y="1" />
-			</images>
+			
+				<images id="right" x="4" y="1" />
+				<images id="left" x="5" y="1" />
+			
 		</character>
 	</characters>
 	<items>
@@ -74,247 +74,247 @@
 			<stats>
 				<fullname>Javelin</fullname>
 			</stats>
-			<images>
-				<image x="16" y="25" />
-			</images>
+			
+				<images x="16" y="25" />
+			
 		</item>
 		<item id="redgem">
 			<stats>
 				<fullname>Red Crystal</fullname>
 			</stats>
-			<images>
-				<image x="19" y="25" />
-			</images>
+			
+				<images x="19" y="25" />
+			
 		</item>
 		<item id="bluegem">
 			<stats>
 				<fullname>Blue Crystal</fullname>
 			</stats>
-			<images>
-				<image x="8" y="25" />
-			</images>
+			
+				<images x="8" y="25" />
+			
 
 		</item>
 		<item id="crystalball">
 			<stats>
 				<fullname>Crystal Ball</fullname>
 			</stats>
-			<images>
-				<image x="20" y="25" />
-			</images>
+			
+				<images x="20" y="25" />
+			
 		</item>
 		<item id="greengem">
 			<stats>
 				<fullname>Green Crystal</fullname>
 			</stats>
-			<images>
-				<image x="17" y="25" />
-			</images>
+			
+				<images x="17" y="25" />
+			
 		</item>
 		<item id="whiteadvert">
-			<images>
-				<image x="18" y="25" />
-			</images>
+			
+				<images x="18" y="25" />
+			
 		</item>
 		<item id="glowingbottle">
 			<stats>
 				<fullname>Glowing Bottle</fullname>
 			</stats>
-			<images>
-				<image x="11" y="25" />
-			</images>
+			
+				<images x="11" y="25" />
+			
 		</item>
 		<item id="fourleafclover">
 			<stats>
 				<fullname>Four leaf clover</fullname>
 			</stats>
-			<images>
-				<image x="12" y="25" />
-			</images>
+			
+				<images x="12" y="25" />
+			
 		</item>
 		<item id="saxophone">
 			<stats>
 				<fullname>Saxophone</fullname>
 			</stats>
-			<images>
-				<image x="10" y="25" />
-			</images>
+			
+				<images x="10" y="25" />
+			
 		</item>
 		<item id="greenbottle">
 			<stats>
 				<fullname>bottle of liquid</fullname>
 			</stats>
-			<images>
-				<image x="13" y="25" />
-			</images>
+			
+				<images x="13" y="25" />
+			
 		</item>
 		<item id="yellowadvert">
-			<images>
-				<image x="14" y="25" />
-			</images>
+			
+				<images x="14" y="25" />
+			
 		</item>
 		<item id="prism">
-			<images>
-				<image x="15" y="25" />
-			</images>
+			
+				<images x="15" y="25" />
+			
 		</item>
 		<item id="wand">
 			<stats>
 				<fullname>Wand of command</fullname>
 			</stats>
-			<images>
-				<image x="7" y="25" />
-			</images>
+			
+				<images x="7" y="25" />
+			
 		</item>
 		<item id="engravedcandle">
 			<stats>
 				<fullname>Engraved Candle</fullname>
 			</stats>
-			<images>
-				<image x="21" y="25" />
-			</images>
+			
+				<images x="21" y="25" />
+			
 		</item>
 		<item id="yellowkey">
-			<images>
-				<image x="22" y="25" />
-			</images>
+			
+				<images x="22" y="25" />
+			
 		</item>
 		<item id="urn">
-			<images>
-				<image x="23" y="25" />
-			</images>
+			
+				<images x="23" y="25" />
+			
 		</item>
 		<item id="goldbrick">
-			<images>
-				<image x="24" y="25" />
-			</images>
+			
+				<images x="24" y="25" />
+			
 		</item>
 		<item id="teleportkey">
 			<stats>
 				<fullname>Teleport Key</fullname>
 			</stats>
-			<images>
-				<image x="25" y="25" />
-			</images>
+			
+				<images x="25" y="25" />
+			
 		</item>
 		<item id="teleportpad">
-			<images>
-				<image x="26" y="25" />
-			</images>
+			
+				<images x="26" y="25" />
+			
 		</item>
 		<item id="masonry">
-			<images>
-				<image x="27" y="25" />
-			</images>
+			
+				<images x="27" y="25" />
+			
 		</item>
 		<item id="bluebottle">
-			<images>
-				<image x="28" y="25" />
-			</images>
+			
+				<images x="28" y="25" />
+			
 		</item>
 		<item id="goldbrick2">
-			<images>
-				<image x="29" y="25" />
-			</images>
+			
+				<images x="29" y="25" />
+			
 		</item>
 		<item id="blueball">
-			<images>
-				<image x="30" y="25" />
-			</images>
+			
+				<images x="30" y="25" />
+			
 		</item>
 		<item id="advert">
-			<images>
-				<image x="0" y="25" />
-			</images>
+			
+				<images x="0" y="25" />
+			
 		</item>
 		<item id="mirror">
-			<images>
-				<image x="5" y="25" />
-			</images>
+			
+				<images x="5" y="25" />
+			
 		</item>
 		<item id="redherring">
 			<stats>
 				<fullname>red herring</fullname>
 			</stats>
-			<images>
-				<image x="4" y="25" />
-			</images>
+			
+				<images x="4" y="25" />
+			
 		</item>
 		<item id="whitegoldring">
 			<stats>
 				<fullname>white gold ring   </fullname>
 			</stats>
-			<images>
-				<image x="31" y="25" />
-			</images>
+			
+				<images x="31" y="25" />
+			
 		</item>
 		<item id="stickybun">
-			<images>
-				<image x="0" y="27" />
-			</images>
+			
+				<images x="0" y="27" />
+			
 		</item>
 		<item id="shadows">
 			<stats>
 				<fullname>book of shadows</fullname>
 			</stats>
-			<images>
-				<image x="1" y="27" />
-			</images>
+			
+				<images x="1" y="27" />
+			
 		</item>
 		<item id="goblet">
-			<images>
-				<image x="2" y="27" />
-			</images>
+			
+				<images x="2" y="27" />
+			
 		</item>
 		<item id="glue">
-			<images>
-				<image x="3" y="27" />
-			</images>
+			
+				<images x="3" y="27" />
+			
 		</item>
 		<item id="trumpet">
-			<images>
-				<image x="4" y="27" />
-			</images>
+			
+				<images x="4" y="27" />
+			
 		</item>
 		<item id="puddle">
 			<stats>
 				<fullname>strange liquid</fullname>
 			</stats>
-			<images>
-				<image x="5" y="27" />
-			</images>
+			
+				<images x="5" y="27" />
+			
 		</item>
 		<item id="lazer">
 			<stats>
 				<fullname>pocket lazer</fullname>
 			</stats>
-			<images>
-				<image x="6" y="27" />
-			</images>
+			
+				<images x="6" y="27" />
+			
 		</item>
 		<item id="brokentalisman">
 			<stats>
 				<fullname>broken talisman</fullname>
 			</stats>
-			<images>
-				<image x="7" y="27" />
-			</images>
+			
+				<images x="7" y="27" />
+			
 		</item>
 		<item id="powerpongplant">
 			<stats>
 				<fullname>power pong plant</fullname>
 			</stats>
-			<images>
-				<image x="8" y="27" />
-			</images>
+			
+				<images x="8" y="27" />
+			
 		</item>
 		<item id="shield">
 			<stats>
 				<fullname>shield</fullname>
 			</stats>
-			<images>
-				<image x="9" y="27" />
-			</images>
+			
+				<images x="9" y="27" />
+			
 		</item>
 	</items>
 	<rooms>
@@ -385,64 +385,64 @@
 	</rooms>
 	<doors>
 		<door id="cellardoor" type="Lift">
-			<images>
-				<image id="closed" x="8" y="1" />
-				<image id="open" x="6" y="1" />
-			</images>
+			
+				<images id="closed" x="8" y="1" />
+				<images id="open" x="6" y="1" />
+			
 		</door>
 		<door id="4thfloor" type="Lift">
-			<images>
-				<image id="closed" x="8" y="1" />
-				<image id="open" x="6" y="1" />
-			</images>
+			
+				<images id="closed" x="8" y="1" />
+				<images id="open" x="6" y="1" />
+			
 		</door>
 		<door id="3rdfloor" type="Lift">
-			<images>
-				<image id="closed" x="8" y="1" />
-				<image id="open" x="6" y="1" />
-			</images>
+			
+				<images id="closed" x="8" y="1" />
+				<images id="open" x="6" y="1" />
+			
 		</door>
 		<door id="2ndfloor" type="Lift">
-			<images>
-				<image id="closed" x="8" y="1" />
-				<image id="open" x="6" y="1" />
-			</images>
+			
+				<images id="closed" x="8" y="1" />
+				<images id="open" x="6" y="1" />
+			
 		</door>
 		<door id="1stfloor" type="Lift">
-			<images>
-				<image id="closed" x="8" y="1" />
-				<image id="open" x="6" y="1" />
-			</images>
+			
+				<images id="closed" x="8" y="1" />
+				<images id="open" x="6" y="1" />
+			
 		</door>
 		<door id="groundfloor" type="Lift">
-			<images>
-				<image id="closed" x="8" y="1" />
-				<image id="open" x="6" y="1" />
-			</images>
+			
+				<images id="closed" x="8" y="1" />
+				<images id="open" x="6" y="1" />
+			
 		</door>
 		<door id="basement" type="Lift">
-			<images>
-				<image id="closed" x="8" y="1" />
-				<image id="open" x="6" y="1" />
-			</images>
+			
+				<images id="closed" x="8" y="1" />
+				<images id="open" x="6" y="1" />
+			
 		</door>
 		<door id="roof" type="Lift">
-			<images>
-				<image id="closed" x="8" y="1" />
-				<image id="open" x="6" y="1" />
-			</images>
+			
+				<images id="closed" x="8" y="1" />
+				<images id="open" x="6" y="1" />
+			
 		</door>
 		<door id="thewall">
-			<images>
-				<image id="closed" x="8" y="1" />
-				<image id="open" x="6" y="1" />
-			</images>
+			
+				<images id="closed" x="8" y="1" />
+				<images id="open" x="6" y="1" />
+			
 		</door>
 		<door id="secretentrance">
-			<images>
-				<image id="closed" x="8" y="1" />
-				<image id="open" x="6" y="1" />
-			</images>
+			
+				<images id="closed" x="8" y="1" />
+				<images id="open" x="6" y="1" />
+			
 		</door>
 	</doors>
 </config>

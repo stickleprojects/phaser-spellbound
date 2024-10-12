@@ -38,6 +38,7 @@ export class Preloader extends Phaser.Scene {
         this.load.spritesheet('objects', 'objectsprites.png', { frameWidth: 16, frameHeight: 32 });
 
         this.load.xml('levelconfig', 'levelconfig.xml')
+        this.load.json('levelconfigJSON', 'levelconfig.json')
     }
 
     create() {

@@ -33,16 +33,22 @@ Once the server is running you can edit any of the files in the `src` folder. Vi
 # Outstanding features
 
 ## Inventory
-Allows you to carry 5 items
+Allows you to carry 5 items (iss #31)
 
-## Colourful fonts
-Need to figure out how to colour the fonts for the various panels/etc
+## Colourful fonts 
+Need to figure out how to colour the fonts for the various panels/etc (iss #32)
 
 
 ## NPCs should walk around
+NPCs should be able to walk around when not onscreen and not asleep (iss #33)
+NPCs can walk into the lift
+
 ## Lift should move by itself
-## NPCs can walk into the lift
+should move between floors (iss #34)
+
+
 ## Menu system for overlapping menus and showing available commands
+Popup dialog system (iss #35)
 Choose the Verb "give"
 Choose the Subject "give [ITEM]"
 Choose the Object "give [ITEM] to [PERSON]"
@@ -56,33 +62,44 @@ Whilst you are carrying the mirror, the inventory panel appears at bottom of the
 ## panel at bottom of screen
 Shows copyright message usually - DONE
 Can show inventory if mirror is carried
+Shows command builder (iss #36)
 
 ## knight animation
-* Knight should face the direction of travel
-* Knight should animate walking
-* Teleport animation disappear
-* Teleport animation appear
+(iss #37)
+* Knight should face the direction of travel (iss #37)
+* Knight should animate walking (iss #37)
+* Teleport animation disappear (iss #38)
+* Teleport animation appear (iss #38)
 
 
 ## Teleport
-Whilst you are carrying the teleportkey
-New menuitem for "teleport"
-When you select "teleport" it takes you to the telepad
+Whilst you are carrying the teleportkey (iss #38)
+New menuitem for "teleport" (iss #38)
+When you select "teleport" it takes you to the telepad (iss #38)
 
 ## Glowing bottle
 Whilst you are carrying the glowingbottle
-DarkRooms wont kill you
+DarkRooms wont kill you (iss #39)
 
 ## Powerpong plant
-Whilst you are carrying the PowerPong plant
+Whilst you are carrying the PowerPong plant (iss #40)
 Poisouns rooms wont kill you
 
 ## Room Poperties
-* Dark - kills you with tripping over
+* Dark - kills you with tripping over (iss #39)
 * Lift - Allows you to move between floors (enables the menu item)
-* Poisonous - Kills you with gas
+* Poisonous - Kills you with gas (iss #40)
+
 ## Health bar
-Should decrease as you walk between screens or run a command
+Should decrease as you walk between screens or run a command (iss #41)
+
+
+##' object attributes
+Weight (iss #42)
+
+## character attributes
+maxweight per item (iss #43)
+max number of items (iss #44)
 
 ## Sound
 * Sound on menu item

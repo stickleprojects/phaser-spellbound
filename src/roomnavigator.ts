@@ -1,3 +1,17 @@
+
+export class Coordinate {
+    x: number;
+    y: number;
+    constructor(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+
+    }
+
+    toString() {
+        return `(${this.x},${this.y})`;
+    }
+}
 export class RoomNavigator {
     SetRoomCoordinates(coords: { x: number; y: number; }) {
         let changed = false;
@@ -24,8 +38,8 @@ export class RoomNavigator {
     horizontalRooms: number;
     verticalRooms: number;
 
-    public GetRoomCoords() {
-        return { x: this.roomX, y: this.roomY };
+    public GetRoomCoords(): Coordinate {
+        return new Coordinate(this.roomX, this.roomY);
     }
     constructor(input: Phaser.Input.InputPlugin, horizontalRoomMax: number, verticalRoomMax: number, onRoomChanged) {
 
