@@ -6,7 +6,7 @@ import { HudFlags, HudRoomInfo } from './Hud';
 import { RoomNavigator } from '../roomnavigator';
 import Player from '../player';
 import { LevelConfig } from '../config/levelconfig';
-import { Character } from '../config/configentities';
+import { Character, Item } from '../config/configentities';
 
 class GameFlags {
     private _followingPlayer: boolean;
@@ -213,6 +213,9 @@ export class GamePlay extends Phaser.Scene {
         });
     }
 
+    private getItemInfo(name: string): Item | undefined {
+        return this._levelConfig.Items.find(x => x.id == name);
+    }
     private createObjectSprites() {
         const objectTileHeight = 16;
         const objectTileWidth = 16;
@@ -223,14 +226,16 @@ export class GamePlay extends Phaser.Scene {
         // create the objets
         this.objectLayer.forEach(o => {
             const objectName = o.name;
-            const objectTilePosition = this.objectMap.get(objectName);
+            //const objectTilePosition = this.objectMap.get(objectName);
+            let itemInfo = this.getItemInfo(objectName);
 
             const mapWidth = objectTilemapWidth;
-            if (!objectTilePosition) {
+            if (!itemInfo) {
                 console.log("Failed to find object " + objectName);
             } else {
 
-                const index = (objectTilePosition.y * mapWidth) + objectTilePosition.x;
+                let firstImage = itemInfo.images[0];
+                const index = (firstImage.y * mapWidth) + firstImage.x;
                 const pixelX = Math.ceil(o.x! / objectTileWidth) * objectTileWidth;
                 const pixelY = Math.ceil(o.y! / objectTileHeight) * objectTileHeight;
 

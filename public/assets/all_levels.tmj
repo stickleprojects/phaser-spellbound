@@ -406,6 +406,17 @@
                 }, 
                 {
                  "height":15,
+                 "id":56,
+                 "name":"mirror",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":14,
+                 "x":889,
+                 "y":381.5
+                }, 
+                {
+                 "height":15,
                  "id":15,
                  "name":"teleportkey",
                  "rotation":0,
@@ -884,7 +895,7 @@
          "y":0
         }],
  "nextlayerid":7,
- "nextobjectid":56,
+ "nextobjectid":57,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.0",
