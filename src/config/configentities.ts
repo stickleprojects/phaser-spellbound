@@ -16,6 +16,7 @@ export class Image {
 
 export class CharacterStats extends Stats {
     maxnumberofitems: number
+    maxweightperitem: number
 }
 export class RoomStats extends Stats { }
 export class ItemStats extends Stats { }
