@@ -24,6 +24,8 @@
     },
     "dependencies": {
         "bitecs": "^0.3.40",
-        "phaser": "^3.80.1"
+        "class-transformer": "^0.5.1",
+        "phaser": "^3.80.1",
+        "reflect-metadata": "^0.2.2"
     }
 }

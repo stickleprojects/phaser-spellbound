@@ -6,22 +6,9 @@ import createObjectMap from '../maps/objects';
 import { Hud, HudFlags, HudParameters, HudRoomInfo } from './Hud';
 import { RoomNavigator } from '../roomnavigator';
 import Player from '../player';
+import { LevelConfig } from '../config/levelconfig';
+import { RoomData } from '../config/RoomData';
 
-class RoomData {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-    name: string;
-
-    constructor(x: number, y: number, width: number, height: number, name: string) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.name = name;
-    }
-}
 
 class GameFlags {
     private _followingPlayer: boolean;
@@ -102,19 +89,24 @@ export class GamePlay extends Phaser.Scene {
 
 
     getRoomConfig() {
-        const xml = this.cache.xml.get('levelconfig');
-        const roomsAndNames = xml.getElementsByTagName("room");
+
+        const c = new LevelConfig(this.cache);
+
+        return c.RoomData;
+
+        // const xml = this.cache.xml.get('levelconfig');
+        // const roomsAndNames = xml.getElementsByTagName("room");
 
 
-        var ret: RoomData[] = [];
+        // var ret: RoomData[] = [];
 
-        Array.from(roomsAndNames).forEach(element => {
-            const x = element.getAttribute('x');
-            const y = element.getAttribute('y');
-            const name = element.getAttribute('name');
-            ret.push(new RoomData(x, y, 0, 0, name));
-        });
-        return ret;
+        // Array.from(roomsAndNames).forEach(element => {
+        //     const x = element.getAttribute('x');
+        //     const y = element.getAttribute('y');
+        //     const name = element.getAttribute('name');
+        //     ret.push(new RoomData(x, y, 0, 0, name));
+        // });
+        // return ret;
     }
     splitTileMapIntoRooms(map: Tilemaps.Tilemap) {
 

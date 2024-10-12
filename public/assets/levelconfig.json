@@ -1,0 +1,981 @@
+{
+    "characters": [
+        {
+            "stats": {
+                "fullname": "orik the clerik"
+            },
+            "images": [
+                {
+                    "id": "right",
+                    "x": "6",
+                    "y": "1"
+                },
+                {
+                    "id": "left",
+                    "x": "7",
+                    "y": "1"
+                }
+            ],
+            "id": "orik"
+        },
+        {
+            "stats": {
+                "fullname": "Lady Rosma"
+            },
+            "images": [
+                {
+                    "id": "right",
+                    "x": "4",
+                    "y": "0"
+                },
+                {
+                    "id": "left",
+                    "x": "5",
+                    "y": "0"
+                }
+            ],
+            "id": "ladyrosmar"
+        },
+        {
+            "images": [
+                {
+                    "id": "right",
+                    "x": "6",
+                    "y": "0"
+                },
+                {
+                    "id": "left",
+                    "x": "7",
+                    "y": "0"
+                }
+            ],
+            "id": "thor"
+        },
+        {
+            "stats": {
+                "fullname": "Florin the dwarf"
+            },
+            "images": [
+                {
+                    "id": "right",
+                    "x": "8",
+                    "y": "0"
+                },
+                {
+                    "id": "left",
+                    "x": "9",
+                    "y": "0"
+                }
+            ],
+            "id": "florin"
+        },
+        {
+            "images": [
+                {
+                    "id": "right",
+                    "x": "10",
+                    "y": "0"
+                },
+                {
+                    "id": "left",
+                    "x": "11",
+                    "y": "0"
+                }
+            ],
+            "id": "the banshee"
+        },
+        {
+            "stats": {
+                "fullname": "samsun the strong"
+            },
+            "images": [
+                {
+                    "id": "right",
+                    "x": "12",
+                    "y": "0"
+                },
+                {
+                    "id": "left",
+                    "x": "13",
+                    "y": "0"
+                }
+            ],
+            "id": "samsun"
+        },
+        {
+            "stats": {
+                "fullname": "Elrand halfelven"
+            },
+            "images": [
+                {
+                    "id": "right",
+                    "x": "14",
+                    "y": "0"
+                },
+                {
+                    "id": "left",
+                    "x": "15",
+                    "y": "0"
+                }
+            ],
+            "id": "elrand"
+        },
+        {
+            "images": [
+                {
+                    "id": "right",
+                    "x": "4",
+                    "y": "1"
+                },
+                {
+                    "id": "left",
+                    "x": "5",
+                    "y": "1"
+                }
+            ],
+            "id": "gimball the wizard"
+        }
+    ],
+    "items": [
+        {
+            "stats": {
+                "fullname": "Javelin"
+            },
+            "images": [
+                {
+                    "x": "16",
+                    "y": "25"
+                }
+            ],
+            "id": "spear"
+        },
+        {
+            "stats": {
+                "fullname": "Red Crystal"
+            },
+            "images": [
+                {
+                    "x": "19",
+                    "y": "25"
+                }
+            ],
+            "id": "redgem"
+        },
+        {
+            "stats": {
+                "fullname": "Blue Crystal"
+            },
+            "images": [
+                {
+                    "x": "8",
+                    "y": "25"
+                }
+            ],
+            "id": "bluegem"
+        },
+        {
+            "stats": {
+                "fullname": "Crystal Ball"
+            },
+            "images": [
+                {
+                    "x": "20",
+                    "y": "25"
+                }
+            ],
+            "id": "crystalball"
+        },
+        {
+            "stats": {
+                "fullname": "Green Crystal"
+            },
+            "images": [
+                {
+                    "x": "17",
+                    "y": "25"
+                }
+            ],
+            "id": "greengem"
+        },
+        {
+            "images": [
+                {
+                    "x": "18",
+                    "y": "25"
+                }
+            ],
+            "id": "whiteadvert"
+        },
+        {
+            "stats": {
+                "fullname": "Glowing Bottle"
+            },
+            "images": [
+                {
+                    "x": "11",
+                    "y": "25"
+                }
+            ],
+            "id": "glowingbottle"
+        },
+        {
+            "stats": {
+                "fullname": "Four leaf clover"
+            },
+            "images": [
+                {
+                    "x": "12",
+                    "y": "25"
+                }
+            ],
+            "id": "fourleafclover"
+        },
+        {
+            "stats": {
+                "fullname": "Saxophone"
+            },
+            "images": [
+                {
+                    "x": "10",
+                    "y": "25"
+                }
+            ],
+            "id": "saxophone"
+        },
+        {
+            "stats": {
+                "fullname": "bottle of liquid"
+            },
+            "images": [
+                {
+                    "x": "13",
+                    "y": "25"
+                }
+            ],
+            "id": "greenbottle"
+        },
+        {
+            "images": [
+                {
+                    "x": "14",
+                    "y": "25"
+                }
+            ],
+            "id": "yellowadvert"
+        },
+        {
+            "images": [
+                {
+                    "x": "15",
+                    "y": "25"
+                }
+            ],
+            "id": "prism"
+        },
+        {
+            "stats": {
+                "fullname": "Wand of command"
+            },
+            "images": [
+                {
+                    "x": "7",
+                    "y": "25"
+                }
+            ],
+            "id": "wand"
+        },
+        {
+            "stats": {
+                "fullname": "Engraved Candle"
+            },
+            "images": [
+                {
+                    "x": "21",
+                    "y": "25"
+                }
+            ],
+            "id": "engravedcandle"
+        },
+        {
+            "images": [
+                {
+                    "x": "22",
+                    "y": "25"
+                }
+            ],
+            "id": "yellowkey"
+        },
+        {
+            "images": [
+                {
+                    "x": "23",
+                    "y": "25"
+                }
+            ],
+            "id": "urn"
+        },
+        {
+            "images": [
+                {
+                    "x": "24",
+                    "y": "25"
+                }
+            ],
+            "id": "goldbrick"
+        },
+        {
+            "stats": {
+                "fullname": "Teleport Key"
+            },
+            "images": [
+                {
+                    "x": "25",
+                    "y": "25"
+                }
+            ],
+            "id": "teleportkey"
+        },
+        {
+            "images": [
+                {
+                    "x": "26",
+                    "y": "25"
+                }
+            ],
+            "id": "teleportpad"
+        },
+        {
+            "images": [
+                {
+                    "x": "27",
+                    "y": "25"
+                }
+            ],
+            "id": "masonry"
+        },
+        {
+            "images": [
+                {
+                    "x": "28",
+                    "y": "25"
+                }
+            ],
+            "id": "bluebottle"
+        },
+        {
+            "images": [
+                {
+                    "x": "29",
+                    "y": "25"
+                }
+            ],
+            "id": "goldbrick2"
+        },
+        {
+            "images": [
+                {
+                    "x": "30",
+                    "y": "25"
+                }
+            ],
+            "id": "blueball"
+        },
+        {
+            "images": [
+                {
+                    "x": "0",
+                    "y": "25"
+                }
+            ],
+            "id": "advert"
+        },
+        {
+            "images": [
+                {
+                    "x": "5",
+                    "y": "25"
+                }
+            ],
+            "id": "mirror"
+        },
+        {
+            "stats": {
+                "fullname": "red herring"
+            },
+            "images": [
+                {
+                    "x": "4",
+                    "y": "25"
+                }
+            ],
+            "id": "redherring"
+        },
+        {
+            "stats": {
+                "fullname": "white gold ring"
+            },
+            "images": [
+                {
+                    "x": "31",
+                    "y": "25"
+                }
+            ],
+            "id": "whitegoldring"
+        },
+        {
+            "images": [
+                {
+                    "x": "0",
+                    "y": "27"
+                }
+            ],
+            "id": "stickybun"
+        },
+        {
+            "stats": {
+                "fullname": "book of shadows"
+            },
+            "images": [
+                {
+                    "x": "1",
+                    "y": "27"
+                }
+            ],
+            "id": "shadows"
+        },
+        {
+            "images": [
+                {
+                    "x": "2",
+                    "y": "27"
+                }
+            ],
+            "id": "goblet"
+        },
+        {
+            "images": [
+                {
+                    "x": "3",
+                    "y": "27"
+                }
+            ],
+            "id": "glue"
+        },
+        {
+            "images": [
+                {
+                    "x": "4",
+                    "y": "27"
+                }
+            ],
+            "id": "trumpet"
+        },
+        {
+            "stats": {
+                "fullname": "strange liquid"
+            },
+            "images": [
+                {
+                    "x": "5",
+                    "y": "27"
+                }
+            ],
+            "id": "puddle"
+        },
+        {
+            "stats": {
+                "fullname": "pocket lazer"
+            },
+            "images": [
+                {
+                    "x": "6",
+                    "y": "27"
+                }
+            ],
+            "id": "lazer"
+        },
+        {
+            "stats": {
+                "fullname": "broken talisman"
+            },
+            "images": [
+                {
+                    "x": "7",
+                    "y": "27"
+                }
+            ],
+            "id": "brokentalisman"
+        },
+        {
+            "stats": {
+                "fullname": "power pong plant"
+            },
+            "images": [
+                {
+                    "x": "8",
+                    "y": "27"
+                }
+            ],
+            "id": "powerpongplant"
+        },
+        {
+            "stats": {
+                "fullname": "shield"
+            },
+            "images": [
+                {
+                    "x": "9",
+                    "y": "27"
+                }
+            ],
+            "id": "shield"
+        }
+    ],
+    "rooms": [
+        {
+            "x": "0",
+            "y": "0",
+            "name": "The Lift"
+        },
+        {
+            "x": "1",
+            "y": "0",
+            "name": "The Roof Garden"
+        },
+        {
+            "x": "2",
+            "y": "0",
+            "name": "The Roof Garden"
+        },
+        {
+            "x": "3",
+            "y": "0",
+            "name": "The Roof Garden"
+        },
+        {
+            "x": "4",
+            "y": "0",
+            "name": "The Roof Garden"
+        },
+        {
+            "x": "5",
+            "y": "0",
+            "name": "The Roof Garden"
+        },
+        {
+            "x": "6",
+            "y": "0",
+            "name": "The Roof Garden"
+        },
+        {
+            "x": "7",
+            "y": "0",
+            "name": "The Roof Garden"
+        },
+        {
+            "x": "8",
+            "y": "0",
+            "name": "The Roof Garden"
+        },
+        {
+            "x": "1",
+            "y": "1",
+            "name": "The Tower"
+        },
+        {
+            "x": "2",
+            "y": "1",
+            "name": "Beyond The Tower"
+        },
+        {
+            "x": "3",
+            "y": "1",
+            "name": "Further Beyond The Tower"
+        },
+        {
+            "x": "4",
+            "y": "1",
+            "name": "The Ballroom"
+        },
+        {
+            "x": "5",
+            "y": "1",
+            "name": "The tree of karn"
+        },
+        {
+            "x": "6",
+            "y": "1",
+            "name": "the stalagmites"
+        },
+        {
+            "x": "7",
+            "y": "1",
+            "name": "the big bottle"
+        },
+        {
+            "x": "8",
+            "y": "1",
+            "name": ""
+        },
+        {
+            "x": "1",
+            "y": "2",
+            "name": "the library"
+        },
+        {
+            "x": "2",
+            "y": "2",
+            "name": "the large bottle"
+        },
+        {
+            "x": "3",
+            "y": "2",
+            "name": "the odd ball"
+        },
+        {
+            "x": "4",
+            "y": "2",
+            "name": ""
+        },
+        {
+            "x": "5",
+            "y": "2",
+            "name": "the start room"
+        },
+        {
+            "x": "6",
+            "y": "2",
+            "name": "the l-shaped room"
+        },
+        {
+            "x": "7",
+            "y": "2",
+            "name": "the plant room"
+        },
+        {
+            "x": "8",
+            "y": "2",
+            "name": "more plant room"
+        },
+        {
+            "x": "1",
+            "y": "3",
+            "name": ""
+        },
+        {
+            "x": "2",
+            "y": "3",
+            "name": ""
+        },
+        {
+            "x": "3",
+            "y": "3",
+            "name": ""
+        },
+        {
+            "x": "4",
+            "y": "3",
+            "name": ""
+        },
+        {
+            "x": "5",
+            "y": "3",
+            "name": "the wall"
+        },
+        {
+            "x": "6",
+            "y": "3",
+            "name": "the gallery"
+        },
+        {
+            "x": "7",
+            "y": "3",
+            "name": "the gallery"
+        },
+        {
+            "x": "8",
+            "y": "3",
+            "name": "the gallery"
+        },
+        {
+            "x": "1",
+            "y": "4",
+            "name": "the mush room"
+        },
+        {
+            "x": "2",
+            "y": "4",
+            "name": "the gas room"
+        },
+        {
+            "x": "3",
+            "y": "4",
+            "name": ""
+        },
+        {
+            "x": "4",
+            "y": "4",
+            "name": ""
+        },
+        {
+            "x": "5",
+            "y": "4",
+            "name": "the spare ballroom"
+        },
+        {
+            "x": "6",
+            "y": "4",
+            "name": ""
+        },
+        {
+            "x": "7",
+            "y": "4",
+            "name": "the trophy room"
+        },
+        {
+            "x": "8",
+            "y": "4",
+            "name": ""
+        },
+        {
+            "x": "1",
+            "y": "5",
+            "name": ""
+        },
+        {
+            "x": "2",
+            "y": "5",
+            "name": "secret tunnel entrance"
+        },
+        {
+            "x": "3",
+            "y": "5",
+            "name": "gimbal's secret study"
+        },
+        {
+            "x": "4",
+            "y": "5",
+            "name": "the secret tunnel"
+        },
+        {
+            "x": "5",
+            "y": "5",
+            "name": "more secret tunnel"
+        },
+        {
+            "x": "6",
+            "y": "5",
+            "name": "the pit"
+        },
+        {
+            "x": "7",
+            "y": "5",
+            "name": ""
+        },
+        {
+            "x": "8",
+            "y": "5",
+            "name": "the most magic room"
+        },
+        {
+            "x": "1",
+            "y": "6",
+            "name": "the basement"
+        },
+        {
+            "x": "2",
+            "y": "6",
+            "name": "boing!"
+        },
+        {
+            "x": "3",
+            "y": "6",
+            "name": "boing,boing,boing,boing!"
+        },
+        {
+            "x": "4",
+            "y": "6",
+            "name": "the deadly trap!"
+        },
+        {
+            "x": "5",
+            "y": "6",
+            "name": "mirror mirror on the wall!"
+        },
+        {
+            "x": "6",
+            "y": "6",
+            "name": "the shifting floor"
+        },
+        {
+            "x": "7",
+            "y": "6",
+            "name": "welcome stranger"
+        },
+        {
+            "x": "8",
+            "y": "6",
+            "name": "the very last room"
+        }
+    ],
+    "doors": [
+        {
+            "images": [
+                {
+                    "id": "closed",
+                    "x": "8",
+                    "y": "1"
+                },
+                {
+                    "id": "open",
+                    "x": "6",
+                    "y": "1"
+                }
+            ],
+            "id": "cellardoor",
+            "type": "Lift"
+        },
+        {
+            "images": [
+                {
+                    "id": "closed",
+                    "x": "8",
+                    "y": "1"
+                },
+                {
+                    "id": "open",
+                    "x": "6",
+                    "y": "1"
+                }
+            ],
+            "id": "4thfloor",
+            "type": "Lift"
+        },
+        {
+            "images": [
+                {
+                    "id": "closed",
+                    "x": "8",
+                    "y": "1"
+                },
+                {
+                    "id": "open",
+                    "x": "6",
+                    "y": "1"
+                }
+            ],
+            "id": "3rdfloor",
+            "type": "Lift"
+        },
+        {
+            "images": [
+                {
+                    "id": "closed",
+                    "x": "8",
+                    "y": "1"
+                },
+                {
+                    "id": "open",
+                    "x": "6",
+                    "y": "1"
+                }
+            ],
+            "id": "2ndfloor",
+            "type": "Lift"
+        },
+        {
+            "images": [
+                {
+                    "id": "closed",
+                    "x": "8",
+                    "y": "1"
+                },
+                {
+                    "id": "open",
+                    "x": "6",
+                    "y": "1"
+                }
+            ],
+            "id": "1stfloor",
+            "type": "Lift"
+        },
+        {
+            "images": [
+                {
+                    "id": "closed",
+                    "x": "8",
+                    "y": "1"
+                },
+                {
+                    "id": "open",
+                    "x": "6",
+                    "y": "1"
+                }
+            ],
+            "id": "groundfloor",
+            "type": "Lift"
+        },
+        {
+            "images": [
+                {
+                    "id": "closed",
+                    "x": "8",
+                    "y": "1"
+                },
+                {
+                    "id": "open",
+                    "x": "6",
+                    "y": "1"
+                }
+            ],
+            "id": "basement",
+            "type": "Lift"
+        },
+        {
+            "images": [
+                {
+                    "id": "closed",
+                    "x": "8",
+                    "y": "1"
+                },
+                {
+                    "id": "open",
+                    "x": "6",
+                    "y": "1"
+                }
+            ],
+            "id": "roof",
+            "type": "Lift"
+        },
+        {
+            "images": [
+                {
+                    "id": "closed",
+                    "x": "8",
+                    "y": "1"
+                },
+                {
+                    "id": "open",
+                    "x": "6",
+                    "y": "1"
+                }
+            ],
+            "id": "thewall"
+        },
+        {
+            "images": [
+                {
+                    "id": "closed",
+                    "x": "8",
+                    "y": "1"
+                },
+                {
+                    "id": "open",
+                    "x": "6",
+                    "y": "1"
+                }
+            ],
+            "id": "secretentrance"
+        }
+    ]
+}
