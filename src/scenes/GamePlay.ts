@@ -7,8 +7,6 @@ import { Hud, HudFlags, HudParameters, HudRoomInfo } from './Hud';
 import { RoomNavigator } from '../roomnavigator';
 import Player from '../player';
 import { LevelConfig } from '../config/levelconfig';
-//import { RoomData } from '../config/RoomData';
-
 
 class GameFlags {
     private _followingPlayer: boolean;
@@ -67,7 +65,7 @@ export class GamePlay extends Phaser.Scene {
     private characterLayer: Phaser.Types.Tilemaps.TiledObject[];
     private doorLayer: Phaser.Types.Tilemaps.TiledObject[];
     private objectLayer: Phaser.Types.Tilemaps.TiledObject[];
-    //private rooms: RoomData[];
+
     private roomWidthInTiles: number = 16;
     private roomHeightInTiles: number = 10;
     private characterMap: Map<String, { x: integer; y: integer; }>;
@@ -248,25 +246,21 @@ export class GamePlay extends Phaser.Scene {
 
         this.physics.add.collider(sprite, this.solidLayer);
     }
-    getRoomData(x: number, y: number): Room {
 
-        let roomData = this._levelConfig.Rooms.find(r => r.x == x && r.y == y);
-        return roomData;
-    }
     positionCameraAccordingToRoom() {
 
         const roomCoords = this.RoomNavigator.GetRoomCoords();
 
-        const roomData = this.getRoomData(roomCoords.x, roomCoords.y);
+        const roomInfo = this._levelConfig.findRoom(roomCoords.x, roomCoords.y);
 
-
-        if (!roomData) {
+        if (!roomInfo) {
             console.log(`Failed to find room! ${roomCoords}`);
         } else {
 
-            this.events.emit("screenmov", new HudRoomInfo(roomCoords.x, roomCoords.y, roomData.name));
-            this.camera.setBounds(roomData.WorldLocation.x, roomData.WorldLocation.y,
-                roomData.WorldLocation.width, roomData.WorldLocation.height, false);
+            this.events.emit("screenmov", new HudRoomInfo(roomCoords.x, roomCoords.y, roomInfo.name));
+            this.camera.setBounds(
+                roomInfo.WorldLocation.x, roomInfo.WorldLocation.y,
+                roomInfo.WorldLocation.width, roomInfo.WorldLocation.height, false);
         }
     }
     init(data: GamePlayWindowConfig) {
