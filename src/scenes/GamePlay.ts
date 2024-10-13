@@ -247,6 +247,7 @@ export class GamePlay extends Phaser.Scene {
 
         const sprite = this.physics.add.sprite(x, y, 'characters', index);
 
+
         const currentGravity = this.physics.world.gravity.y;
         const playerGravity = currentGravity * -0.35;
         this.Player = new Player(sprite, this.cursors!, playerGravity);
