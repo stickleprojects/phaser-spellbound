@@ -484,7 +484,11 @@
                     "x": 18,
                     "y": 0
                 }
-            ]
+            ],
+            "stats": {
+                "fullname": "White Advert",
+                "weight": 1.0
+            }
         },
         {
             "id": "glowingbottle",

@@ -7,6 +7,7 @@ import { RoomNavigator } from '../roomnavigator';
 import Player from '../player';
 import { LevelConfig } from '../config/levelconfig';
 import { Character, Item } from '../config/configentities';
+import { Inventory, IInventoryItem, IInventoryOwner } from '../inventory';
 
 class GameFlags {
     private _followingPlayer: boolean;
@@ -44,6 +45,18 @@ export class GamePlayWindowConfig {
         this.width = width;
     }
 }
+class ObjectItem implements IInventoryItem {
+    private _sprite: Phaser.GameObjects.Sprite;
+
+    constructor(src: Item, sprite: Phaser.GameObjects.Sprite) {
+        this._sprite = sprite;
+        this.id = src.id;
+        this.weight = src.stats?.weight || -1;
+
+    }
+    id: string;
+    weight: number;
+}
 export class GamePlay extends Phaser.Scene {
 
 
@@ -76,6 +89,8 @@ export class GamePlay extends Phaser.Scene {
     private verticalRooms: number;
     private inputTimer: Phaser.Time.TimerEvent;
     private parentScene: Scene;
+    private Items: Map<string, ObjectItem>;
+
     RoomNavigator: RoomNavigator;
     Player: Player;
     followingPlayer: boolean;
@@ -169,6 +184,18 @@ export class GamePlay extends Phaser.Scene {
         this.flags.FollowingPlayer = true;
 
 
+        this.addSampleItemsToPlayer();
+    }
+    private addSampleItemsToPlayer() {
+
+        let o = this.Items.get("whitegoldring");
+        if (!o) {
+            console.error("Cannot find item");
+        } else {
+
+            this.Player.getInventory().AddItem(o);
+        }
+
     }
     private getCharacter(name: string): Character | undefined {
         let character = this._levelConfig.Characters.find(c => c.id == name);
@@ -220,6 +247,9 @@ export class GamePlay extends Phaser.Scene {
 
         const objecthalfH = objectTileHeight / 2;
 
+        const that = this;
+        this.Items = new Map<string, ObjectItem>();
+
         // create the objets
         this.objectLayer.forEach(o => {
             const objectName = o.name;
@@ -236,7 +266,10 @@ export class GamePlay extends Phaser.Scene {
                 const pixelX = Math.ceil(o.x! / objectTileWidth) * objectTileWidth;
                 const pixelY = Math.ceil(o.y! / objectTileHeight) * objectTileHeight;
 
-                this.add.sprite(pixelX, pixelY + objecthalfH, 'objects', index);
+                let sprite = this.add.sprite(pixelX, pixelY + objecthalfH, 'objects', index);
+
+                let newitem = new ObjectItem(itemInfo, sprite);
+                that.Items.set(newitem.id, newitem);
 
             }
         });
@@ -250,7 +283,11 @@ export class GamePlay extends Phaser.Scene {
 
         const currentGravity = this.physics.world.gravity.y;
         const playerGravity = currentGravity * -0.35;
-        this.Player = new Player(sprite, this.cursors!, playerGravity);
+
+        let inventory = new Inventory(5, 10, this.events);
+
+        this.Player = new Player(sprite, this.cursors!, playerGravity, inventory);
+
 
         this.physics.add.collider(sprite, this.solidLayer);
     }

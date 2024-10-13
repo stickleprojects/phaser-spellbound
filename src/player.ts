@@ -1,4 +1,5 @@
 import { Physics } from "phaser";
+import { Inventory } from "./inventory";
 
 export default class Player {
     private sprite: Phaser.GameObjects.Sprite;
@@ -6,10 +7,12 @@ export default class Player {
     private jumpSpeed: number = -250;
     private gravity: number = 600;
     private cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys
+    private _inventory: any;
 
     constructor(sprite: Phaser.GameObjects.Sprite,
         cursors: Phaser.Types.Input.Keyboard.CursorKeys
-        , jumpSpeed: number = -250) {
+        , jumpSpeed: number = -250
+        , inventory: Inventory) {
         this.sprite = sprite;
 
         this.jumpSpeed = jumpSpeed;
@@ -27,6 +30,7 @@ export default class Player {
         if (fi.length < 1) {
             console.error("No animation frames found");
         }
+
         // setup the anims
         this.sprite.anims.create({
             key: 'walk',
@@ -44,8 +48,12 @@ export default class Player {
             repeat: -1,
 
         })
+
+        this._inventory = inventory;
+
     }
 
+    getInventory(): Inventory { return this._inventory; }
     protected getBody(): Physics.Arcade.Body {
         return this.sprite.body as Physics.Arcade.Body;
     }
