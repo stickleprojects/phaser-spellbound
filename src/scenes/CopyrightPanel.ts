@@ -30,8 +30,11 @@ export class CopyrightPanel extends BottomPanel {
             "BY ADRIAN SHEPPARD 1986"
         ];
 
-        this._titleText = this.add.text(0, 0, title);
-        this._copyrightText = this.add.text(0, 20, copyright);
+        const x = this.InnerRect!.x;
+        const y = this.InnerRect!.y;
+
+        this._titleText = this.add.text(x, y, title);
+        this._copyrightText = this.add.text(x, y + 20, copyright);
 
     }
 }

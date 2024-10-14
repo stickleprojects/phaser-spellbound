@@ -39,7 +39,7 @@ export class MainWindow extends Scene {
 
         const height = this._copyrightHeight;
         var copyrightData = new CopyrightPanelParameters(this, 0,
-            this.sys.game.canvas.height - height, this.sys.game.canvas.width, height);
+            this.sys.game.canvas.height - height, this.sys.game.canvas.width - 120, height);
 
         this.copyrightScene = this.scene.launch('copyright', copyrightData);
 
