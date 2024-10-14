@@ -1,23 +1,15 @@
 import { Scene } from "phaser";
+import { BottomPanel, BottomPanelParameters } from "./BottomPanel";
 
-export class CopyrightPanelParameters {
-    parent: Scene;
-    x: number;
-    y: number;
-    width: number;
-    height: number;
+export class CopyrightPanelParameters extends BottomPanelParameters {
 
     constructor(parent: Scene, x: number, y: number, width: number, height: number) {
-        this.parent = parent;
-        this.x = x;
-        this.y = y;
-        this.height = height;
-        this.width = width;
+        super(parent, x, y, width, height);
     }
 }
 
-export class CopyrightPanel extends Phaser.Scene {
-    parentScene: Scene;
+export class CopyrightPanel extends BottomPanel {
+
     private _copyrightText: Phaser.GameObjects.Text;
     private _titleText: Phaser.GameObjects.Text;
 
@@ -25,14 +17,7 @@ export class CopyrightPanel extends Phaser.Scene {
     constructor() {
         super('copyright');
     }
-    init(data: CopyrightPanelParameters) {
-        this.parentScene = data.parent;
 
-        this.cameras.main.setViewport(data.x, data.y, data.width, data.height);
-
-        // hook up events
-
-    }
 
     create() {
 
