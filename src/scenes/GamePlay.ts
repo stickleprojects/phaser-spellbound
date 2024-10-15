@@ -99,6 +99,7 @@ export class GamePlay extends Phaser.Scene {
     ToggleFollowingPlayerKey: Phaser.Input.Keyboard.Key | undefined;
     flags: GameFlags;
     PickupItemKey: Phaser.Input.Keyboard.Key | undefined;
+    DropItemKey: Phaser.Input.Keyboard.Key | undefined;
     ObjectGroup: Phaser.Physics.Arcade.Group;
 
     constructor() {
@@ -141,6 +142,7 @@ export class GamePlay extends Phaser.Scene {
 
         this.ToggleFollowingPlayerKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         this.PickupItemKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+        this.DropItemKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.X);
         this.flags = new GameFlags(this.onFlagsChanged, this);
 
         this.camera = this.cameras.main;
@@ -187,20 +189,8 @@ export class GamePlay extends Phaser.Scene {
         this.RoomNavigator.SetRoomCoordinates({ x: 5, y: 2 });
         this.flags.FollowingPlayer = true;
 
-
-        this.addSampleItemsToPlayer();
     }
-    private addSampleItemsToPlayer() {
 
-        let o = this.Items.get("whitegoldring");
-        if (!o) {
-            console.error("Cannot find item");
-        } else {
-
-            this.Player.getInventory().AddItem(o);
-        }
-
-    }
     private getCharacter(name: string): Character | undefined {
         let character = this._levelConfig.Characters.find(c => c.id == name);
 
@@ -273,6 +263,8 @@ export class GamePlay extends Phaser.Scene {
                 const pixelY = Math.ceil(o.y! / objectTileHeight) * objectTileHeight;
 
                 let sprite = this.physics.add.sprite(pixelX, pixelY + objecthalfH, 'objects', index);
+                sprite.body.setSize(16, 16);
+
                 this.ObjectGroup.add(sprite, false);
                 let newitem = new ObjectItem(itemInfo, sprite);
 
@@ -350,7 +342,7 @@ export class GamePlay extends Phaser.Scene {
         this.RoomNavigator.SetRoomCoordinates(newCoords);
 
     }
-    getNearbyItems() {
+    getNearbyItems(): ObjectItem[] {
         let s = this.Player.getNearbySprite();
 
         let nearObjects: Phaser.GameObjects.Sprite[] = [];
@@ -363,7 +355,7 @@ export class GamePlay extends Phaser.Scene {
 
         console.log(nearObjects);
 
-        let nearbyItems: IInventoryItem[] = [];
+        let nearbyItems: ObjectItem[] = [];
         // map the objects into items
         nearObjects.map(o => {
             let objectName = o.name;
@@ -382,12 +374,31 @@ export class GamePlay extends Phaser.Scene {
         if (nearbyItems.length == 0) {
             // no items
         } else {
+            let itemToPickup = nearbyItems[0];
+            let s = itemToPickup.getSprite();
+            //s.setImmovable(true);
+            s.body.setAllowGravity(false);
             let result = this.Player.getInventory().AddItem(nearbyItems[0]);
             if (result.ok) {
                 // great
             } else {
                 console.log(result.error.message);
             }
+        }
+    }
+    dropLastItem() {
+        let items = this.Player.getInventory().GetItems();
+        if (items.length == 0) {
+            // you arent carrying anything
+            console.log("You arent carrying anything!");
+        } else {
+            // drop the last item
+            let lastItem = items[items.length - 1];
+            let s = lastItem._sprite;
+            s.body.setAllowGravity(true);
+
+            this.Player.getInventory().RemoveItem(lastItem);
+
         }
     }
     update(time, delta) {
@@ -416,6 +427,10 @@ export class GamePlay extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(this.PickupItemKey!)) {
 
             this.pickupNearestItem();
+        }
+        if (Phaser.Input.Keyboard.JustDown(this.DropItemKey!)) {
+
+            this.dropLastItem();
         }
     }
 
