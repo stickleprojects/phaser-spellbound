@@ -191,7 +191,7 @@ export class Inventory {
         }
 
         this._items.delete(item.id);
-        item.owner = null;
+        item.owner = undefined;
         this._eventEmitter.emit("itemremoved", new InventoryEventArgs(this, item));
         return { ok: true, value: true };
     }
