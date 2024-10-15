@@ -1,8 +1,5 @@
 // Allows someone to carry something
 
-import * as Format from "string-format";
-
-
 export interface IInventoryOwner {
 
 }
@@ -10,17 +7,26 @@ export interface IInventoryItem {
 
     id: string;
     weight: number;
+    owner?: Inventory;
 }
 export class TemplateString {
     private _template: string;
     private _params: any[];
 
     private _formattedString: string;
+
+    // Custom String.format function
+    formatString(template: string, ...args: any[]): string {
+        return template.replace(/\${(\d+)}/g, (match, index) => {
+            return typeof args[index] !== 'undefined' ? args[index] : match;
+        });
+    }
+
     constructor(template: string, ...params: any[]) {
         this._template = template;
         this._params = params;
 
-        this._formattedString = Format(template, params)
+        this._formattedString = this.formatString(template, params)
 
     }
 
@@ -85,13 +91,13 @@ export class ItemTooHeavyError extends InventoryItemError {
 }
 export class TooManyItemsError extends InventoryItemError {
     constructor(inventory: Inventory, item: IInventoryItem) {
-        super(inventory, item, new TemplateString("Not enough room for {0}", item.id))
+        super(inventory, item, new TemplateString("Not enough room for ${0}", item.id))
 
     }
 }
 export class ItemNotInInventoryError extends InventoryItemError {
     constructor(inventory: Inventory, item: IInventoryItem) {
-        super(inventory, item, new TemplateString("{0} is not in the inventory", item.id))
+        super(inventory, item, new TemplateString("${0} is not in the inventory", item.id))
 
     }
 }
@@ -155,7 +161,7 @@ export class Inventory {
         }
 
         this._items.set(item.id, item);
-
+        item.owner = this;
         this._eventEmitter.emit("itemadded", new InventoryEventArgs(this, item));
 
         return { ok: true, value: true };
@@ -185,7 +191,7 @@ export class Inventory {
         }
 
         this._items.delete(item.id);
-
+        item.owner = null;
         this._eventEmitter.emit("itemremoved", new InventoryEventArgs(this, item));
         return { ok: true, value: true };
     }

@@ -45,7 +45,7 @@ export class GamePlayWindowConfig {
         this.width = width;
     }
 }
-class ObjectItem implements IInventoryItem {
+export class ObjectItem implements IInventoryItem {
     private _sprite: Phaser.GameObjects.Sprite;
 
     constructor(src: Item, sprite: Phaser.GameObjects.Sprite) {
@@ -56,6 +56,8 @@ class ObjectItem implements IInventoryItem {
     }
     id: string;
     weight: number;
+    owner?: Inventory;
+    getSprite() { return this._sprite; }
 }
 export class GamePlay extends Phaser.Scene {
 
@@ -96,6 +98,8 @@ export class GamePlay extends Phaser.Scene {
     followingPlayer: boolean;
     ToggleFollowingPlayerKey: Phaser.Input.Keyboard.Key | undefined;
     flags: GameFlags;
+    PickupItemKey: Phaser.Input.Keyboard.Key | undefined;
+    ObjectGroup: Phaser.Physics.Arcade.Group;
 
     constructor() {
         super('GamePlay')
@@ -136,7 +140,7 @@ export class GamePlay extends Phaser.Scene {
         this.cursors = this.input.keyboard?.createCursorKeys()
 
         this.ToggleFollowingPlayerKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.F);
-
+        this.PickupItemKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.P);
         this.flags = new GameFlags(this.onFlagsChanged, this);
 
         this.camera = this.cameras.main;
@@ -230,8 +234,8 @@ export class GamePlay extends Phaser.Scene {
                     // create the knight and add to the world
                     this.createKnight(pixelX + characterhalfW, pixelY + characterhalfH, index);
                 } else {
-                    this.add.sprite(pixelX + characterhalfW, pixelY + characterhalfH, 'characters', index);
-
+                    let ss = this.add.sprite(pixelX + characterhalfW, pixelY + characterhalfH, 'characters', index);
+                    ss.name = o.name;
                 }
             }
         });
@@ -250,6 +254,8 @@ export class GamePlay extends Phaser.Scene {
         const that = this;
         this.Items = new Map<string, ObjectItem>();
 
+        this.ObjectGroup = this.physics.add.group();
+
         // create the objets
         this.objectLayer.forEach(o => {
             const objectName = o.name;
@@ -266,10 +272,13 @@ export class GamePlay extends Phaser.Scene {
                 const pixelX = Math.ceil(o.x! / objectTileWidth) * objectTileWidth;
                 const pixelY = Math.ceil(o.y! / objectTileHeight) * objectTileHeight;
 
-                let sprite = this.add.sprite(pixelX, pixelY + objecthalfH, 'objects', index);
-
+                let sprite = this.physics.add.sprite(pixelX, pixelY + objecthalfH, 'objects', index);
+                this.ObjectGroup.add(sprite, false);
                 let newitem = new ObjectItem(itemInfo, sprite);
+
                 that.Items.set(newitem.id, newitem);
+                this.physics.add.collider(sprite, this.solidLayer);
+                sprite.name = objectName;
 
             }
         });
@@ -280,16 +289,22 @@ export class GamePlay extends Phaser.Scene {
 
         const sprite = this.physics.add.sprite(x, y, 'characters', index);
 
+        const nearbyWidth = sprite.width * 4;
+        const nearbySprite = this.physics.add.body(x, y, nearbyWidth, sprite.height);
+        nearbySprite.allowGravity = false;
 
         const currentGravity = this.physics.world.gravity.y;
         const playerGravity = currentGravity * -0.35;
 
         let inventory = new Inventory(5, 10, this.events);
 
-        this.Player = new Player(sprite, this.cursors!, playerGravity, inventory);
-
+        this.Player = new Player(sprite, nearbySprite, this.cursors!, playerGravity, inventory);
 
         this.physics.add.collider(sprite, this.solidLayer);
+        this.physics.add.overlap(nearbySprite, this.ObjectGroup);
+
+        sprite.name = "Knight";
+
     }
 
     positionCameraAccordingToRoom() {
@@ -320,8 +335,9 @@ export class GamePlay extends Phaser.Scene {
     }
 
     showRoomThatThePlayerIsIn() {
-        const px = this.Player.sprite.x;
-        const py = this.Player.sprite.y;
+        let s = this.Player.getSprite();
+        const px = s.x;
+        const py = s.y;
 
         const cw = this.camera.displayWidth;
         const ch = this.camera.displayHeight;
@@ -334,10 +350,51 @@ export class GamePlay extends Phaser.Scene {
         this.RoomNavigator.SetRoomCoordinates(newCoords);
 
     }
+    getNearbyItems() {
+        let s = this.Player.getNearbySprite();
+
+        let nearObjects: Phaser.GameObjects.Sprite[] = [];
+
+        this.physics.overlap(s, this.ObjectGroup, (a: Phaser.Physics.Arcade.GameObjectWithBody, b: Phaser.Physics.Arcade.GameObjectWithBody, info) => {
+
+
+            nearObjects.push(b);
+        });
+
+        console.log(nearObjects);
+
+        let nearbyItems: IInventoryItem[] = [];
+        // map the objects into items
+        nearObjects.map(o => {
+            let objectName = o.name;
+            let item = this.Items.get(objectName);
+            if (item) {
+                if (!item.owner) {
+                    nearbyItems.push(item);
+                }
+            }
+        })
+        return nearbyItems;
+    }
+    pickupNearestItem() {
+        let nearbyItems = this.getNearbyItems();
+
+        if (nearbyItems.length == 0) {
+            // no items
+        } else {
+            let result = this.Player.getInventory().AddItem(nearbyItems[0]);
+            if (result.ok) {
+                // great
+            } else {
+                console.log(result.error.message);
+            }
+        }
+    }
     update(time, delta) {
 
         //const sprite = this.Player.sprite;
         //this.physics.collide(sprite, this.solidLayer,);
+
 
         this.RoomNavigator.UpdateInput();
 
@@ -355,6 +412,11 @@ export class GamePlay extends Phaser.Scene {
             this.showRoomThatThePlayerIsIn();
         }
 
+        // testing, pickup items
+        if (Phaser.Input.Keyboard.JustDown(this.PickupItemKey!)) {
+
+            this.pickupNearestItem();
+        }
     }
 
 }

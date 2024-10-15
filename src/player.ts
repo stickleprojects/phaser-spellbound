@@ -1,5 +1,6 @@
 import { Physics } from "phaser";
-import { Inventory } from "./inventory";
+import { IInventoryItem, Inventory } from "./inventory";
+import { ObjectItem } from "./scenes/GamePlay";
 
 export default class Player {
     private sprite: Phaser.GameObjects.Sprite;
@@ -7,14 +8,21 @@ export default class Player {
     private jumpSpeed: number = -250;
     private gravity: number = 600;
     private cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys
-    private _inventory: any;
+    private _inventory: Inventory;
+    nearbySprite: Phaser.Physics.Arcade.Body;
 
-    constructor(sprite: Phaser.GameObjects.Sprite,
+    getSprite(): Phaser.GameObjects.Sprite { return this.sprite; }
+    getNearbySprite(): Phaser.Physics.Arcade.Body { return this.nearbySprite; }
+
+    constructor(
+        sprite: Phaser.GameObjects.Sprite,
+        nearbySprite: Phaser.Physics.Arcade.Body,
         cursors: Phaser.Types.Input.Keyboard.CursorKeys
         , jumpSpeed: number = -250
         , inventory: Inventory) {
         this.sprite = sprite;
 
+        this.nearbySprite = nearbySprite;
         this.jumpSpeed = jumpSpeed;
         this.getBody().allowGravity = true;
         this.getBody().setMass(1)
@@ -91,5 +99,21 @@ export default class Player {
             // move sprite 
             this.jump();
         }
+
+        this.repositionNearbySprite();
+    }
+    repositionNearbySprite() {
+        this.nearbySprite.x = this.sprite.x - this.nearbySprite.width / 2;
+        this.nearbySprite.y = this.sprite.y - this.nearbySprite.height / 2;
+
+        // move the inventory items too!
+        this._inventory.GetItems().forEach((i: IInventoryItem, index: number) => {
+
+            let value = i as ObjectItem;
+
+            value.getSprite().x = this.sprite.x;
+            value.getSprite().y = this.sprite.y;
+
+        })
     }
 }

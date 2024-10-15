@@ -17,7 +17,6 @@ export class InventoryPanel extends BottomPanel {
 
     }
     create() {
-        this.add.text(this.InnerRect!.x, this.InnerRect!.y, 'Inventory');
 
         this.events.on('itemadded', (args: InventoryEventArgs) => {
             this._inventory = args.inventory
@@ -36,7 +35,7 @@ export class InventoryPanel extends BottomPanel {
             this._inventoryText = this.add.text(this.InnerRect!.x, this.InnerRect!.y, '');
         }
 
-        let inventorylist: string[] = this._inventory.GetItems().map(i => i.id);
+        let inventorylist: string[] = this._inventory.GetItems().map((item, idx) => `${idx + 1}. ${item.id}`);
 
         this._inventoryText.setText(inventorylist);
     }
