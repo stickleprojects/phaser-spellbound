@@ -10,9 +10,6 @@ export class MainWindow extends Scene {
     private _hudHeight = 60;
     private _copyrightHeight = 120;
 
-    hudScene: Phaser.Scenes.ScenePlugin;
-    copyrightScene: Phaser.Scenes.ScenePlugin;
-    inventoryScene: Phaser.Scenes.ScenePlugin;
 
     constructor() {
         super('MainWindow');
@@ -23,26 +20,35 @@ export class MainWindow extends Scene {
     showHud() {
         var hudData = new HudParameters(this, 0, 0, this.sys.game.canvas.width, this._hudHeight);
 
-        this.hudScene = this.scene.launch('hud', hudData);
+        this.scene.launch('hud', hudData);
 
+    }
+    getHudScene(): Scene {
+        return this.scene.manager.getScene('hud')!;
+    }
+    getInventoryScene(): Scene {
+        return this.scene.manager.getScene('inventory')!;
+    }
+    getCopyrightScene(): Scene {
+        return this.scene.manager.getScene('copyright')!;
     }
     wireUpEvents() {
         const scn = this.scene.manager.getScene('GamePlay');
         scn!.events.on('screenmov', (args: object) => {
-            this.hudScene.scene.events.emit('screenmov', args);
+            this.getHudScene().events.emit('screenmov', args);
 
 
         })
 
         scn!.events.on('updateflags', (args: object) => {
-            this.hudScene.scene.events.emit('updateflags', args);
+            this.getHudScene().events.emit('updateflags', args);
         })
 
         scn!.events.on('itemadded', (args: InventoryEventArgs) => {
-            this.inventoryScene.scene.events.emit('itemadded', args);
+            this.getInventoryScene().events.emit('itemadded', args);
         })
         scn!.events.on('itemremoved', (args: InventoryEventArgs) => {
-            this.inventoryScene.scene.events.emit('itemremoved', args);
+            this.getInventoryScene().events.emit('itemremoved', args);
         })
 
     }
@@ -52,7 +58,7 @@ export class MainWindow extends Scene {
         var copyrightData = new CopyrightPanelParameters(this, 0,
             this.sys.game.canvas.height - height, this.sys.game.canvas.width - 120, height);
 
-        this.copyrightScene = this.scene.launch('copyright', copyrightData);
+        this.scene.launch('copyright', copyrightData);
 
     }
     showInventory() {
@@ -60,7 +66,7 @@ export class MainWindow extends Scene {
         var data = new BottomPanelParameters(this, 0,
             this.sys.game.canvas.height - height, this.sys.game.canvas.width - 120, height);
 
-        this.inventoryScene = this.scene.launch('inventory', data);
+        this.scene.launch('inventory', data);
     }
     showGamePlayWindow() {
 
