@@ -4,6 +4,7 @@ import { CopyrightPanel } from './scenes/CopyrightPanel';
 // import { GameOver } from './scenes/GameOver';
 import { GamePlay } from './scenes/GamePlay';
 import { Hud } from './scenes/Hud';
+import { InventoryPanel } from './scenes/InventoryPanel';
 import { MainWindow } from './scenes/MainWindow';
 // import { MainMenu } from './scenes/MainMenu';
 import { Preloader } from './scenes/Preloader';
@@ -36,7 +37,8 @@ const config: Types.Core.GameConfig = {
         GamePlay,
         Hud,
         MainWindow,
-        CopyrightPanel
+        CopyrightPanel,
+        InventoryPanel
         // MainMenu,
         // MainGame,
         // GameOver

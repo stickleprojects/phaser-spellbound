@@ -32,6 +32,15 @@ export class TemplateString {
     public getParams() { return this._params; }
 
 }
+export class InventoryEventArgs {
+    inventory: Inventory;
+    item: IInventoryItem;
+    constructor(inventory: Inventory, item: IInventoryItem) {
+        this.inventory = inventory;
+        this.item = item;
+
+    }
+}
 export type Result<T, E = Error> =
     | { ok: true; value: T }
     | { ok: false; error: E };
@@ -147,7 +156,7 @@ export class Inventory {
 
         this._items.set(item.id, item);
 
-        this._eventEmitter.emit("itemadded", { inventory: this, item: item });
+        this._eventEmitter.emit("itemadded", new InventoryEventArgs(this, item));
 
         return { ok: true, value: true };
     }
@@ -177,7 +186,7 @@ export class Inventory {
 
         this._items.delete(item.id);
 
-        this._eventEmitter.emit("itemremoved", { inventory: this, item: item });
+        this._eventEmitter.emit("itemremoved", new InventoryEventArgs(this, item));
         return { ok: true, value: true };
     }
 }

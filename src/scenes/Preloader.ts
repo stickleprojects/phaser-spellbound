@@ -38,7 +38,7 @@ export class Preloader extends Phaser.Scene {
         this.load.spritesheet('objects', 'objectsprites.png', { frameWidth: 16, frameHeight: 32 });
 
         this.load.spritesheet('border_bottompanel', 'borders_bottompanel.png', { frameWidth: 16, frameHeight: 16 })
-        this.load.spritesheet('border_panel', 'borders_panel.png', { frameWidth: 16, frameHeight: 16 })
+        this.load.spritesheet('border_panel', 'borders_menu.png', { frameWidth: 16, frameHeight: 16 })
 
         this.load.json('levelconfig', 'levelconfig.json')
     }

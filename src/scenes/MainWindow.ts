@@ -2,6 +2,8 @@ import { Scene } from "phaser";
 import { HudParameters } from "./Hud";
 import { GamePlayWindowConfig } from "./GamePlay";
 import { CopyrightPanelParameters } from "./CopyrightPanel";
+import { BottomPanelParameters } from "./BottomPanel";
+import { InventoryEventArgs } from "../inventory";
 
 export class MainWindow extends Scene {
 
@@ -10,6 +12,8 @@ export class MainWindow extends Scene {
 
     hudScene: Phaser.Scenes.ScenePlugin;
     copyrightScene: Phaser.Scenes.ScenePlugin;
+    inventoryScene: Phaser.Scenes.ScenePlugin;
+
     constructor() {
         super('MainWindow');
     }
@@ -24,14 +28,21 @@ export class MainWindow extends Scene {
     }
     wireUpEvents() {
         const scn = this.scene.manager.getScene('GamePlay');
-        scn.events.on('screenmov', (args: object) => {
+        scn!.events.on('screenmov', (args: object) => {
             this.hudScene.scene.events.emit('screenmov', args);
 
 
         })
 
-        scn.events.on('updateflags', (args: object) => {
+        scn!.events.on('updateflags', (args: object) => {
             this.hudScene.scene.events.emit('updateflags', args);
+        })
+
+        scn!.events.on('itemadded', (args: InventoryEventArgs) => {
+            this.inventoryScene.scene.events.emit('itemadded', args);
+        })
+        scn!.events.on('itemremoved', (args: InventoryEventArgs) => {
+            this.inventoryScene.scene.events.emit('itemremoved', args);
         })
 
     }
@@ -43,6 +54,13 @@ export class MainWindow extends Scene {
 
         this.copyrightScene = this.scene.launch('copyright', copyrightData);
 
+    }
+    showInventory() {
+        const height = this._copyrightHeight;
+        var data = new BottomPanelParameters(this, 0,
+            this.sys.game.canvas.height - height, this.sys.game.canvas.width - 120, height);
+
+        this.inventoryScene = this.scene.launch('inventory', data);
     }
     showGamePlayWindow() {
 
@@ -61,11 +79,15 @@ export class MainWindow extends Scene {
         // data is the params passed to this scene with this.scene.start(key,data)
         this.showHud();
 
+        this.showCopyright();
+
+        this.showInventory();
+
         this.showGamePlayWindow();
 
         this.wireUpEvents();
 
-        this.showCopyright();
+
 
     }
     create() {
