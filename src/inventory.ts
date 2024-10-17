@@ -9,6 +9,8 @@ export interface IInventoryItem {
 
     id: string;
     weight: number;
+    name: string;
+    description: string;
     owner?: Inventory;
 }
 export class TemplateString {

@@ -36,7 +36,7 @@ export class InventoryPanel extends BottomPanel {
             this._inventoryText = this.add.text(this.InnerRect!.x, this.InnerRect!.y, '');
         }
 
-        let inventorylist: string[] = this._inventory.GetItems().map((item, idx) => `${idx + 1}. ${item.id}`);
+        let inventorylist: string[] = this._inventory.GetItems().map((item, idx) => `${idx + 1}. ${item.name}`);
 
         this._inventoryText.setText(inventorylist);
     }

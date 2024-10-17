@@ -58,17 +58,18 @@ export class GamePlayWindowConfig {
 }
 export class ObjectItem implements IInventoryItem {
     private _sprite: Phaser.GameObjects.Sprite;
+    private _src: Item;
 
     constructor(src: Item, sprite: Phaser.GameObjects.Sprite) {
         this._sprite = sprite;
         this.id = src.id;
-        this.weight = src.stats?.weight || -1;
-
+        this._src = src;
     }
     id: string;
-    weight: number;
     owner?: Inventory;
-    getSprite() { return this._sprite; }
+    get Sprite() { return this._sprite; }
+    get name() { return this._src.stats?.fullname || this.id }
+    get weight() { return this._src.stats?.weight || 0 }
 }
 export class GamePlay extends Phaser.Scene {
 
@@ -384,7 +385,7 @@ export class GamePlay extends Phaser.Scene {
             // no items
         } else {
             let itemToPickup = nearbyItems[0];
-            let s = itemToPickup.getSprite();
+            let s = itemToPickup.Sprite;
             //s.setImmovable(true);
             s.body.setAllowGravity(false);
             let result = this.Player.getInventory().AddItem(nearbyItems[0]);

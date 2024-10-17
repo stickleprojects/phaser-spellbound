@@ -111,8 +111,8 @@ export default class Player {
 
             let value = i as ObjectItem;
 
-            value.getSprite().x = this.sprite.x;
-            value.getSprite().y = this.sprite.y;
+            value.Sprite.x = this.sprite.x;
+            value.Sprite.y = this.sprite.y;
 
         })
     }
