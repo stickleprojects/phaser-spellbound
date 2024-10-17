@@ -1,5 +1,7 @@
 // Allows someone to carry something
 
+import { customEmitter } from "./components/customemitter";
+
 export interface IInventoryOwner {
 
 }
@@ -120,13 +122,14 @@ export class Inventory {
         //owner: IInventoryOwner,
         maxNumberOfItems: number,
         maxTotalWeight: number,
-        eventEmitter: Phaser.Events.EventEmitter
+        eventEmitter?: Phaser.Events.EventEmitter
+
     ) {
 
         //  this._owner = owner;
         this._maxNumberOfItems = maxNumberOfItems;
         this._maxTotalWeight = maxTotalWeight;
-        this._eventEmitter = eventEmitter;
+        this._eventEmitter = eventEmitter || customEmitter;
 
         this._items = new Map<string, IInventoryItem>();
 

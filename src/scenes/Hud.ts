@@ -19,8 +19,11 @@ export class HudParameters {
 export class HudFlags {
     FollowingPlayer: boolean
 
-    constructor(followingPlayer: boolean) {
+    Debug: boolean;
+
+    constructor(followingPlayer: boolean, debug: boolean) {
         this.FollowingPlayer = followingPlayer;
+        this.Debug = debug;
     }
 }
 export class HudRoomInfo {
@@ -41,8 +44,9 @@ export class Hud extends Phaser.Scene {
     Flags_FollowingPlayer: Phaser.GameObjects.Text;
     NotFollowing_instructions: Phaser.GameObjects.Text;
     Following_instructions: Phaser.GameObjects.Text;
+    Flags_Debug: Phaser.GameObjects.Text;
 
-    updateRoomLocation(xy: object) {
+    private updateRoomLocation(xy: HudRoomInfo) {
         const x = xy.x;
         const y = xy.y;
         const name = xy.name;
@@ -59,6 +63,7 @@ export class Hud extends Phaser.Scene {
         this.Flags_FollowingPlayer.setText(flags.FollowingPlayer ? "FOLLOWING" : "");
         this.Following_instructions.setVisible(flags.FollowingPlayer);
         this.NotFollowing_instructions.setVisible(!flags.FollowingPlayer);
+        this.Flags_Debug.setVisible(flags.Debug);
     }
     init(data: HudParameters) {
         this.parentScene = data.parent;
@@ -95,7 +100,9 @@ export class Hud extends Phaser.Scene {
 
         // flags
 
-        this.Flags_FollowingPlayer = this.add.text(0, 30, 'FOLLOWING');
+        let y = 40;
+        this.Flags_Debug = this.add.text(0, y, 'DEBUG');
+        this.Flags_FollowingPlayer = this.add.text(60, y, 'FOLLOWING');
     }
 
 }

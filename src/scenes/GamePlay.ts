@@ -7,13 +7,14 @@ import { RoomNavigator } from '../roomnavigator';
 import Player from '../player';
 import { LevelConfig } from '../config/levelconfig';
 import { Character, Item } from '../config/configentities';
-import { Inventory, IInventoryItem, IInventoryOwner } from '../inventory';
+import { Inventory, IInventoryItem } from '../inventory';
 import { customEmitter } from '../components/customemitter';
 
 class GameFlags {
     private _followingPlayer: boolean;
     private _callback: (values: GameFlags, propertyName: string, oldValue: any) => void;
     private _context: any;
+    private _debug: any;
 
     constructor(callback: (values: GameFlags, propertyName: string, oldValue: any) => void, context: any) {
         this._callback = callback;
@@ -29,6 +30,15 @@ class GameFlags {
     }
     get FollowingPlayer() { return this._followingPlayer; }
 
+    set Debug(newvalue: boolean) {
+        let oldValue = this._debug;
+        if (oldValue == newvalue) return;
+
+        this._debug = newvalue;
+        this._callback.call(this._context, this, "Debug", oldValue);
+
+    }
+    get Debug() { return this._debug; }
 
 }
 export class GamePlayWindowConfig {
@@ -73,25 +83,16 @@ export class GamePlay extends Phaser.Scene {
 
     private map_alltiles: Phaser.Tilemaps.Tileset;
     private map_foregroundtiles: Phaser.Tilemaps.Tileset;
-    private backgroundLayer: Phaser.Tilemaps.TilemapLayer;
-    private foregroundLayer: Phaser.Tilemaps.TilemapLayer;
     private solidLayer: Phaser.Tilemaps.TilemapLayer;
-    private characterSprites: Phaser.GameObjects.GameObject[];
-    private objectSprites: Phaser.GameObjects.GameObject[];
     private characterLayer: Phaser.Types.Tilemaps.TiledObject[];
-    private doorLayer: Phaser.Types.Tilemaps.TiledObject[];
     private objectLayer: Phaser.Types.Tilemaps.TiledObject[];
 
     private roomWidthInTiles: number = 16;
     private roomHeightInTiles: number = 10;
 
 
-    private cameraController: any;
-    private hud: any;
     private horizontalRooms: number;
     private verticalRooms: number;
-    private inputTimer: Phaser.Time.TimerEvent;
-    private parentScene: Scene;
     private Items: Map<string, ObjectItem>;
 
     RoomNavigator: RoomNavigator;
@@ -102,6 +103,7 @@ export class GamePlay extends Phaser.Scene {
     PickupItemKey: Phaser.Input.Keyboard.Key | undefined;
     DropItemKey: Phaser.Input.Keyboard.Key | undefined;
     ObjectGroup: Phaser.Physics.Arcade.Group;
+    ToggleDebugKey: Phaser.Input.Keyboard.Key | undefined;
 
     constructor() {
         super('GamePlay')
@@ -124,7 +126,7 @@ export class GamePlay extends Phaser.Scene {
             // move the screen to the player
             this.showRoomThatThePlayerIsIn();
         }
-        var newhudFlags = new HudFlags(args.FollowingPlayer);
+        var newhudFlags = new HudFlags(args.FollowingPlayer, args.Debug);
         customEmitter.emit('updateflags', newhudFlags);
 
 
@@ -144,7 +146,13 @@ export class GamePlay extends Phaser.Scene {
         this.ToggleFollowingPlayerKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         this.PickupItemKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.P);
         this.DropItemKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.X);
+        this.ToggleDebugKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.flags = new GameFlags(this.onFlagsChanged, this);
+
+        this.physics.world.drawDebug = false;
+
+        this.flags.Debug = this.physics.world.drawDebug;
+
 
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor(0x000000);
@@ -289,7 +297,7 @@ export class GamePlay extends Phaser.Scene {
         const currentGravity = this.physics.world.gravity.y;
         const playerGravity = currentGravity * -0.35;
 
-        let inventory = new Inventory(5, 10, this.events);
+        let inventory = new Inventory(5, 10);
 
         this.Player = new Player(sprite, nearbySprite, this.cursors!, playerGravity, inventory);
 
@@ -402,7 +410,16 @@ export class GamePlay extends Phaser.Scene {
 
         }
     }
-    update(time, delta) {
+    toggleDebug(on: boolean) {
+        if (!on) {
+            this.physics.world.drawDebug = false;
+            this.physics.world.debugGraphic.clear();
+        }
+        else {
+            this.physics.world.drawDebug = true;
+        }
+    }
+    update(/*time, delta*/) {
 
         //const sprite = this.Player.sprite;
         //this.physics.collide(sprite, this.solidLayer,);
@@ -418,6 +435,12 @@ export class GamePlay extends Phaser.Scene {
 
         if (Phaser.Input.Keyboard.JustDown(this.ToggleFollowingPlayerKey!)) {
             this.flags.FollowingPlayer = !this.flags.FollowingPlayer;
+
+        }
+
+        if (Phaser.Input.Keyboard.JustDown(this.ToggleDebugKey!)) {
+            this.flags.Debug = !this.flags.Debug;
+            this.toggleDebug(this.flags.Debug);
 
         }
         if (this.flags.FollowingPlayer) {
