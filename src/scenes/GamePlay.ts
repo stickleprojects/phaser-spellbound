@@ -8,6 +8,7 @@ import Player from '../player';
 import { LevelConfig } from '../config/levelconfig';
 import { Character, Item } from '../config/configentities';
 import { Inventory, IInventoryItem, IInventoryOwner } from '../inventory';
+import { customEmitter } from '../components/customemitter';
 
 class GameFlags {
     private _followingPlayer: boolean;
@@ -124,7 +125,7 @@ export class GamePlay extends Phaser.Scene {
             this.showRoomThatThePlayerIsIn();
         }
         var newhudFlags = new HudFlags(args.FollowingPlayer);
-        this.events.emit('updateflags', newhudFlags);
+        customEmitter.emit('updateflags', newhudFlags);
 
 
     }
@@ -309,7 +310,7 @@ export class GamePlay extends Phaser.Scene {
             console.log(`Failed to find room! ${roomCoords}`);
         } else {
 
-            this.events.emit("screenmov", new HudRoomInfo(roomCoords.x, roomCoords.y, roomInfo.name));
+            customEmitter.emit("screenmov", new HudRoomInfo(roomCoords.x, roomCoords.y, roomInfo.name));
             this.camera.setBounds(
                 roomInfo.WorldLocation.x, roomInfo.WorldLocation.y,
                 roomInfo.WorldLocation.width, roomInfo.WorldLocation.height, false);

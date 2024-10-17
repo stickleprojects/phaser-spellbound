@@ -1,3 +1,4 @@
+import { customEmitter } from "../components/customemitter";
 import { InventoryEventArgs, Inventory } from "../inventory";
 import { BottomPanel, BottomPanelParameters } from "./BottomPanel";
 
@@ -18,11 +19,11 @@ export class InventoryPanel extends BottomPanel {
     }
     create() {
 
-        this.events.on('itemadded', (args: InventoryEventArgs) => {
+        customEmitter.on('itemadded', (args: InventoryEventArgs) => {
             this._inventory = args.inventory
             this.showInventory();
         })
-        this.events.on('itemremoved', (args: InventoryEventArgs) => {
+        customEmitter.on('itemremoved', (args: InventoryEventArgs) => {
             this._inventory = args.inventory
             this.showInventory();
         })

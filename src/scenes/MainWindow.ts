@@ -33,23 +33,7 @@ export class MainWindow extends Scene {
         return this.scene.manager.getScene('copyright')!;
     }
     wireUpEvents() {
-        const scn = this.scene.manager.getScene('GamePlay');
-        scn!.events.on('screenmov', (args: object) => {
-            this.getHudScene().events.emit('screenmov', args);
 
-
-        })
-
-        scn!.events.on('updateflags', (args: object) => {
-            this.getHudScene().events.emit('updateflags', args);
-        })
-
-        scn!.events.on('itemadded', (args: InventoryEventArgs) => {
-            this.getInventoryScene().events.emit('itemadded', args);
-        })
-        scn!.events.on('itemremoved', (args: InventoryEventArgs) => {
-            this.getInventoryScene().events.emit('itemremoved', args);
-        })
 
     }
     showCopyright() {

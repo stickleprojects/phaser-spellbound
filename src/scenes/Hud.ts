@@ -1,4 +1,5 @@
 import Phaser, { Scene } from 'phaser';
+import { customEmitter } from '../components/customemitter';
 
 export class HudParameters {
     parent: Scene;
@@ -64,11 +65,11 @@ export class Hud extends Phaser.Scene {
 
         this.cameras.main.setViewport(data.x, data.y, data.width, data.height);
 
-        this.parentScene.events.on('screenmov', (args: HudRoomInfo) => {
+        customEmitter.on('screenmov', (args: HudRoomInfo) => {
             this.updateRoomLocation(args);
 
         }, this)
-        this.parentScene.events.on('updateflags', (args: HudFlags) => {
+        customEmitter.on('updateflags', (args: HudFlags) => {
             this.updateFlags(args);
 
         }, this)
