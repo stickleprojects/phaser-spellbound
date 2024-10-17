@@ -431,8 +431,6 @@ export class GamePlay extends Phaser.Scene {
 
         // tick the input system and other systems maybe
 
-        // check if  player wandered off screen
-
         if (Phaser.Input.Keyboard.JustDown(this.ToggleFollowingPlayerKey!)) {
             this.flags.FollowingPlayer = !this.flags.FollowingPlayer;
 
