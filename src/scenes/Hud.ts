@@ -87,11 +87,12 @@ export class Hud extends Phaser.Scene {
         this.roomLocationControl = this.add.text(0, 0, "Room: (0,0)");
 
         const NotFollowing_instructionText = [
-            'Instructions: Use WASD to explore theres only 8x6 rooms or so, and the characters dont move',
-            '              The Room name and position will be displayed in topleft hand corner'
+            'Instructions:      Use WASD to explore theres only 8x6 rooms or so',
+            '                   The Room name and position will be displayed in topleft hand corner'
         ];
         const Following_instructionText = [
-            'Instructions: Use Arrow Keys to walk about, Press F to toggle walking/screens'
+            'Instructions:      Use Arrow Keys to walk about, Press F to toggle walking/screens',
+            '                   P=Pickup object, X = Drop last object, SPACE=debug'
 
         ];
 
