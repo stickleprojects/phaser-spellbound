@@ -5,6 +5,7 @@ export const KEYEVENT_PICKUP_ITEM = "pickup";
 export const KEYEVENT_FOLLOW_PLAYER = "followplayer";
 export const KEYEVENT_DROP_ITEM = "drop";
 export const KEYEVENT_TOGGLE_DEBUG = "toggledebug";
+export const KEYEVENT_TELEPORT = "teleport";
 
 
 export function InputEventSystem(input: Phaser.Input.InputPlugin) {
@@ -14,6 +15,8 @@ export function InputEventSystem(input: Phaser.Input.InputPlugin) {
     const ToggleDebugKey: Phaser.Input.Keyboard.Key = input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     const ToggleFollowingPlayerKey: Phaser.Input.Keyboard.Key = input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.F);
 
+    const TeleportKey: Phaser.Input.Keyboard.Key = input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.T);
+
 
     return defineSystem((world: IWorld) => {
 
@@ -22,6 +25,11 @@ export function InputEventSystem(input: Phaser.Input.InputPlugin) {
         }
         if (Phaser.Input.Keyboard.JustDown(ToggleFollowingPlayerKey)) {
             customEmitter.emit(KEYEVENT_FOLLOW_PLAYER);
+        }
+
+
+        if (Phaser.Input.Keyboard.JustDown(TeleportKey)) {
+            customEmitter.emit(KEYEVENT_TELEPORT);
         }
 
 
