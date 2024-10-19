@@ -134,6 +134,7 @@ export class GamePlay extends Phaser.Scene {
             () => this.positionCameraAccordingToRoom());
 
 
+
         this.map_alltiles = this.map.addTilesetImage('alltiles', 'map_background')!
         this.map_foregroundtiles = this.map.addTilesetImage('foregroundtiles', 'map_foreground')!
 
@@ -162,6 +163,9 @@ export class GamePlay extends Phaser.Scene {
         this.inputEventSystem = InputEventSystem(this.input);
 
         this.wireupEvents();
+
+
+
     }
 
     private wireupEvents() {

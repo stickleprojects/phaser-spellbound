@@ -59,41 +59,28 @@ export default class Player {
         })
 
         let vanishFrames = this.sprite.anims.generateFrameNumbers('knight_smoke', {
-            start: 0,
-            end: 5,
-
+            start: 5,
+            end: 0,
 
         });
         this.sprite.anims.create({
             key: 'vanish',
             frames: vanishFrames,
             frameRate: 8,
-            repeat: 1,
-            yoyo: true
+            repeat: 0,
+            yoyo: false
 
         })
 
         this.sprite.anims.create({
             key: 'appear',
-            frames: vanishFrames,
+            frames: vanishFrames.reverse(),
             frameRate: 8,
-            repeat: 1,
-            yoyo: true
+            repeat: 0,
+
+            yoyo: false
         })
 
-        this.sprite.on(Phaser.Animations.Events.ANIMATION_COMPLETE, (anim, frame) => {
-            //this.sprite.emit('animationcomplete_' + anim.key, frame);
-            console.log(anim.key);
-        });
-
-        this.sprite.on(Phaser.Animations.Events.ANIMATION_STOP, (anim, frame) => {
-            //this.sprite.emit('animationcomplete_' + anim.key, frame);
-            console.log(anim.key);
-        });
-
-        this.sprite.on(Phaser.Animations.Events.ANIMATION_START, (anim, frame) => {
-            console.log(anim.key);
-        });
         this._inventory = inventory;
 
     }
@@ -155,7 +142,7 @@ export default class Player {
         this.sprite.on('animationcomplete-vanish', () => {
             this.getBody().setVelocity(0);
             this.sprite.x = x;
-            this.sprite.y = y;
+            this.sprite.y = y - 10;
 
             this.repositionNearbySprite();
 
@@ -164,10 +151,25 @@ export default class Player {
 
         this.sprite.on('animationcomplete-appear', () => {
             this.allowMovement = oldAllowMovement;
+            this.showHideInventoryItems(false);
         })
+
+        this.showHideInventoryItems(true);
         this.playAnim('vanish');
 
 
+    }
+
+    showHideInventoryItems(hide: boolean) {
+        // move the inventory items too!
+        this._inventory.GetItems().forEach((i: IInventoryItem, index: number) => {
+
+            let value = i as ObjectItem;
+
+            value.Sprite.visible = !hide;
+
+
+        })
     }
     repositionNearbySprite() {
         this.nearbySprite.x = this.sprite.x - this.nearbySprite.width / 2;
