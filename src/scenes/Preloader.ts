@@ -36,6 +36,7 @@ export class Preloader extends Phaser.Scene {
         this.load.image('map_background', 'c64tiles.png')
         this.load.spritesheet('characters', 'charactersprites.png', { frameWidth: 16, frameHeight: 32 });
         this.load.spritesheet('objects', 'objectsprites.png', { frameWidth: 16, frameHeight: 32 });
+        this.load.spritesheet('knight_smoke', 'knight_smoke.png', { frameWidth: 16, frameHeight: 32 });
 
         this.load.spritesheet('border_bottompanel', 'borders_bottompanel.png', { frameWidth: 16, frameHeight: 16 })
         this.load.spritesheet('border_panel', 'borders_menu.png', { frameWidth: 16, frameHeight: 16 })

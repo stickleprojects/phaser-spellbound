@@ -172,6 +172,9 @@ export class Inventory {
         return { ok: true, value: true };
     }
 
+    public HasItem(id: string): boolean {
+        return this._items.has(id);
+    }
     public GetItems(): readonly IInventoryItem[] {
         return Array.from(this._items.values());
 

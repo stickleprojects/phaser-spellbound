@@ -58,6 +58,29 @@ export default class Player {
 
         })
 
+        let vanishFrames = this.sprite.anims.generateFrameNumbers('knight_smoke', {
+            start: 5,
+            end: 0,
+
+        });
+        this.sprite.anims.create({
+            key: 'vanish',
+            frames: vanishFrames,
+            frameRate: 8,
+            repeat: 0,
+            yoyo: false
+
+        })
+
+        this.sprite.anims.create({
+            key: 'appear',
+            frames: vanishFrames.reverse(),
+            frameRate: 8,
+            repeat: 0,
+
+            yoyo: false
+        })
+
         this._inventory = inventory;
 
     }
@@ -69,17 +92,21 @@ export default class Player {
     moveRight() {
 
         this.getBody().setVelocityX(this.speed);
-        this.sprite.anims.play('walk', true);
+        this.playAnim('walk');
     }
     moveLeft() {
         this.getBody().setVelocityX(-this.speed);
-        this.sprite.anims.play('walk', true);
+        this.playAnim('walk');
     }
     jump() {
         this.getBody().setVelocityY(this.jumpSpeed);
     }
+    playAnim(animName: string) {
+        if (this.sprite.anims.currentAnim?.key != animName) {
+            this.sprite.anims.play(animName, true);
+        }
+    }
     Update() {
-
 
         if (this.allowMovement) {
             if (this.cursorKeys.right.isDown) {
@@ -94,7 +121,8 @@ export default class Player {
 
             } else {
                 this.getBody().setVelocityX(0);
-                this.sprite.anims.play('stop');
+
+                this.playAnim('stop');
                 //      this.sprite.flipX = !this.sprite.flipX;
             }
             if (this.cursorKeys.up.isDown && this.getBody().onFloor()) {
@@ -104,6 +132,44 @@ export default class Player {
 
             this.repositionNearbySprite();
         }
+    }
+    moveTo(x: number, y: number) {
+
+        const oldAllowMovement = this.allowMovement;
+        this.allowMovement = false;
+
+        // play vanishing animation
+        this.sprite.on('animationcomplete-vanish', () => {
+            this.getBody().setVelocity(0);
+            this.sprite.x = x;
+            this.sprite.y = y - 10;
+
+            this.repositionNearbySprite();
+
+            this.playAnim('appear');
+        })
+
+        this.sprite.on('animationcomplete-appear', () => {
+            this.allowMovement = oldAllowMovement;
+            this.showHideInventoryItems(false);
+        })
+
+        this.showHideInventoryItems(true);
+        this.playAnim('vanish');
+
+
+    }
+
+    showHideInventoryItems(hide: boolean) {
+        // move the inventory items too!
+        this._inventory.GetItems().forEach((i: IInventoryItem, index: number) => {
+
+            let value = i as ObjectItem;
+
+            value.Sprite.visible = !hide;
+
+
+        })
     }
     repositionNearbySprite() {
         this.nearbySprite.x = this.sprite.x - this.nearbySprite.width / 2;

@@ -9,39 +9,11 @@ import { LevelConfig } from '../config/levelconfig';
 import { Character, Item } from '../config/configentities';
 import { Inventory, IInventoryItem } from '../inventory';
 import { customEmitter } from '../components/customemitter';
-import { InputEventSystem, KEYEVENT_DROP_ITEM, KEYEVENT_FOLLOW_PLAYER, KEYEVENT_PICKUP_ITEM, KEYEVENT_TOGGLE_DEBUG } from '../systems/inputEventSystem';
+import { InputEventSystem, KEYEVENT_DROP_ITEM, KEYEVENT_FOLLOW_PLAYER, KEYEVENT_PICKUP_ITEM, KEYEVENT_TELEPORT, KEYEVENT_TOGGLE_DEBUG } from '../systems/inputEventSystem';
+import { GameFlags } from './GameFlags';
+import { ObjectItem } from './objectitem';
 
-class GameFlags {
-    private _followingPlayer: boolean;
-    private _callback: (values: GameFlags, propertyName: string, oldValue: any) => void;
-    private _context: any;
-    private _debug: any;
 
-    constructor(callback: (values: GameFlags, propertyName: string, oldValue: any) => void, context: any) {
-        this._callback = callback;
-        this._context = context;
-    }
-
-    set FollowingPlayer(newvalue: boolean) {
-        let oldValue = this._followingPlayer;
-        if (oldValue == newvalue) return;
-
-        this._followingPlayer = newvalue;
-        this._callback.call(this._context, this, "FollowingPlayer", oldValue);
-    }
-    get FollowingPlayer() { return this._followingPlayer; }
-
-    set Debug(newvalue: boolean) {
-        let oldValue = this._debug;
-        if (oldValue == newvalue) return;
-
-        this._debug = newvalue;
-        this._callback.call(this._context, this, "Debug", oldValue);
-
-    }
-    get Debug() { return this._debug; }
-
-}
 export class GamePlayWindowConfig {
     parent: Scene;
     x: number;
@@ -56,21 +28,6 @@ export class GamePlayWindowConfig {
         this.height = height;
         this.width = width;
     }
-}
-export class ObjectItem implements IInventoryItem {
-    private _sprite: Phaser.GameObjects.Sprite;
-    private _src: Item;
-
-    constructor(src: Item, sprite: Phaser.GameObjects.Sprite) {
-        this._sprite = sprite;
-        this.id = src.id;
-        this._src = src;
-    }
-    id: string;
-    owner?: Inventory;
-    get Sprite() { return this._sprite; }
-    get name() { return this._src.stats?.fullname || this.id }
-    get weight() { return this._src.stats?.weight || 0 }
 }
 export class GamePlay extends Phaser.Scene {
 
@@ -177,6 +134,7 @@ export class GamePlay extends Phaser.Scene {
             () => this.positionCameraAccordingToRoom());
 
 
+
         this.map_alltiles = this.map.addTilesetImage('alltiles', 'map_background')!
         this.map_foregroundtiles = this.map.addTilesetImage('foregroundtiles', 'map_foreground')!
 
@@ -205,10 +163,16 @@ export class GamePlay extends Phaser.Scene {
         this.inputEventSystem = InputEventSystem(this.input);
 
         this.wireupEvents();
+
+
+
     }
 
     private wireupEvents() {
 
+        customEmitter.on(KEYEVENT_TELEPORT, () => {
+            this.teleportPlayerToPad();
+        });
         customEmitter.on(KEYEVENT_TOGGLE_DEBUG, () => {
             this.flags.Debug = !this.flags.Debug;
             this.toggleDebug(this.flags.Debug);
@@ -347,6 +311,29 @@ export class GamePlay extends Phaser.Scene {
                 roomInfo.WorldLocation.x, roomInfo.WorldLocation.y,
                 roomInfo.WorldLocation.width, roomInfo.WorldLocation.height, false);
         }
+    }
+    teleportPlayerToPad() {
+        // if the player is carrying the teleportkey
+
+        if (!this.Player.getInventory().HasItem("teleportkey")) {
+            console.error("you arent carrying the teleport key");
+            return;
+        }
+
+        // find the teleportpad
+        const tp = this.Items.get("teleportpad");
+        if (!tp) {
+            console.error("Cannot find teleportpad");
+            return;
+        }
+
+        const newLocationX = tp!.Sprite.x;
+        const newLocationY = tp!.Sprite.y;
+
+        console.log("moving to {0},{1}", newLocationX, newLocationY)
+
+        this.Player.moveTo(newLocationX, newLocationY);
+
     }
     init(data: GamePlayWindowConfig) {
 
