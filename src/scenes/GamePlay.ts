@@ -1,6 +1,6 @@
 import Phaser, { Scene } from 'phaser';
 
-import { createWorld, IWorld } from "bitecs";
+import { createWorld, IWorld, System } from "bitecs";
 
 import { HudFlags, HudRoomInfo } from './Hud';
 import { RoomNavigator } from '../roomnavigator';
@@ -9,6 +9,7 @@ import { LevelConfig } from '../config/levelconfig';
 import { Character, Item } from '../config/configentities';
 import { Inventory, IInventoryItem } from '../inventory';
 import { customEmitter } from '../components/customemitter';
+import { InputEventSystem, KEYEVENT_DROP_ITEM, KEYEVENT_FOLLOW_PLAYER, KEYEVENT_PICKUP_ITEM, KEYEVENT_TOGGLE_DEBUG } from '../systems/inputEventSystem';
 
 class GameFlags {
     private _followingPlayer: boolean;
@@ -98,13 +99,9 @@ export class GamePlay extends Phaser.Scene {
 
     RoomNavigator: RoomNavigator;
     Player: Player;
-    followingPlayer: boolean;
-    ToggleFollowingPlayerKey: Phaser.Input.Keyboard.Key | undefined;
     flags: GameFlags;
-    PickupItemKey: Phaser.Input.Keyboard.Key | undefined;
-    DropItemKey: Phaser.Input.Keyboard.Key | undefined;
     ObjectGroup: Phaser.Physics.Arcade.Group;
-    ToggleDebugKey: Phaser.Input.Keyboard.Key | undefined;
+    inputEventSystem: System;
 
     constructor() {
         super('GamePlay')
@@ -142,12 +139,15 @@ export class GamePlay extends Phaser.Scene {
 
         this.setupPhysics();
 
-        this.cursors = this.input.keyboard?.createCursorKeys()
 
-        this.ToggleFollowingPlayerKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.F);
-        this.PickupItemKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.P);
-        this.DropItemKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.X);
-        this.ToggleDebugKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        this.cursors = this.input.keyboard?.createCursorKeys()
+        /*
+                this.ToggleFollowingPlayerKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+                this.PickupItemKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+                this.DropItemKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.X);
+                this.ToggleDebugKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+          */
         this.flags = new GameFlags(this.onFlagsChanged, this);
 
         this.physics.world.drawDebug = false;
@@ -199,8 +199,28 @@ export class GamePlay extends Phaser.Scene {
         this.RoomNavigator.SetRoomCoordinates({ x: 5, y: 2 });
         this.flags.FollowingPlayer = true;
 
+        this.inputEventSystem = InputEventSystem(this.input);
+
+        this.wireupEvents();
     }
 
+    private wireupEvents() {
+
+        customEmitter.on(KEYEVENT_TOGGLE_DEBUG, () => {
+            this.flags.Debug = !this.flags.Debug;
+            this.toggleDebug(this.flags.Debug);
+        })
+        customEmitter.on(KEYEVENT_FOLLOW_PLAYER, () => {
+            this.flags.FollowingPlayer = !this.flags.FollowingPlayer;
+        })
+        customEmitter.on(KEYEVENT_DROP_ITEM, () => {
+            this.dropLastItem();
+        })
+        customEmitter.on(KEYEVENT_PICKUP_ITEM, () => {
+            this.pickupNearestItem();
+        })
+
+    }
     private getCharacter(name: string): Character | undefined {
         let character = this._levelConfig.Characters.find(c => c.id == name);
 
@@ -422,39 +442,15 @@ export class GamePlay extends Phaser.Scene {
     }
     update(/*time, delta*/) {
 
-        //const sprite = this.Player.sprite;
-        //this.physics.collide(sprite, this.solidLayer,);
-
-
+        this.inputEventSystem(this.world);
         this.RoomNavigator.UpdateInput();
 
         this.Player.Update();
 
-        // tick the input system and other systems maybe
-
-        if (Phaser.Input.Keyboard.JustDown(this.ToggleFollowingPlayerKey!)) {
-            this.flags.FollowingPlayer = !this.flags.FollowingPlayer;
-
-        }
-
-        if (Phaser.Input.Keyboard.JustDown(this.ToggleDebugKey!)) {
-            this.flags.Debug = !this.flags.Debug;
-            this.toggleDebug(this.flags.Debug);
-
-        }
         if (this.flags.FollowingPlayer) {
             this.showRoomThatThePlayerIsIn();
         }
 
-        // testing, pickup items
-        if (Phaser.Input.Keyboard.JustDown(this.PickupItemKey!)) {
-
-            this.pickupNearestItem();
-        }
-        if (Phaser.Input.Keyboard.JustDown(this.DropItemKey!)) {
-
-            this.dropLastItem();
-        }
     }
 
 }
