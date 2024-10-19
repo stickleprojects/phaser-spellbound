@@ -124,6 +124,9 @@ export class GamePlay extends Phaser.Scene {
             // move the screen to the player
             this.showRoomThatThePlayerIsIn();
         }
+        if (this.Player) {
+            this.Player.allowMovement = args.FollowingPlayer;
+        }
         var newhudFlags = new HudFlags(args.FollowingPlayer, args.Debug);
         customEmitter.emit('updateflags', newhudFlags);
 

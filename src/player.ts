@@ -11,6 +11,7 @@ export default class Player {
     private _inventory: Inventory;
     nearbySprite: Phaser.Physics.Arcade.Body;
 
+    allowMovement: boolean;
     getSprite(): Phaser.GameObjects.Sprite { return this.sprite; }
     getNearbySprite(): Phaser.Physics.Arcade.Body { return this.nearbySprite; }
 
@@ -80,27 +81,29 @@ export default class Player {
     Update() {
 
 
-        if (this.cursorKeys.right.isDown) {
-            // move sprite 
-            this.moveRight();
+        if (this.allowMovement) {
+            if (this.cursorKeys.right.isDown) {
+                // move sprite 
+                this.moveRight();
 
-            this.sprite.flipX = false;
-        } else if (this.cursorKeys.left.isDown) {
-            // move sprite 
-            this.moveLeft();
-            this.sprite.flipX = true;
+                this.sprite.flipX = false;
+            } else if (this.cursorKeys.left.isDown) {
+                // move sprite 
+                this.moveLeft();
+                this.sprite.flipX = true;
 
-        } else {
-            this.getBody().setVelocityX(0);
-            this.sprite.anims.play('stop');
-            //      this.sprite.flipX = !this.sprite.flipX;
+            } else {
+                this.getBody().setVelocityX(0);
+                this.sprite.anims.play('stop');
+                //      this.sprite.flipX = !this.sprite.flipX;
+            }
+            if (this.cursorKeys.up.isDown && this.getBody().onFloor()) {
+                // move sprite 
+                this.jump();
+            }
+
+            this.repositionNearbySprite();
         }
-        if (this.cursorKeys.up.isDown && this.getBody().onFloor()) {
-            // move sprite 
-            this.jump();
-        }
-
-        this.repositionNearbySprite();
     }
     repositionNearbySprite() {
         this.nearbySprite.x = this.sprite.x - this.nearbySprite.width / 2;
