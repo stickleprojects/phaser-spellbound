@@ -7,7 +7,7 @@ import { RoomNavigator } from '../roomnavigator';
 import Player from '../player';
 import { LevelConfig } from '../config/levelconfig';
 import { Character, Item } from '../config/configentities';
-import { Inventory, IInventoryItem } from '../inventory';
+import { Inventory } from '../inventory';
 import { customEmitter } from '../components/customemitter';
 import { InputEventSystem, KEYEVENT_DROP_ITEM, KEYEVENT_FOLLOW_PLAYER, KEYEVENT_PICKUP_ITEM, KEYEVENT_TELEPORT, KEYEVENT_TOGGLE_DEBUG } from '../systems/inputEventSystem';
 import { GameFlags } from './GameFlags';
@@ -138,11 +138,11 @@ export class GamePlay extends Phaser.Scene {
         this.map_alltiles = this.map.addTilesetImage('alltiles', 'map_background')!
         this.map_foregroundtiles = this.map.addTilesetImage('foregroundtiles', 'map_foreground')!
 
-        this.backgroundLayer = this.map.createLayer('background', this.map_alltiles)!
-        this.foregroundLayer = this.map.createLayer('foreground', this.map_foregroundtiles)!
+        this.map.createLayer('background', this.map_alltiles)!
+        this.map.createLayer('foreground', this.map_foregroundtiles)!
         this.solidLayer = this.map.createLayer('solid', this.map_alltiles)!
         this.characterLayer = this.map.getObjectLayer('characters')?.objects!
-        this.doorLayer = this.map.getObjectLayer('doorobjects')?.objects!
+        this.map.getObjectLayer('doorobjects')?.objects!
         this.objectLayer = this.map.getObjectLayer('objects')?.objects!
 
         this.map.setCollisionBetween(0, 1000, true, true, 'solid');
@@ -327,6 +327,11 @@ export class GamePlay extends Phaser.Scene {
             return;
         }
 
+        if (tp.owner) {
+            console.error("Someone is carrying that!");
+            return;
+        }
+
         const newLocationX = tp!.Sprite.x;
         const newLocationY = tp!.Sprite.y;
 
@@ -337,7 +342,6 @@ export class GamePlay extends Phaser.Scene {
     }
     init(data: GamePlayWindowConfig) {
 
-        this.parentScene = data.parent;
 
         this.cameras.main.setViewport(data.x, data.y, data.width, data.height);
 
@@ -367,7 +371,7 @@ export class GamePlay extends Phaser.Scene {
 
         let nearObjects: Phaser.GameObjects.Sprite[] = [];
 
-        this.physics.overlap(s, this.ObjectGroup, (a: Phaser.Physics.Arcade.GameObjectWithBody, b: Phaser.Physics.Arcade.GameObjectWithBody, info) => {
+        this.physics.overlap(s, this.ObjectGroup, (_, b: Phaser.Physics.Arcade.GameObjectWithBody) => {
 
 
             nearObjects.push(b);

@@ -1,6 +1,6 @@
 import { Physics } from "phaser";
 import { IInventoryItem, Inventory } from "./inventory";
-import { ObjectItem } from "./scenes/GamePlay";
+import { ObjectItem } from "./scenes/objectitem";
 
 export default class Player {
     private sprite: Phaser.GameObjects.Sprite;
@@ -162,7 +162,7 @@ export default class Player {
 
     showHideInventoryItems(hide: boolean) {
         // move the inventory items too!
-        this._inventory.GetItems().forEach((i: IInventoryItem, index: number) => {
+        this._inventory.GetItems().forEach((i: IInventoryItem) => {
 
             let value = i as ObjectItem;
 
@@ -171,12 +171,9 @@ export default class Player {
 
         })
     }
-    repositionNearbySprite() {
-        this.nearbySprite.x = this.sprite.x - this.nearbySprite.width / 2;
-        this.nearbySprite.y = this.sprite.y - this.nearbySprite.height / 2;
-
+    repositionCarriedItems() {
         // move the inventory items too!
-        this._inventory.GetItems().forEach((i: IInventoryItem, index: number) => {
+        this._inventory.GetItems().forEach((i: IInventoryItem) => {
 
             let value = i as ObjectItem;
 
@@ -184,5 +181,11 @@ export default class Player {
             value.Sprite.y = this.sprite.y;
 
         })
+    }
+    repositionNearbySprite() {
+        this.nearbySprite.x = this.sprite.x - this.nearbySprite.width / 2;
+        this.nearbySprite.y = this.sprite.y - this.nearbySprite.height / 2;
+
+        this.repositionCarriedItems();
     }
 }
