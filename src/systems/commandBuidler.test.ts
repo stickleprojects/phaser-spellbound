@@ -1,20 +1,22 @@
 import { CommandBuilder, ShowSceneArguments } from './commandbuilder';
-import { describe, vi, it, expect, beforeEach } from 'vitest'
 
 describe('commandbuilder tests', () => {
 
     it('should pause the main screen', async () => {
 
-        let callback = vi.fn((data: ShowSceneArguments) => Promise.resolve(new ShowSceneArguments(data.sceneKey, data.characterId, 'fred')));
+        let cb = new CommandBuilder((args: ShowSceneArguments): Promise<ShowSceneArguments> => {
+            console.log("in test", args.sceneKey);
 
-
-        let cb = new CommandBuilder(callback);
+            const itemid = 'fred';
+            const ret = new ShowSceneArguments(args.sceneKey, undefined, itemid);
+            return Promise.resolve<ShowSceneArguments>(ret);
+        });
 
         // cb is a statemachine
         return cb.ExecuteCommand("pickup")
             .then((data) => {
                 expect(data.itemId).toBe('fred');
-
+                expect(data.sceneKey).toBe("nearbyitemslist");
             });
 
 
@@ -53,11 +55,11 @@ describe('commandbuilder tests', () => {
                                 expect(sut.CommandText.toString()).toBe(expectedText);
                  */
             });
-            it('should present the list of items in that persons inventory');
+            it('should present the list of items in that persons inventory', () => { });
 
             describe('once you select an item', () => {
-                it('should update the template with the person and item');
-                it('should emit the take event')
+                it('should update the template with the person and item', () => { });
+                it('should emit the take event', () => { })
             })
         })
 

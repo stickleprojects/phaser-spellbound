@@ -57,6 +57,8 @@ class PickupCommand implements ICommand {
 
                 // eecute the command;
                 console.log("'user chose something!", data);
+
+                return data;
             },
                 (err) => {
                     this._showScene(new ShowSceneArguments('abandoned' + err));
@@ -69,17 +71,18 @@ export class CommandBuilder {
 
     private _showScene: (sceneargs: ShowSceneArguments) => Promise<ShowSceneArguments>;
 
-    private _commands: ICommand[];
+    private _commands: ICommand[] = new Array<ICommand>();
 
     constructor(onShowScene: (sceneargs: ShowSceneArguments) => Promise<ShowSceneArguments>) {
+
 
         this._showScene = onShowScene;
 
         this.initCommands();
-    }
-    private initCommands() {
-        this._commands.push(new PickupCommand(this.onCommandShowScene));
 
+    }
+    initCommands() {
+        this._commands.push(new PickupCommand(this.onCommandShowScene.bind(this)));
     }
 
     public ExecuteCommand(commandid: string): Promise<ShowSceneArguments> {
@@ -91,9 +94,9 @@ export class CommandBuilder {
     }
     private onCommandShowScene(args: ShowSceneArguments): Promise<ShowSceneArguments> {
 
-        return new Promise<ShowSceneArguments>(() => {
-            return this._showScene(args);
-        });
+
+        return this._showScene(args);
+
     }
 
 
