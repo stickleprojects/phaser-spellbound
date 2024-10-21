@@ -20,6 +20,13 @@ enum CommandStates {
 }
     */
 
+
+import { customEmitter } from "../components/customemitter";
+
+import { KEYEVENT_PICKUP_ITEM } from "./inputEventSystem";
+
+//import { IInventoryItem, IInventoryOwner, Inventory } from "../inventory";
+
 export class ShowSceneArguments {
     sceneKey: string;
     characterId?: string;
@@ -32,73 +39,136 @@ export class ShowSceneArguments {
     }
 }
 interface ICommand {
-    execute(): Promise<ShowSceneArguments>;
+    execute(): Promise<boolean>;
 
 }
-class PickupCommand implements ICommand {
-    private _showScene: (sceneargs: ShowSceneArguments) => Promise<ShowSceneArguments>;
+export interface ICommandExecutor {
+    PickupItem(itemId: string): Promise<boolean>;
+    GiveItem(itemId: string, characterId: string): Promise<boolean>;
+}
+export interface ICommandPresenter {
+    GetInventoryItemId(): Promise<string>;
+    GetNearbyCharacterId(): Promise<string>;
+}
+abstract class CommandBase implements ICommand {
+    private _presenter: ICommandPresenter;
+    private _executor: ICommandExecutor;
 
+    get Executor(): ICommandExecutor { return this._executor };
+    get Presenter(): ICommandPresenter { return this._presenter };
 
-    constructor(fnShowScene: (sceneargs: ShowSceneArguments) => Promise<ShowSceneArguments>) {
+    constructor(commandBuilder: ICommandPresenter, commandServer: ICommandExecutor) {
 
-        // we need to show a list of nearby items and wait for one to be chosen
-        // showng the list is async, so show it and wait for inventoryitemchoen event
+        this._presenter = commandBuilder;
+        this._executor = commandServer;
+    }
 
-        this._showScene = fnShowScene
+    abstract execute(): Promise<boolean>;
+
+}
+export class PickupCommand extends CommandBase {
+
+    constructor(presenter: ICommandPresenter, server: ICommandExecutor) {
+        super(presenter, server)
+    }
+
+    execute(): Promise<boolean> {
+
+        return super.Presenter.GetInventoryItemId()
+            .then((itemId: string) => {
+                console.log(`pickup nearby item ${itemId}`);
+
+                super.Executor.PickupItem(itemId);
+                return true;
+            }, (err: any) => {
+                console.log("something went really wrong", err)
+                return false;
+
+            })
+            ;
 
 
     }
 
+}
 
-    execute(): Promise<any> {
-
-        return this._showScene(new ShowSceneArguments('nearbyitemslist'))
-            .then((data: ShowSceneArguments) => {
-
-                // eecute the command;
-                console.log("'user chose something!", data);
-
-                return data;
-            },
-                (err) => {
-                    this._showScene(new ShowSceneArguments('abandoned' + err));
-                }
-            );
+export class GiveCommand implements ICommand {
+    execute(): Promise<boolean> {
+        throw new Error("Method not implemented.");
     }
 
 }
+export class CommandExecutor implements ICommandExecutor {
+    PickupItem(itemId: string): Promise<boolean> {
+        // emit the correct event
+        customEmitter.emit(KEYEVENT_PICKUP_ITEM, { itemid: itemId });
+
+        return Promise.resolve(true);
+    }
+    GiveItem(itemId: string, characterId: string): Promise<boolean> {
+        customEmitter.emit(KEYEVENT_PICKUP_ITEM, { itemid: itemId, characterId: characterId });
+
+        return Promise.resolve(true);
+    }
+
+}
+
+
 export class CommandBuilder {
 
-    private _showScene: (sceneargs: ShowSceneArguments) => Promise<ShowSceneArguments>;
+    //private _showScene: (sceneargs: ShowSceneArguments) => Promise<ShowSceneArguments>;
 
     private _commands: ICommand[] = new Array<ICommand>();
+    private _presenter: ICommandPresenter;
+    private _executor: ICommandExecutor;
 
-    constructor(onShowScene: (sceneargs: ShowSceneArguments) => Promise<ShowSceneArguments>) {
+    constructor(
+        presenter: ICommandPresenter,
+        executor: ICommandExecutor
+        //    onShowScene: (sceneargs: ShowSceneArguments) => Promise<ShowSceneArguments>
+    ) {
 
+        this._presenter = presenter;
+        this._executor = executor;
 
-        this._showScene = onShowScene;
+        //  this._showScene = onShowScene;
 
         this.initCommands();
 
     }
+    PickupItem(): Promise<boolean> {
+        const x = new PickupCommand(this._presenter, this._executor);
+        return x.execute();
+    }
+    GiveItem(itemId: string, characterId: string): Promise<boolean> {
+        console.log("pickupItem", itemId, characterId);
+        throw new Error("Method not implemented.");
+    }
     initCommands() {
-        this._commands.push(new PickupCommand(this.onCommandShowScene.bind(this)));
+        this._commands.push(new PickupCommand(this, this));
     }
 
-    public ExecuteCommand(commandid: string): Promise<ShowSceneArguments> {
+    public GetInventoryItemId(): Promise<string> {
+
+        return Promise.resolve<string>('fred');
+    }
+    public GetNearbyCharacterId(): Promise<string> {
+        return Promise.resolve<string>('nearbycharacterid');
+    }
+
+    public GetAnyCharacterId(): Promise<string> {
+        return Promise.resolve<string>('anycharacter');
+    }
+    public GetNearbyItemId(): Promise<string> {
+        return Promise.resolve<string>('nearbyitemid');
+    }
+    public ExecuteCommand(commandid: string): Promise<boolean> {
         let c = this._commands[0];
 
         console.log(commandid);
 
         return c.execute();
     }
-    private onCommandShowScene(args: ShowSceneArguments): Promise<ShowSceneArguments> {
-
-
-        return this._showScene(args);
-
-    }
-
 
 
 }
