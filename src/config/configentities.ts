@@ -20,7 +20,10 @@ export class CharacterStats extends Stats {
     maxenergy: number
     energy: number
 }
-export class RoomStats extends Stats { }
+export class RoomStats extends Stats {
+    dark: boolean
+    poisonous: boolean
+}
 export class ItemStats extends Stats {
     weight: number
 }

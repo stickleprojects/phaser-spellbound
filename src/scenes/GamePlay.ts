@@ -306,10 +306,20 @@ export class GamePlay extends Phaser.Scene {
             console.log(`Failed to find room! ${roomCoords}`);
         } else {
 
+            console.log('room stats', roomInfo.stats);
+
             customEmitter.emit("screenmov", new HudRoomInfo(roomCoords.x, roomCoords.y, roomInfo.name));
             this.camera.setBounds(
                 roomInfo.WorldLocation.x, roomInfo.WorldLocation.y,
                 roomInfo.WorldLocation.width, roomInfo.WorldLocation.height, false);
+
+            if (roomInfo.stats.dark) {
+                console.log("its TOO DARK in here!");
+                this.camera.setAlpha(0.2);
+            } else {
+                this.camera.setAlpha(1);
+
+            }
         }
     }
     teleportPlayerToPad() {
