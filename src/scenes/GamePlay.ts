@@ -315,8 +315,17 @@ export class GamePlay extends Phaser.Scene {
     teleportPlayerToPad() {
         // if the player is carrying the teleportkey
 
+        if (!this.Player.getBody().onFloor()) {
+            return;
+
+        }
         if (!this.Player.getInventory().HasItem("teleportkey")) {
             console.error("you arent carrying the teleport key");
+            return;
+        }
+
+        if (this.Player.getInventory().HasItem("teleportpad")) {
+            console.error("you are CARRYING the teleport pad! you cant teleport to it");
             return;
         }
 

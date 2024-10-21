@@ -86,7 +86,7 @@ export default class Player {
     }
 
     getInventory(): Inventory { return this._inventory; }
-    protected getBody(): Physics.Arcade.Body {
+    getBody(): Physics.Arcade.Body {
         return this.sprite.body as Physics.Arcade.Body;
     }
     moveRight() {
@@ -137,6 +137,9 @@ export default class Player {
 
         const oldAllowMovement = this.allowMovement;
         this.allowMovement = false;
+        this.getBody().setVelocityX(0);
+
+        this.playAnim('stop');
 
         // play vanishing animation
         this.sprite.on('animationcomplete-vanish', () => {
