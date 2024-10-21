@@ -1,22 +1,48 @@
-import { CommandBuilder, ShowSceneArguments } from './commandbuilder';
+import { mock } from 'jest-mock-extended'
+import { ICommandPresenter, ICommandExecutor, PickupCommand, CommandBuilder } from './commandbuilder';
 
+describe('pickup command tests', () => {
+    it("should return invoke commandbuilder", async () => {
+        const cb = mock<ICommandPresenter>();
+        const cs = mock<ICommandExecutor>();
+
+        const itemid = "fred";
+        cb.GetInventoryItemId.mockReturnValue(Promise.resolve<string>(itemid));
+
+        let pp = new PickupCommand(cb, cs);
+        pp.execute().then((result: Boolean) => {
+            expect(cb.GetInventoryItemId).toHaveBeenCalled();
+            expect(cs.PickupItem).toHaveBeenCalledWith(itemid);
+            expect(result).toBe(true);
+
+        })
+    })
+    it("should return invoke commandexecutor", async () => {
+        const cb = mock<ICommandPresenter>();
+        const cs = mock<ICommandExecutor>();
+
+        const itemid = "fred";
+        cb.GetInventoryItemId.mockReturnValue(Promise.resolve<string>(itemid));
+
+        let pp = new PickupCommand(cb, cs);
+        pp.execute().then((result: Boolean) => {
+            expect(cb.GetInventoryItemId).toHaveBeenCalled();
+            expect(cs.PickupItem).toHaveBeenCalledWith(itemid);
+            expect(result).toBe(true);
+        })
+    })
+})
 describe('commandbuilder tests', () => {
 
     it('should pause the main screen', async () => {
 
-        let cb = new CommandBuilder((args: ShowSceneArguments): Promise<ShowSceneArguments> => {
-            console.log("in test", args.sceneKey);
-
-            const itemid = 'fred';
-            const ret = new ShowSceneArguments(args.sceneKey, undefined, itemid);
-            return Promise.resolve<ShowSceneArguments>(ret);
-        });
+        let cb = new CommandBuilder();
 
         // cb is a statemachine
-        return cb.ExecuteCommand("pickup")
-            .then((data) => {
-                expect(data.itemId).toBe('fred');
-                expect(data.sceneKey).toBe("nearbyitemslist");
+        return cb.GetInventoryItemId()
+            .then((itemId: string) => {
+                expect(itemId).toBe('fred');
+
             });
 
 

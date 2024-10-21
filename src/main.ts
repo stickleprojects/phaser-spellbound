@@ -1,5 +1,7 @@
 import { Boot } from './scenes/Boot';
 import { CopyrightPanel } from './scenes/CopyrightPanel';
+
+import { MenuDialog } from './scenes/dialogs/MenuDialog';
 // import { Game as MainGame } from './scenes/Game';
 // import { GameOver } from './scenes/GameOver';
 import { GamePlay } from './scenes/GamePlay';
@@ -8,6 +10,7 @@ import { InventoryPanel } from './scenes/InventoryPanel';
 import { MainWindow } from './scenes/MainWindow';
 // import { MainMenu } from './scenes/MainMenu';
 import { Preloader } from './scenes/Preloader';
+
 
 import { Game, Types } from "phaser";
 
@@ -38,11 +41,13 @@ const config: Types.Core.GameConfig = {
         Hud,
         MainWindow,
         CopyrightPanel,
-        InventoryPanel
+        InventoryPanel,
+        MenuDialog
         // MainMenu,
         // MainGame,
         // GameOver
-    ]
+    ],
+
 };
 
 export default new Game(config);
