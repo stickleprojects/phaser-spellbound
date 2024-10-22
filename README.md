@@ -1,6 +1,6 @@
 # Phaser spellbound mockup
 
-running in netlify! see [netlify](https://master--kwspbound-phaser.netlify.app/)
+running in netlify! see [netlify](https://kwspbound-phaser.netlify.app/)
 
 ![screenshot](screenshot.png)
 
