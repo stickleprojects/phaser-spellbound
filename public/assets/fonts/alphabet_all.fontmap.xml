@@ -1,0 +1,11 @@
+<fontconfig imageurl="data/fonts/alphabet_all.png" verticalspacing="0" characterheight="16" characterwidth="16">
+<charsets>
+	<charset>:;&lt;=&gt;?@ </charset>
+	<charset>/0123456789</charset>
+	<charset>!"#$%&amp;'()*+,-.</charset>
+	<charset>ABCDEFGHIJKLM</charset>
+	<charset>NOPQRSTUVWXYZ</charset>
+	
+	<charset row="7" col="7">£</charset>
+	</charsets>
+</fontconfig>

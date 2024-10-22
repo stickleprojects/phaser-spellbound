@@ -78,7 +78,7 @@
          "name":"solid",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":150,
          "x":0,
          "y":0
@@ -414,17 +414,6 @@
                  "width":14,
                  "x":889,
                  "y":381.5
-                }, 
-                {
-                 "height":15,
-                 "id":15,
-                 "name":"teleportkey",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":14,
-                 "x":1578,
-                 "y":444
                 }, 
                 {
                  "height":15,
@@ -769,7 +758,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 

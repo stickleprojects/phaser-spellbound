@@ -1,34 +1,19 @@
 import Phaser, { Scene } from 'phaser';
 
-import { createWorld, IWorld } from "bitecs";
+import { createWorld, IWorld, System } from "bitecs";
 
 import { HudFlags, HudRoomInfo } from './Hud';
 import { RoomNavigator } from '../roomnavigator';
 import Player from '../player';
 import { LevelConfig } from '../config/levelconfig';
 import { Character, Item } from '../config/configentities';
-
-class GameFlags {
-    private _followingPlayer: boolean;
-    private _callback: (values: GameFlags, propertyName: string, oldValue: any) => void;
-    private _context: any;
-
-    constructor(callback: (values: GameFlags, propertyName: string, oldValue: any) => void, context: any) {
-        this._callback = callback;
-        this._context = context;
-    }
-
-    set FollowingPlayer(newvalue: boolean) {
-        let oldValue = this._followingPlayer;
-        if (oldValue == newvalue) return;
-
-        this._followingPlayer = newvalue;
-        this._callback.call(this._context, this, "FollowingPlayer", oldValue);
-    }
-    get FollowingPlayer() { return this._followingPlayer; }
+import { Inventory } from '../inventory';
+import { customEmitter } from '../components/customemitter';
+import { InputEventSystem, KEYEVENT_DROP_ITEM, KEYEVENT_FOLLOW_PLAYER, KEYEVENT_PICKUP_ITEM, KEYEVENT_TELEPORT, KEYEVENT_TOGGLE_DEBUG } from '../systems/inputEventSystem';
+import { GameFlags } from './GameFlags';
+import { ObjectItem } from './objectitem';
 
 
-}
 export class GamePlayWindowConfig {
     parent: Scene;
     x: number;
@@ -57,30 +42,23 @@ export class GamePlay extends Phaser.Scene {
 
     private map_alltiles: Phaser.Tilemaps.Tileset;
     private map_foregroundtiles: Phaser.Tilemaps.Tileset;
-    private backgroundLayer: Phaser.Tilemaps.TilemapLayer;
-    private foregroundLayer: Phaser.Tilemaps.TilemapLayer;
     private solidLayer: Phaser.Tilemaps.TilemapLayer;
-    private characterSprites: Phaser.GameObjects.GameObject[];
-    private objectSprites: Phaser.GameObjects.GameObject[];
     private characterLayer: Phaser.Types.Tilemaps.TiledObject[];
-    private doorLayer: Phaser.Types.Tilemaps.TiledObject[];
     private objectLayer: Phaser.Types.Tilemaps.TiledObject[];
 
     private roomWidthInTiles: number = 16;
     private roomHeightInTiles: number = 10;
 
 
-    private cameraController: any;
-    private hud: any;
     private horizontalRooms: number;
     private verticalRooms: number;
-    private inputTimer: Phaser.Time.TimerEvent;
-    private parentScene: Scene;
+    private Items: Map<string, ObjectItem>;
+
     RoomNavigator: RoomNavigator;
     Player: Player;
-    followingPlayer: boolean;
-    ToggleFollowingPlayerKey: Phaser.Input.Keyboard.Key | undefined;
     flags: GameFlags;
+    ObjectGroup: Phaser.Physics.Arcade.Group;
+    inputEventSystem: System;
 
     constructor() {
         super('GamePlay')
@@ -103,8 +81,11 @@ export class GamePlay extends Phaser.Scene {
             // move the screen to the player
             this.showRoomThatThePlayerIsIn();
         }
-        var newhudFlags = new HudFlags(args.FollowingPlayer);
-        this.events.emit('updateflags', newhudFlags);
+        if (this.Player) {
+            this.Player.allowMovement = args.FollowingPlayer;
+        }
+        var newhudFlags = new HudFlags(args.FollowingPlayer, args.Debug);
+        customEmitter.emit('updateflags', newhudFlags);
 
 
     }
@@ -118,11 +99,21 @@ export class GamePlay extends Phaser.Scene {
 
         this.setupPhysics();
 
+
+
         this.cursors = this.input.keyboard?.createCursorKeys()
-
-        this.ToggleFollowingPlayerKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.F);
-
+        /*
+                this.ToggleFollowingPlayerKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+                this.PickupItemKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+                this.DropItemKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.X);
+                this.ToggleDebugKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+          */
         this.flags = new GameFlags(this.onFlagsChanged, this);
+
+        this.physics.world.drawDebug = false;
+
+        this.flags.Debug = this.physics.world.drawDebug;
+
 
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor(0x000000);
@@ -143,14 +134,15 @@ export class GamePlay extends Phaser.Scene {
             () => this.positionCameraAccordingToRoom());
 
 
+
         this.map_alltiles = this.map.addTilesetImage('alltiles', 'map_background')!
         this.map_foregroundtiles = this.map.addTilesetImage('foregroundtiles', 'map_foreground')!
 
-        this.backgroundLayer = this.map.createLayer('background', this.map_alltiles)!
-        this.foregroundLayer = this.map.createLayer('foreground', this.map_foregroundtiles)!
+        this.map.createLayer('background', this.map_alltiles)!
+        this.map.createLayer('foreground', this.map_foregroundtiles)!
         this.solidLayer = this.map.createLayer('solid', this.map_alltiles)!
         this.characterLayer = this.map.getObjectLayer('characters')?.objects!
-        this.doorLayer = this.map.getObjectLayer('doorobjects')?.objects!
+        this.map.getObjectLayer('doorobjects')?.objects!
         this.objectLayer = this.map.getObjectLayer('objects')?.objects!
 
         this.map.setCollisionBetween(0, 1000, true, true, 'solid');
@@ -168,6 +160,32 @@ export class GamePlay extends Phaser.Scene {
         this.RoomNavigator.SetRoomCoordinates({ x: 5, y: 2 });
         this.flags.FollowingPlayer = true;
 
+        this.inputEventSystem = InputEventSystem(this.input);
+
+        this.wireupEvents();
+
+
+
+    }
+
+    private wireupEvents() {
+
+        customEmitter.on(KEYEVENT_TELEPORT, () => {
+            this.teleportPlayerToPad();
+        });
+        customEmitter.on(KEYEVENT_TOGGLE_DEBUG, () => {
+            this.flags.Debug = !this.flags.Debug;
+            this.toggleDebug(this.flags.Debug);
+        })
+        customEmitter.on(KEYEVENT_FOLLOW_PLAYER, () => {
+            this.flags.FollowingPlayer = !this.flags.FollowingPlayer;
+        })
+        customEmitter.on(KEYEVENT_DROP_ITEM, () => {
+            this.dropLastItem();
+        })
+        customEmitter.on(KEYEVENT_PICKUP_ITEM, () => {
+            this.pickupNearestItem();
+        })
 
     }
     private getCharacter(name: string): Character | undefined {
@@ -203,8 +221,8 @@ export class GamePlay extends Phaser.Scene {
                     // create the knight and add to the world
                     this.createKnight(pixelX + characterhalfW, pixelY + characterhalfH, index);
                 } else {
-                    this.add.sprite(pixelX + characterhalfW, pixelY + characterhalfH, 'characters', index);
-
+                    let ss = this.add.sprite(pixelX + characterhalfW, pixelY + characterhalfH, 'characters', index);
+                    ss.name = o.name;
                 }
             }
         });
@@ -219,6 +237,11 @@ export class GamePlay extends Phaser.Scene {
         const objectTilemapWidth = 16;
 
         const objecthalfH = objectTileHeight / 2;
+
+        const that = this;
+        this.Items = new Map<string, ObjectItem>();
+
+        this.ObjectGroup = this.physics.add.group();
 
         // create the objets
         this.objectLayer.forEach(o => {
@@ -236,7 +259,15 @@ export class GamePlay extends Phaser.Scene {
                 const pixelX = Math.ceil(o.x! / objectTileWidth) * objectTileWidth;
                 const pixelY = Math.ceil(o.y! / objectTileHeight) * objectTileHeight;
 
-                this.add.sprite(pixelX, pixelY + objecthalfH, 'objects', index);
+                let sprite = this.physics.add.sprite(pixelX, pixelY + objecthalfH, 'objects', index);
+                sprite.body.setSize(16, 16);
+
+                this.ObjectGroup.add(sprite, false);
+                let newitem = new ObjectItem(itemInfo, sprite);
+
+                that.Items.set(newitem.id, newitem);
+                this.physics.add.collider(sprite, this.solidLayer);
+                sprite.name = objectName;
 
             }
         });
@@ -247,11 +278,22 @@ export class GamePlay extends Phaser.Scene {
 
         const sprite = this.physics.add.sprite(x, y, 'characters', index);
 
+        const nearbyWidth = sprite.width * 4;
+        const nearbySprite = this.physics.add.body(x, y, nearbyWidth, sprite.height);
+        nearbySprite.allowGravity = false;
+
         const currentGravity = this.physics.world.gravity.y;
         const playerGravity = currentGravity * -0.35;
-        this.Player = new Player(sprite, this.cursors!, playerGravity);
+
+        let inventory = new Inventory(5, 10);
+
+        this.Player = new Player(sprite, nearbySprite, this.cursors!, playerGravity, inventory);
 
         this.physics.add.collider(sprite, this.solidLayer);
+        this.physics.add.overlap(nearbySprite, this.ObjectGroup);
+
+        sprite.name = "Knight";
+
     }
 
     positionCameraAccordingToRoom() {
@@ -264,15 +306,61 @@ export class GamePlay extends Phaser.Scene {
             console.log(`Failed to find room! ${roomCoords}`);
         } else {
 
-            this.events.emit("screenmov", new HudRoomInfo(roomCoords.x, roomCoords.y, roomInfo.name));
+            console.log('room stats', roomInfo.stats);
+
+            customEmitter.emit("screenmov", new HudRoomInfo(roomCoords.x, roomCoords.y, roomInfo.name));
             this.camera.setBounds(
                 roomInfo.WorldLocation.x, roomInfo.WorldLocation.y,
                 roomInfo.WorldLocation.width, roomInfo.WorldLocation.height, false);
+
+            if (roomInfo.stats.dark) {
+                console.log("its TOO DARK in here!");
+                this.camera.setAlpha(0.2);
+            } else {
+                this.camera.setAlpha(1);
+
+            }
         }
+    }
+    teleportPlayerToPad() {
+        // if the player is carrying the teleportkey
+
+        if (!this.Player.getBody().onFloor()) {
+            return;
+
+        }
+        if (!this.Player.getInventory().HasItem("teleportkey")) {
+            console.error("you arent carrying the teleport key");
+            return;
+        }
+
+        if (this.Player.getInventory().HasItem("teleportpad")) {
+            console.error("you are CARRYING the teleport pad! you cant teleport to it");
+            return;
+        }
+
+        // find the teleportpad
+        const tp = this.Items.get("teleportpad");
+        if (!tp) {
+            console.error("Cannot find teleportpad");
+            return;
+        }
+
+        if (tp.owner) {
+            console.error("Someone is carrying that!");
+            return;
+        }
+
+        const newLocationX = tp!.Sprite.x;
+        const newLocationY = tp!.Sprite.y;
+
+        console.log("moving to {0},{1}", newLocationX, newLocationY)
+
+        this.Player.moveTo(newLocationX, newLocationY);
+
     }
     init(data: GamePlayWindowConfig) {
 
-        this.parentScene = data.parent;
 
         this.cameras.main.setViewport(data.x, data.y, data.width, data.height);
 
@@ -282,8 +370,9 @@ export class GamePlay extends Phaser.Scene {
     }
 
     showRoomThatThePlayerIsIn() {
-        const px = this.Player.sprite.x;
-        const py = this.Player.sprite.y;
+        let s = this.Player.getSprite();
+        const px = s.x;
+        const py = s.y;
 
         const cw = this.camera.displayWidth;
         const ch = this.camera.displayHeight;
@@ -296,23 +385,81 @@ export class GamePlay extends Phaser.Scene {
         this.RoomNavigator.SetRoomCoordinates(newCoords);
 
     }
-    update(time, delta) {
+    getNearbyItems(): ObjectItem[] {
+        let s = this.Player.getNearbySprite();
 
-        //const sprite = this.Player.sprite;
-        //this.physics.collide(sprite, this.solidLayer,);
+        let nearObjects: Phaser.GameObjects.Sprite[] = [];
 
+        this.physics.overlap(s, this.ObjectGroup, (_, b: Phaser.Physics.Arcade.GameObjectWithBody) => {
+
+
+            nearObjects.push(b);
+        });
+
+        console.log(nearObjects);
+
+        let nearbyItems: ObjectItem[] = [];
+        // map the objects into items
+        nearObjects.map(o => {
+            let objectName = o.name;
+            let item = this.Items.get(objectName);
+            if (item) {
+                if (!item.owner) {
+                    nearbyItems.push(item);
+                }
+            }
+        })
+        return nearbyItems;
+    }
+    pickupNearestItem() {
+        let nearbyItems = this.getNearbyItems();
+
+        if (nearbyItems.length == 0) {
+            // no items
+        } else {
+            let itemToPickup = nearbyItems[0];
+            let s = itemToPickup.Sprite;
+            //s.setImmovable(true);
+            s.body.setAllowGravity(false);
+            let result = this.Player.getInventory().AddItem(nearbyItems[0]);
+            if (result.ok) {
+                // great
+            } else {
+                console.log(result.error.message);
+            }
+        }
+    }
+    dropLastItem() {
+        let items = this.Player.getInventory().GetItems();
+        if (items.length == 0) {
+            // you arent carrying anything
+            console.log("You arent carrying anything!");
+        } else {
+            // drop the last item
+            let lastItem = items[items.length - 1];
+            let s = lastItem._sprite;
+            s.body.setAllowGravity(true);
+
+            this.Player.getInventory().RemoveItem(lastItem);
+
+        }
+    }
+    toggleDebug(on: boolean) {
+        if (!on) {
+            this.physics.world.drawDebug = false;
+            this.physics.world.debugGraphic.clear();
+        }
+        else {
+            this.physics.world.drawDebug = true;
+        }
+    }
+    update(/*time, delta*/) {
+
+        this.inputEventSystem(this.world);
         this.RoomNavigator.UpdateInput();
 
         this.Player.Update();
 
-        // tick the input system and other systems maybe
-
-        // check if  player wandered off screen
-
-        if (Phaser.Input.Keyboard.JustDown(this.ToggleFollowingPlayerKey!)) {
-            this.flags.FollowingPlayer = !this.flags.FollowingPlayer;
-
-        }
         if (this.flags.FollowingPlayer) {
             this.showRoomThatThePlayerIsIn();
         }

@@ -22,8 +22,16 @@
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
         "experimentalDecorators": true,
+        "esModuleInterop": true
     },
     "include": [
         "src"
+    ],
+    "exclude": [
+        "node_modules",
+        "public_html",
+        "test",
+        "**/*.spec.ts",
+        "**/*.test.ts"
     ]
 }

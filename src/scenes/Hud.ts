@@ -1,4 +1,5 @@
 import Phaser, { Scene } from 'phaser';
+import { customEmitter } from '../components/customemitter';
 
 export class HudParameters {
     parent: Scene;
@@ -18,8 +19,11 @@ export class HudParameters {
 export class HudFlags {
     FollowingPlayer: boolean
 
-    constructor(followingPlayer: boolean) {
+    Debug: boolean;
+
+    constructor(followingPlayer: boolean, debug: boolean) {
         this.FollowingPlayer = followingPlayer;
+        this.Debug = debug;
     }
 }
 export class HudRoomInfo {
@@ -40,8 +44,9 @@ export class Hud extends Phaser.Scene {
     Flags_FollowingPlayer: Phaser.GameObjects.Text;
     NotFollowing_instructions: Phaser.GameObjects.Text;
     Following_instructions: Phaser.GameObjects.Text;
+    Flags_Debug: Phaser.GameObjects.Text;
 
-    updateRoomLocation(xy: object) {
+    private updateRoomLocation(xy: HudRoomInfo) {
         const x = xy.x;
         const y = xy.y;
         const name = xy.name;
@@ -58,17 +63,18 @@ export class Hud extends Phaser.Scene {
         this.Flags_FollowingPlayer.setText(flags.FollowingPlayer ? "FOLLOWING" : "");
         this.Following_instructions.setVisible(flags.FollowingPlayer);
         this.NotFollowing_instructions.setVisible(!flags.FollowingPlayer);
+        this.Flags_Debug.setVisible(flags.Debug);
     }
     init(data: HudParameters) {
         this.parentScene = data.parent;
 
         this.cameras.main.setViewport(data.x, data.y, data.width, data.height);
 
-        this.parentScene.events.on('screenmov', (args: HudRoomInfo) => {
+        customEmitter.on('screenmov', (args: HudRoomInfo) => {
             this.updateRoomLocation(args);
 
         }, this)
-        this.parentScene.events.on('updateflags', (args: HudFlags) => {
+        customEmitter.on('updateflags', (args: HudFlags) => {
             this.updateFlags(args);
 
         }, this)
@@ -81,11 +87,12 @@ export class Hud extends Phaser.Scene {
         this.roomLocationControl = this.add.text(0, 0, "Room: (0,0)");
 
         const NotFollowing_instructionText = [
-            'Instructions: Use WASD to explore theres only 8x6 rooms or so, and the characters dont move',
-            '              The Room name and position will be displayed in topleft hand corner'
+            'Instructions:      Use WASD to explore theres only 8x6 rooms or so',
+            '                   The Room name and position will be displayed in topleft hand corner'
         ];
         const Following_instructionText = [
-            'Instructions: Use Arrow Keys to walk about, Press F to toggle walking/screens'
+            'Instructions:      Use Arrow Keys to walk about, Press F to toggle walking/screens',
+            '                   P=Pickup object, X = Drop last object, SPACE=debug'
 
         ];
 
@@ -94,7 +101,9 @@ export class Hud extends Phaser.Scene {
 
         // flags
 
-        this.Flags_FollowingPlayer = this.add.text(0, 30, 'FOLLOWING');
+        let y = 40;
+        this.Flags_Debug = this.add.text(0, y, 'DEBUG');
+        this.Flags_FollowingPlayer = this.add.text(60, y, 'FOLLOWING');
     }
 
 }

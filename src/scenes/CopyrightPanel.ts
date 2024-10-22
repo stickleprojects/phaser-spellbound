@@ -1,23 +1,15 @@
 import { Scene } from "phaser";
+import { BottomPanel, BottomPanelParameters } from "./BottomPanel";
 
-export class CopyrightPanelParameters {
-    parent: Scene;
-    x: number;
-    y: number;
-    width: number;
-    height: number;
+export class CopyrightPanelParameters extends BottomPanelParameters {
 
     constructor(parent: Scene, x: number, y: number, width: number, height: number) {
-        this.parent = parent;
-        this.x = x;
-        this.y = y;
-        this.height = height;
-        this.width = width;
+        super(parent, x, y, width, height);
     }
 }
 
-export class CopyrightPanel extends Phaser.Scene {
-    parentScene: Scene;
+export class CopyrightPanel extends BottomPanel {
+
     private _copyrightText: Phaser.GameObjects.Text;
     private _titleText: Phaser.GameObjects.Text;
 
@@ -25,14 +17,7 @@ export class CopyrightPanel extends Phaser.Scene {
     constructor() {
         super('copyright');
     }
-    init(data: CopyrightPanelParameters) {
-        this.parentScene = data.parent;
 
-        this.cameras.main.setViewport(data.x, data.y, data.width, data.height);
-
-        // hook up events
-
-    }
 
     create() {
 
@@ -45,8 +30,11 @@ export class CopyrightPanel extends Phaser.Scene {
             "BY ADRIAN SHEPPARD 1986"
         ];
 
-        this._titleText = this.add.text(0, 0, title);
-        this._copyrightText = this.add.text(0, 20, copyright);
+        const x = this.InnerRect!.x;
+        const y = this.InnerRect!.y;
+
+        this._titleText = this.add.text(x, y, title);
+        this._copyrightText = this.add.text(x, y + 20, copyright);
 
     }
 }
