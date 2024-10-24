@@ -22,17 +22,46 @@ export abstract class Dialog extends Phaser.Scene {
     parentScene: Scene;
 
     InnerRect?: Rectangle;
-    private _topBorder: Phaser.GameObjects.TileSprite;
-    private _topRight: Phaser.GameObjects.Sprite;
-    private _leftBorder: Phaser.GameObjects.TileSprite;
-    private _rightBorder: Phaser.GameObjects.TileSprite;
-    private _bottomLeft: Phaser.GameObjects.Sprite;
-    private _bottomBorder: Phaser.GameObjects.TileSprite;
-    private _bottomRight: Phaser.GameObjects.Sprite;
+    private _topBorder?: Phaser.GameObjects.TileSprite;
+    private _topRight?: Phaser.GameObjects.Sprite;
+    private _leftBorder?: Phaser.GameObjects.TileSprite;
+    private _rightBorder?: Phaser.GameObjects.TileSprite;
+    private _bottomLeft?: Phaser.GameObjects.Sprite;
+    private _bottomBorder?: Phaser.GameObjects.TileSprite;
+    private _bottomRight?: Phaser.GameObjects.Sprite;
 
-    private _topLeft: Phaser.GameObjects.Sprite;
-    protected _borderTint: string;
+    private _topLeft?: Phaser.GameObjects.Sprite;
+    protected _color: string;
 
+    create() {
+        this.events.on("shutdown", () => {
+            this._topBorder?.destroy();
+            this._topBorder = undefined;
+
+            this._topRight?.destroy();
+            this._topRight = undefined;
+
+            this._leftBorder?.destroy();
+            this._leftBorder = undefined;
+
+            this._rightBorder?.destroy();
+            this._rightBorder = undefined;
+
+            this._bottomLeft?.destroy();
+            this._bottomLeft = undefined;
+
+            this._bottomBorder?.destroy();
+            this._bottomBorder = undefined;
+
+            this._bottomRight?.destroy();
+            this._bottomRight = undefined;
+
+            this._topLeft?.destroy;
+            this._topLeft = undefined;
+
+        });
+
+    }
     constructor(id: string) {
         super(id);
     }
@@ -122,13 +151,15 @@ export abstract class Dialog extends Phaser.Scene {
 
     }
 
+    shutdown() {
+
+    }
     setSpriteSetting(sprite: Phaser.GameObjects.Sprite | Phaser.GameObjects.TileSprite) {
 
+        sprite.setVisible(true);
         sprite.setOrigin(0, 0);
+        sprite.setActive(true);
 
-        const rgb = Number(this._borderTint);
-
-        sprite.setTint(rgb);
 
     }
     setBorderSpriteSettings() {
@@ -147,16 +178,19 @@ export abstract class Dialog extends Phaser.Scene {
 
 
     }
+
+
     init(data: DialogParameters) {
 
         this.parentScene = data.parent;
 
-        this._borderTint = data.color;
+        this._color = data.color;
 
         const dimensions = data.dimensions;
         this.cameras.main.setViewport(dimensions.x, dimensions.y, dimensions.width, dimensions.height);
         this.cameras.main.setZoom(1);
         this.cameras.main.setBackgroundColor("black")
+
 
         this.InnerRect = this.drawBorders(data.tileWidth, data.tileHeight, data.texture, dimensions);
 

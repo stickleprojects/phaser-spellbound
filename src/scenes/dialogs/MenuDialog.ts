@@ -71,7 +71,7 @@ export class MenuDialog extends Dialog {
     }
     createMenuItem(itemdata: string, x: number, y: number): Phaser.GameObjects.Text {
 
-        const c = this._borderTint.replace('0x', '#');
+        const c = this._color.replace('0x', '#');
 
         const item = this.add.text(x, y, itemdata, { color: c });
 

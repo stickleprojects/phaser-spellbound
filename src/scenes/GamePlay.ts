@@ -194,6 +194,7 @@ export class GamePlay extends Phaser.Scene {
 
         );
 
+        windowParameters.texture = 'border_panel_green';
         windowParameters.color = '0xcf6af7';
 
         this._dialogManager.showDialog('commandDialog', windowParameters);
@@ -221,6 +222,7 @@ export class GamePlay extends Phaser.Scene {
             , true
 
         );
+        windowParameters.texture = 'border_panel_red';
 
         windowParameters.color = '0x6a6aff';
 

@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { changeTextureColor } from '../TextureColourChanger';
 
 
 export class Preloader extends Phaser.Scene {
@@ -39,7 +40,7 @@ export class Preloader extends Phaser.Scene {
         this.load.spritesheet('knight_smoke', 'knight_smoke.png', { frameWidth: 16, frameHeight: 32 });
 
         this.load.spritesheet('border_bottompanel', 'borders_bottompanel.png', { frameWidth: 16, frameHeight: 16 })
-        this.load.spritesheet('border_panel', 'borders_menu.png', { frameWidth: 16, frameHeight: 16 })
+        this.load.spritesheet('border_panel_original', 'borders_menu.png', { frameWidth: 16, frameHeight: 16 })
 
         this.load.json('levelconfig', 'levelconfig.json')
     }
@@ -47,6 +48,13 @@ export class Preloader extends Phaser.Scene {
     create() {
         //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
         //  For example, you can define global animations here, so we can use them in other scenes.
+
+        changeTextureColor('border_panel_original', 'border_panel_white', '#ffffff', '#ffffff', this.textures);
+        changeTextureColor('border_panel_original', 'border_panel_blue', '#ffffff', '#0000ff0', this.textures);
+        changeTextureColor('border_panel_original', 'border_panel_red', '#ffffff', '#ff0000', this.textures);
+        changeTextureColor('border_panel_original', 'border_panel_yellow', '#ffffff', '#ffff00', this.textures);
+        changeTextureColor('border_panel_original', 'border_panel_green', '#ffffff', '#00ff00', this.textures);
+
 
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
         this.scene.start('MainWindow');
