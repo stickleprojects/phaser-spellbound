@@ -8,15 +8,30 @@ import { BottomPanelParameters } from "./BottomPanel";
 import { Rectangle } from "../config/levelconfig";
 
 import { MenuDialogParameters } from "./dialogs/MenuDialog";
+import { DialogManager, ISceneManager } from "../systems/dialogManager";
 
-export class MainWindow extends Scene {
+export class MainWindow extends Scene implements ISceneManager {
 
     private _hudHeight = 60;
     private _copyrightHeight = 120;
+    private _dialogManager: DialogManager;
 
 
     constructor() {
         super('MainWindow');
+
+    }
+    start(key: string, data: any): void {
+        this.scene.launch(key, data);
+    }
+    stop(key: string | Scene): void {
+        this.scene.stop(key);
+    }
+    getScene(key: string): Phaser.Scene {
+        return this.scene.get(key);
+    }
+    bringToTop(key: string): void {
+        this.scene.bringToTop(key);
     }
 
 
@@ -62,40 +77,26 @@ export class MainWindow extends Scene {
         var top = this._hudHeight;
         var height = this.sys.game.canvas.height - this._hudHeight - this._copyrightHeight;
 
+        if (!this._dialogManager) {
+            throw ("Dualogmanager not set");
+        }
         var playWindow = new GamePlayWindowConfig(this, 0, top,
-            this.sys.game.canvas.width, height);
+            this.sys.game.canvas.width, height
+            , this._dialogManager);
 
         this.scene.launch('GamePlay', playWindow);
 
     }
-    showDialog() {
-        let x = 100;
-        let y = 150;
 
-        var playWindow = new MenuDialogParameters(this,
-            new Rectangle(x, y, 400, 100),
-            [
-                'p = pickup',
-                'x = drop',
-                'cursorkeys = move',
-                'space = show debug',
-                'f = toggle follow player',
-                't = teleport (if you carry the key)'
-            ]
-            , true
 
-        );
-
-        playWindow.color = '0xcf6af7';
-
-        this.scene.launch('menudialog1', playWindow);
-
-    }
     init() {
 
         // everything is loaded, so display stuff
         // data is the params passed to this scene with this.scene.start(key,data)
 
+
+
+        this._dialogManager = new DialogManager(this);
 
 
         this.showHud();
@@ -107,8 +108,6 @@ export class MainWindow extends Scene {
         this.showGamePlayWindow();
 
         this.wireUpEvents();
-        this.showDialog();
-
 
 
     }

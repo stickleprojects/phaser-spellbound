@@ -5,13 +5,16 @@ import { createWorld, IWorld, System } from "bitecs";
 import { HudFlags, HudRoomInfo } from './Hud';
 import { RoomNavigator } from '../roomnavigator';
 import Player from '../player';
-import { LevelConfig } from '../config/levelconfig';
+import { LevelConfig, Rectangle } from '../config/levelconfig';
 import { Character, Item } from '../config/configentities';
 import { Inventory } from '../inventory';
 import { customEmitter } from '../components/customemitter';
-import { InputEventSystem, KEYEVENT_DROP_ITEM, KEYEVENT_FOLLOW_PLAYER, KEYEVENT_PICKUP_ITEM, KEYEVENT_TELEPORT, KEYEVENT_TOGGLE_DEBUG } from '../systems/inputEventSystem';
+import { InputEventSystem, KEYEVENT_CLOSEDIALOG, KEYEVENT_DROP_ITEM, KEYEVENT_FOLLOW_PLAYER, KEYEVENT_OPENDIALOG, KEYEVENT_PICKUP_ITEM, KEYEVENT_TELEPORT, KEYEVENT_TOGGLE_DEBUG } from '../systems/inputEventSystem';
 import { GameFlags } from './GameFlags';
 import { ObjectItem } from './objectitem';
+import { DialogManager } from '../systems/dialogManager';
+import { MenuDialogParameters } from './dialogs/MenuDialog';
+import { InventoryDialogParameters } from './dialogs/InventorySelector';
 
 
 export class GamePlayWindowConfig {
@@ -20,13 +23,15 @@ export class GamePlayWindowConfig {
     y: number;
     width: number;
     height: number;
+    dialogManager: DialogManager;
 
-    constructor(parent: Scene, x: number, y: number, width: number, height: number) {
+    constructor(parent: Scene, x: number, y: number, width: number, height: number, dialogManager: DialogManager) {
         this.parent = parent;
         this.x = x;
         this.y = y;
         this.height = height;
         this.width = width;
+        this.dialogManager = dialogManager;
     }
 }
 export class GamePlay extends Phaser.Scene {
@@ -59,6 +64,7 @@ export class GamePlay extends Phaser.Scene {
     flags: GameFlags;
     ObjectGroup: Phaser.Physics.Arcade.Group;
     inputEventSystem: System;
+    private _dialogManager: DialogManager;
 
     constructor() {
         super('GamePlay')
@@ -168,8 +174,76 @@ export class GamePlay extends Phaser.Scene {
 
     }
 
+    showDialog() {
+
+        this._dialogManager.clear();
+        let x = 100;
+        let y = 150;
+
+        var windowParameters = new MenuDialogParameters(this,
+            new Rectangle(x, y, 400, 100),
+            [
+                'p = pickup',
+                'x = drop',
+                'cursorkeys = move',
+                'space = show debug',
+                'f = toggle follow player',
+                't = teleport (if you carry the key)'
+            ]
+            , true
+
+        );
+
+        windowParameters.color = '0xcf6af7';
+
+        this._dialogManager.showDialog('commandDialog', windowParameters);
+
+        // if (this.scene.manager.getIndex('commandDialog') < 0) {
+        //     this.scene.manager.add('commandDialog', CommandDialog, false);
+        // }
+
+        // this.scene.launch('commandDialog', playWindow);
+
+    }
+
+    showInventory() {
+
+        let x = 250;
+        let y = 250;
+
+        var windowParameters = new InventoryDialogParameters(this,
+            new Rectangle(x, y, 400, 100),
+            [
+                'f = florin',
+                'e = elrand',
+
+            ]
+            , true
+
+        );
+
+        windowParameters.color = '0x6a6aff';
+
+        this._dialogManager.showDialog('inventoryDialog', windowParameters);
+
+    }
+    private closeLastDialog() {
+
+        this._dialogManager.closeTopmost();
+
+
+    }
     private wireupEvents() {
 
+        customEmitter.on(KEYEVENT_OPENDIALOG, () => {
+            this.showDialog();
+            this.showInventory();
+        });
+
+        customEmitter.on(KEYEVENT_CLOSEDIALOG, () => {
+            this.closeLastDialog();
+
+        });
         customEmitter.on(KEYEVENT_TELEPORT, () => {
             this.teleportPlayerToPad();
         });
@@ -361,6 +435,8 @@ export class GamePlay extends Phaser.Scene {
     }
     init(data: GamePlayWindowConfig) {
 
+
+        this._dialogManager = data.dialogManager;
 
         this.cameras.main.setViewport(data.x, data.y, data.width, data.height);
 

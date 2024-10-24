@@ -21,8 +21,8 @@ export class MenuDialog extends Dialog {
     private _itemGapBetween: number = 1;
     private _itemGapLeft: number = 10;
 
-    constructor() {
-        super('menudialog1')
+    constructor(id: string = 'menudialog1') {
+        super(id)
     }
 
     protected calculateDimensions(data: MenuDialogParameters): Rectangle {

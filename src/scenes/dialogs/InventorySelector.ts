@@ -1,12 +1,12 @@
-import { Dialog, DialogParameters } from './Dialog';
+import { MenuDialogParameters, MenuDialog } from "./MenuDialog";
 
-export class InventorySelectorParameters extends DialogParameters {
+export class InventoryDialogParameters extends MenuDialogParameters {
 
 }
-export class InventorySelector extends Dialog {
+export class InventoryDialog extends MenuDialog {
 
-    constructor(id: string) {
-        super(id);
+    constructor() {
+        super('inventoryDialog');
     }
 
 

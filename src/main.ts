@@ -1,5 +1,7 @@
 import { Boot } from './scenes/Boot';
 import { CopyrightPanel } from './scenes/CopyrightPanel';
+import { CommandDialog } from './scenes/dialogs/CommandDialog';
+import { InventoryDialog } from './scenes/dialogs/InventorySelector';
 
 import { MenuDialog } from './scenes/dialogs/MenuDialog';
 // import { Game as MainGame } from './scenes/Game';
@@ -42,7 +44,10 @@ const config: Types.Core.GameConfig = {
         MainWindow,
         CopyrightPanel,
         InventoryPanel,
-        MenuDialog
+        MenuDialog,
+        CommandDialog,
+        InventoryDialog
+
         // MainMenu,
         // MainGame,
         // GameOver
