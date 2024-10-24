@@ -31,7 +31,8 @@ export abstract class Dialog extends Phaser.Scene {
     private _bottomRight?: Phaser.GameObjects.Sprite;
 
     private _topLeft?: Phaser.GameObjects.Sprite;
-    protected _color: string;
+    protected _color: Phaser.Display.Color;
+    private _colorTint: number;
 
     create() {
         this.events.on("shutdown", () => {
@@ -154,12 +155,13 @@ export abstract class Dialog extends Phaser.Scene {
     shutdown() {
 
     }
-    setSpriteSetting(sprite: Phaser.GameObjects.Sprite | Phaser.GameObjects.TileSprite) {
+    setSpriteSetting(sprite: Phaser.GameObjects.Sprite | Phaser.GameObjects.TileSprite | undefined) {
 
+        if (!sprite) return;
         sprite.setVisible(true);
         sprite.setOrigin(0, 0);
         sprite.setActive(true);
-
+        sprite.setTint(this._colorTint);
 
     }
     setBorderSpriteSettings() {
@@ -184,7 +186,8 @@ export abstract class Dialog extends Phaser.Scene {
 
         this.parentScene = data.parent;
 
-        this._color = data.color;
+        this._color = Phaser.Display.Color.HexStringToColor(data.color);
+        this._colorTint = Phaser.Display.Color.GetColor(this._color.red, this._color.green, this._color.blue);
 
         const dimensions = data.dimensions;
         this.cameras.main.setViewport(dimensions.x, dimensions.y, dimensions.width, dimensions.height);

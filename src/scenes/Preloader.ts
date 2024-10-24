@@ -49,6 +49,7 @@ export class Preloader extends Phaser.Scene {
         //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
         //  For example, you can define global animations here, so we can use them in other scenes.
 
+        changeTextureColor('border_panel_original', 'border_panel', '#ffffff', '#ffffff', this.textures);
         changeTextureColor('border_panel_original', 'border_panel_white', '#ffffff', '#ffffff', this.textures);
         changeTextureColor('border_panel_original', 'border_panel_blue', '#ffffff', '#0000ff0', this.textures);
         changeTextureColor('border_panel_original', 'border_panel_red', '#ffffff', '#ff0000', this.textures);
