@@ -12,6 +12,9 @@ export interface IInventoryItem {
     name: string;
     description: string;
     owner?: Inventory;
+
+    setOwner(owner?: Inventory): void;
+
 }
 export class TemplateString {
     private _template: string;

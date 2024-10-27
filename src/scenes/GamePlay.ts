@@ -355,6 +355,12 @@ export class GamePlay extends Phaser.Scene {
                 sprite.name = objectName;
                 sprite.setPipeline('Light2D');
 
+                if (itemInfo.stats?.glows) {
+                    const objectLight = this.lights.addLight(pixelX, pixelY, 50, 0xfcc603, 5);
+
+                    newitem.light = objectLight;
+
+                }
             }
         });
     }
@@ -395,11 +401,6 @@ export class GamePlay extends Phaser.Scene {
 
         this.physics.add.collider(sprite, this.solidLayer);
         this.physics.add.overlap(nearbySprite, this.ObjectGroup);
-
-
-
-        this.Player.KnightLight = this.lights.addLight(x, y, 60, 0xa0a0a0, 2);
-        this.Player.KnightLight.setVisible(true);
 
         sprite.name = "Knight";
 
@@ -463,12 +464,11 @@ export class GamePlay extends Phaser.Scene {
             return;
         }
 
-        const newLocationX = tp!.Sprite.x;
-        const newLocationY = tp!.Sprite.y;
+        const newLocation = tp.getLocation();
 
-        console.log("moving to {0},{1}", newLocationX, newLocationY)
+        console.log("moving to ", newLocation)
 
-        this.Player.moveTo(newLocationX, newLocationY);
+        this.Player.moveTo(newLocation.x, newLocation.y);
 
     }
     init(data: GamePlayWindowConfig) {
@@ -532,10 +532,10 @@ export class GamePlay extends Phaser.Scene {
             // no items
         } else {
             let itemToPickup = nearbyItems[0];
-            let s = itemToPickup.Sprite;
-            //s.setImmovable(true);
-            s.body.setAllowGravity(false);
-            let result = this.Player.getInventory().AddItem(nearbyItems[0]);
+
+            itemToPickup.setOwner(this.Player.getInventory());
+
+            let result = this.Player.getInventory().AddItem(itemToPickup);
             if (result.ok) {
                 // great
             } else {
@@ -551,8 +551,8 @@ export class GamePlay extends Phaser.Scene {
         } else {
             // drop the last item
             let lastItem = items[items.length - 1];
-            let s = lastItem._sprite;
-            s.body.setAllowGravity(true);
+
+            lastItem.setOwner(undefined);
 
             this.Player.getInventory().RemoveItem(lastItem);
 
