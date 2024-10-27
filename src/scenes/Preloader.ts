@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { createAtlas } from './atlascreator';
 
 
 export class Preloader extends Phaser.Scene {
@@ -79,13 +80,13 @@ export class Preloader extends Phaser.Scene {
         //  Load the assets for the game - Replace with your own assets
         this.load.setPath('assets');
 
-        this.load.atlas('characters', 'characters.png', 'characters.json');
+        this.load.atlas('characters', ['characters.png', 'default_normal_map.png'], 'characters.json');
 
         this.load.tilemapTiledJSON('levels', 'all_levels.tmj')
         this.load.image('map_foreground', 'c64tiles_foreground.png')
         this.load.image('map_background', 'c64tiles.png')
 
-        this.load.spritesheet('objects', 'objectsprites.png', { frameWidth: 16, frameHeight: 32 });
+        this.load.atlas('objects', ['objectsprites.png', 'default_normal_map.png'], 'objectsprites.json') // { frameWidth: 16, frameHeight: 32 });
         this.load.spritesheet('knight_smoke', 'knight_smoke.png', { frameWidth: 16, frameHeight: 32 });
 
         this.load.spritesheet('border_bottompanel', 'borders_bottompanel.png', { frameWidth: 16, frameHeight: 16 })

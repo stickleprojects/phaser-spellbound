@@ -12,6 +12,7 @@ export default class Player {
     nearbySprite: Phaser.Physics.Arcade.Body;
 
     allowMovement: boolean;
+    KnightLight: Phaser.GameObjects.Light;
     getSprite(): Phaser.GameObjects.Sprite { return this.sprite; }
     getNearbySprite(): Phaser.Physics.Arcade.Body { return this.nearbySprite; }
 
@@ -183,6 +184,8 @@ export default class Player {
         })
     }
     repositionCarriedItems() {
+        let enableLight = true;
+
         // move the inventory items too!
         this._inventory.GetItems().forEach((i: IInventoryItem) => {
 
@@ -191,7 +194,20 @@ export default class Player {
             value.Sprite.x = this.sprite.x;
             value.Sprite.y = this.sprite.y;
 
-        })
+            if (value.Src.stats?.glows) {
+                enableLight = true;
+            }
+
+        });
+
+        if (this.KnightLight) {
+            this.KnightLight.setVisible(enableLight);
+
+            this.KnightLight.setPosition(this.sprite.x, this.sprite.y);
+
+        }
+
+
     }
     repositionNearbySprite() {
         this.nearbySprite.x = this.sprite.x - this.nearbySprite.width / 2;

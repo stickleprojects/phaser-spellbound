@@ -144,9 +144,15 @@ export class GamePlay extends Phaser.Scene {
         this.map_alltiles = this.map.addTilesetImage('alltiles', 'map_background')!
         this.map_foregroundtiles = this.map.addTilesetImage('foregroundtiles', 'map_foreground')!
 
-        this.map.createLayer('background', this.map_alltiles)!
-        this.map.createLayer('foreground', this.map_foregroundtiles)!
+        const bk = this.map.createLayer('background', this.map_alltiles)!
+        bk.setPipeline('Light2D');
+
+        const fg = this.map.createLayer('foreground', this.map_foregroundtiles)!
+        fg.setPipeline('Light2D');
+
         this.solidLayer = this.map.createLayer('solid', this.map_alltiles)!
+        this.solidLayer.setPipeline('Light2D');
+
         this.characterLayer = this.map.getObjectLayer('characters')?.objects!
         this.map.getObjectLayer('doorobjects')?.objects!
         this.objectLayer = this.map.getObjectLayer('objects')?.objects!
@@ -170,6 +176,7 @@ export class GamePlay extends Phaser.Scene {
 
         this.wireupEvents();
 
+        this.setupLights();
 
 
     }
@@ -332,10 +339,12 @@ export class GamePlay extends Phaser.Scene {
 
                 let firstImage = itemInfo.images[0];
                 const index = (firstImage.y * mapWidth) + firstImage.x;
+                const frameName = index.toString().padStart(2, '0') + '.png';
                 const pixelX = Math.ceil(o.x! / objectTileWidth) * objectTileWidth;
                 const pixelY = Math.ceil(o.y! / objectTileHeight) * objectTileHeight;
 
-                let sprite = this.physics.add.sprite(pixelX, pixelY + objecthalfH, 'objects', index);
+
+                let sprite = this.physics.add.sprite(pixelX, pixelY + objecthalfH, 'objects', frameName);
                 sprite.body.setSize(16, 16);
 
                 this.ObjectGroup.add(sprite, false);
@@ -344,15 +353,34 @@ export class GamePlay extends Phaser.Scene {
                 that.Items.set(newitem.id, newitem);
                 this.physics.add.collider(sprite, this.solidLayer);
                 sprite.name = objectName;
+                sprite.setPipeline('Light2D');
 
             }
         });
     }
 
+    enableAmbientLight() {
+        this.lights.setAmbientColor(0xe0e0e0);
+    }
+
+    disableAmbientLight() {
+        this.lights.setAmbientColor(0x0);
+
+    }
+    setupLights() {
+        this.lights.enable().setAmbientColor(0xa0a0a0);
+        this.enableAmbientLight();
+
+
+
+    }
     createKnight(x: number, y: number, index: number) {
 
 
         const sprite = this.physics.add.sprite(x, y, 'characters', index);
+
+
+        sprite.setPipeline('Light2D');
 
         const nearbyWidth = sprite.width * 4;
         const nearbySprite = this.physics.add.body(x, y, nearbyWidth, sprite.height);
@@ -367,6 +395,11 @@ export class GamePlay extends Phaser.Scene {
 
         this.physics.add.collider(sprite, this.solidLayer);
         this.physics.add.overlap(nearbySprite, this.ObjectGroup);
+
+
+
+        this.Player.KnightLight = this.lights.addLight(x, y, 60, 0xa0a0a0, 2);
+        this.Player.KnightLight.setVisible(true);
 
         sprite.name = "Knight";
 
@@ -389,13 +422,16 @@ export class GamePlay extends Phaser.Scene {
                 roomInfo.WorldLocation.x, roomInfo.WorldLocation.y,
                 roomInfo.WorldLocation.width, roomInfo.WorldLocation.height, false);
 
+
+            console.log(roomInfo.WorldLocation);
+
             if (roomInfo.stats.dark) {
                 console.log("its TOO DARK in here!");
-                this.camera.setAlpha(0.2);
+                this.disableAmbientLight();
             } else {
-                this.camera.setAlpha(1);
-
+                this.enableAmbientLight();
             }
+
         }
     }
     teleportPlayerToPad() {
@@ -541,6 +577,7 @@ export class GamePlay extends Phaser.Scene {
         if (this.flags.FollowingPlayer) {
             this.showRoomThatThePlayerIsIn();
         }
+
 
     }
 
