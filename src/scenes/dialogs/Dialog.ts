@@ -10,11 +10,13 @@ export class DialogParameters {
     tileHeight: number = 16;
     promise?: Promise<string>;
     color: string = '0xffffff';
+    isModal: boolean = true;
 
     constructor(parent: Scene, dims: Rectangle, promise?: Promise<string>) {
         this.parent = parent;
         this.dimensions = dims;
         this.promise = promise;
+        this.isModal = true;
     }
 }
 
@@ -22,19 +24,22 @@ export abstract class Dialog extends Phaser.Scene {
     parentScene: Scene;
 
     InnerRect?: Rectangle;
-    private _topBorder: Phaser.GameObjects.TileSprite;
-    private _topRight: Phaser.GameObjects.Sprite;
-    private _leftBorder: Phaser.GameObjects.TileSprite;
-    private _rightBorder: Phaser.GameObjects.TileSprite;
-    private _bottomLeft: Phaser.GameObjects.Sprite;
-    private _bottomBorder: Phaser.GameObjects.TileSprite;
-    private _bottomRight: Phaser.GameObjects.Sprite;
+    private _topBorder?: Phaser.GameObjects.TileSprite;
+    private _topRight?: Phaser.GameObjects.Sprite;
+    private _leftBorder?: Phaser.GameObjects.TileSprite;
+    private _rightBorder?: Phaser.GameObjects.TileSprite;
+    private _bottomLeft?: Phaser.GameObjects.Sprite;
+    private _bottomBorder?: Phaser.GameObjects.TileSprite;
+    private _bottomRight?: Phaser.GameObjects.Sprite;
 
-    private _topLeft: Phaser.GameObjects.Sprite;
+    private _topLeft?: Phaser.GameObjects.Sprite;
     protected _borderTint: string;
+    private _id: string;
 
     constructor(id: string) {
         super(id);
+        this._id = id;
+
     }
     drawBorders(tileWidth: number, tileHeight: number, texture: string, boundaries: Rectangle): Rectangle {
 
@@ -46,83 +51,28 @@ export abstract class Dialog extends Phaser.Scene {
         let horizontalBorderWidth = boundaries.width - (tileWidth * 2);
         let verticalBorderHeight = boundaries.height - (tileHeight * 2);
 
-        // all sprites will be setorigin(0,0)
-        // topleft
-        if (!this._topLeft) {
-            this._topLeft = this.add.sprite(left, top, texture, 0);
+        this._topLeft = this.add.sprite(left, top, texture, 0);
 
-        } else {
-            this._topLeft.setPosition(left, top);
-        }
-        if (!this._topBorder) {
-            this._topBorder = this.add.tileSprite(left + tileWidth, top, horizontalBorderWidth, tileHeight, texture, 1)
+        this._topBorder = this.add.tileSprite(left + tileWidth, top, horizontalBorderWidth, tileHeight, texture, 1)
+        this._topRight = this.add.sprite(right - tileWidth, top, texture, 2);
 
-        } else {
+        this._leftBorder = this.add.tileSprite(left, top + tileHeight, tileWidth, verticalBorderHeight, texture, 3);
 
-            this._topBorder.setPosition(left, top);
-            this._topBorder.width = horizontalBorderWidth;
-        }
-
-        // topright
-        if (!this._topRight) {
-            this._topRight = this.add.sprite(right - tileWidth, top, texture, 2);
-
-        } else {
-            this._topBorder.setPosition(right - tileWidth, top);
-
-        }
-
-        // left border
-
-        if (!this._leftBorder) {
-            this._leftBorder = this.add.tileSprite(left, top + tileHeight, tileWidth, verticalBorderHeight, texture, 3);
-
-        } else {
-            this._leftBorder.setPosition(left, top + tileHeight);
-            this._leftBorder.height = verticalBorderHeight;
-        }
-
-        // right
-        if (!this._rightBorder) {
-            this._rightBorder = this.add.tileSprite(right - tileWidth, top + tileHeight, tileWidth, verticalBorderHeight, texture, 5)
-
-        } else {
-            this._leftBorder.setPosition(right - tileWidth, top + tileHeight);
-            this._leftBorder.height = verticalBorderHeight;
-        }
-
-        // botleft
-        if (!this._bottomLeft) {
-            this._bottomLeft = this.add.sprite(left, bottom - tileHeight, texture, 6);
-
-        } else {
-            this._leftBorder.setPosition(left, bottom - tileHeight);
-        }
-
-        // bottomBorder
-        if (!this._bottomBorder) {
-            this._bottomBorder = this.add.tileSprite(left + tileWidth, bottom - tileHeight, horizontalBorderWidth, tileHeight, texture, 7)
-
-        } else {
-            this._bottomBorder.setPosition(left, bottom - tileHeight);
-            this._bottomBorder.width = horizontalBorderWidth
-        }
-
-        // botright
-        if (!this._bottomRight) {
-            this._bottomRight = this.add.sprite(right - tileWidth, bottom - tileHeight, texture, 8);
-
-        } else {
-            this._bottomRight.setPosition(right - tileWidth, bottom - tileHeight)
-        }
-
+        this._rightBorder = this.add.tileSprite(right - tileWidth, top + tileHeight, tileWidth, verticalBorderHeight, texture, 5)
+        this._bottomLeft = this.add.sprite(left, bottom - tileHeight, texture, 6);
+        this._bottomBorder = this.add.tileSprite(left + tileWidth, bottom - tileHeight, horizontalBorderWidth, tileHeight, texture, 7)
+        this._bottomRight = this.add.sprite(right - tileWidth, bottom - tileHeight, texture, 8);
         this.setBorderSpriteSettings();
 
         return new Rectangle(left + tileWidth, top + tileHeight, horizontalBorderWidth, verticalBorderHeight);
 
     }
 
-    setSpriteSetting(sprite: Phaser.GameObjects.Sprite | Phaser.GameObjects.TileSprite) {
+
+    setSpriteSetting(sprite: Phaser.GameObjects.Sprite | Phaser.GameObjects.TileSprite | undefined) {
+
+
+        if (!sprite) return;
 
         sprite.setOrigin(0, 0);
 
@@ -145,6 +95,57 @@ export abstract class Dialog extends Phaser.Scene {
         this.setSpriteSetting(this._bottomRight);
 
 
+
+    }
+    create() {
+
+
+
+        this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
+
+            if (this._topLeft) {
+                this._topLeft.destroy();
+                this._topLeft = undefined;
+            }
+
+            if (this._topBorder) {
+                this._topBorder.destroy();
+                this._topBorder = undefined;
+            }
+
+            if (this._topRight) {
+                this._topRight.destroy();
+                this._topRight = undefined;
+            }
+            if (this._rightBorder) {
+                this._rightBorder.destroy();
+                this._rightBorder = undefined;
+            }
+
+
+            if (this._bottomRight) {
+                this._bottomRight.destroy();
+                this._bottomRight = undefined;
+            }
+
+
+            if (this._bottomBorder) {
+                this._bottomBorder.destroy();
+                this._bottomBorder = undefined;
+            }
+
+            if (this._bottomLeft) {
+                this._bottomLeft.destroy();
+                this._bottomLeft = undefined;
+            }
+
+
+            if (this._leftBorder) {
+                this._leftBorder.destroy();
+                this._leftBorder = undefined;
+            }
+
+        });
 
     }
     init(data: DialogParameters) {

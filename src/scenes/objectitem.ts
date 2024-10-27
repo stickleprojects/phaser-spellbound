@@ -1,4 +1,4 @@
-import { Item } from "../config/configentities";
+import { Item, ItemStats } from "../config/configentities";
 import { IInventoryItem, Inventory } from "../inventory";
 
 export class ObjectItem implements IInventoryItem {
@@ -33,6 +33,8 @@ export class ObjectItem implements IInventoryItem {
     get name() { return this._src.stats?.fullname || this.id }
     get weight() { return this._src.stats?.weight || 0 }
     get Src() { return this._src; }
+    get stats(): ItemStats | undefined { return this._src.stats; }
+
     setVisible(visible: boolean) {
         this._sprite.visible = visible;
 

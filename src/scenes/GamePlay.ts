@@ -8,13 +8,14 @@ import Player from '../player';
 import { LevelConfig, Rectangle } from '../config/levelconfig';
 import { Character, Item } from '../config/configentities';
 import { Inventory } from '../inventory';
-import { customEmitter } from '../components/customemitter';
-import { InputEventSystem, KEYEVENT_CLOSEDIALOG, KEYEVENT_DROP_ITEM, KEYEVENT_FOLLOW_PLAYER, KEYEVENT_OPENDIALOG, KEYEVENT_PICKUP_ITEM, KEYEVENT_TELEPORT, KEYEVENT_TOGGLE_DEBUG } from '../systems/inputEventSystem';
+import { customEmitter, GAMEEVENT_SHOWMESSAGE } from '../components/customemitter';
+import { InputEventSystem, KEYEVENT_DROP_ITEM, KEYEVENT_FOLLOW_PLAYER, KEYEVENT_OPENDIALOG, KEYEVENT_PICKUP_ITEM, KEYEVENT_TELEPORT, KEYEVENT_TOGGLE_DEBUG } from '../systems/inputEventSystem';
 import { GameFlags } from './GameFlags';
 import { ObjectItem } from './objectitem';
 import { DialogManager } from '../systems/dialogManager';
 import { MenuDialogParameters } from './dialogs/MenuDialog';
 import { InventoryDialogParameters } from './dialogs/InventorySelector';
+import { MessageDialogParameters } from './dialogs/MessageDialog';
 
 
 export class GamePlayWindowConfig {
@@ -187,7 +188,7 @@ export class GamePlay extends Phaser.Scene {
         let x = 100;
         let y = 150;
 
-        var windowParameters = new MenuDialogParameters(this,
+        var dialogParameters = new MenuDialogParameters(this,
             new Rectangle(x, y, 400, 100),
             [
                 'p = pickup',
@@ -201,15 +202,28 @@ export class GamePlay extends Phaser.Scene {
 
         );
 
-        windowParameters.color = '0xcf6af7';
+        dialogParameters.color = '0xcf6af7';
 
-        this._dialogManager.showDialog('commandDialog', windowParameters);
+        this._dialogManager.showDialog('commandDialog', dialogParameters);
 
-        // if (this.scene.manager.getIndex('commandDialog') < 0) {
-        //     this.scene.manager.add('commandDialog', CommandDialog, false);
-        // }
+    }
 
-        // this.scene.launch('commandDialog', playWindow);
+    showMessage(txt: string[]) {
+
+
+        var dialogParameter = new MessageDialogParameters(this,
+            new Rectangle(0, 0, 400, 100),
+            txt
+            , true
+
+        );
+        dialogParameter.centerX = true;
+        dialogParameter.centerY = true;
+
+        dialogParameter.color = '0xffffff';
+
+        this._dialogManager.showDialog('messageDialog', dialogParameter);
+
 
     }
 
@@ -218,7 +232,7 @@ export class GamePlay extends Phaser.Scene {
         let x = 250;
         let y = 250;
 
-        var windowParameters = new InventoryDialogParameters(this,
+        var dialogParameter = new InventoryDialogParameters(this,
             new Rectangle(x, y, 400, 100),
             [
                 'f = florin',
@@ -229,28 +243,22 @@ export class GamePlay extends Phaser.Scene {
 
         );
 
-        windowParameters.color = '0x6a6aff';
+        dialogParameter.color = '0x6a6aff';
 
-        this._dialogManager.showDialog('inventoryDialog', windowParameters);
-
-    }
-    private closeLastDialog() {
-
-        this._dialogManager.closeTopmost();
-
+        this._dialogManager.showDialog('inventoryDialog', dialogParameter);
 
     }
     private wireupEvents() {
 
+        customEmitter.on(GAMEEVENT_SHOWMESSAGE, (data: string[]) => {
+            this.showMessage(data);
+
+        })
         customEmitter.on(KEYEVENT_OPENDIALOG, () => {
             this.showDialog();
             this.showInventory();
         });
 
-        customEmitter.on(KEYEVENT_CLOSEDIALOG, () => {
-            this.closeLastDialog();
-
-        });
         customEmitter.on(KEYEVENT_TELEPORT, () => {
             this.teleportPlayerToPad();
         });
@@ -424,10 +432,13 @@ export class GamePlay extends Phaser.Scene {
                 roomInfo.WorldLocation.width, roomInfo.WorldLocation.height, false);
 
 
-            console.log(roomInfo.WorldLocation);
-
             if (roomInfo.stats.dark) {
-                console.log("its TOO DARK in here!");
+                if (!this.Player.isCarryingItem(i => i.stats?.glows == true)) {
+                    customEmitter.emit(GAMEEVENT_SHOWMESSAGE, ['its TOO DARK in here!', 'Press ESC and make your way back'])
+                    console.log("its TOO DARK in here!");
+                } else {
+                    console.log("its reet dark in here!! Good job you have a glowing thing!")
+                }
                 this.disableAmbientLight();
             } else {
                 this.enableAmbientLight();

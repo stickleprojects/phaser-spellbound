@@ -8,6 +8,10 @@ export class Stack<T> {
         //when a new stack is created
     }
 
+    any(predicate: (item: T) => boolean) {
+        return this.items.find(i => predicate(i)) != undefined;
+
+    }
     // Method to push an 
     // element onto the stack
     push(element: T): void {

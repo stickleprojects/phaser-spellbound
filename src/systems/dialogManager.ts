@@ -1,7 +1,18 @@
 import { Scene } from "phaser";
 import { Dialog, DialogParameters } from "../scenes/dialogs/Dialog";
 import { Stack } from "./stack";
+import { customEmitter, GAMEEVENT_MODALDIALOG_CLOSE, GAMEEVENT_MODALDIALOG_SHOW } from "../components/customemitter";
 
+class SceneWithData {
+    scene: Phaser.Scene;
+    data: DialogParameters;
+
+    constructor(scene: Phaser.Scale, data: DialogParameters) {
+        this.scene = scene;
+        this.data = data;
+
+    }
+}
 export interface ISceneManager {
 
     start(key: string, data: any): void;
@@ -12,35 +23,56 @@ export interface ISceneManager {
 
 export class DialogManager {
     private _sceneManager: ISceneManager;
-    private _dialogQueue: Stack<Scene>;
+    private _dialogQueue: Stack<SceneWithData>;
+
 
     constructor(sceneManager: ISceneManager) {
 
         this._sceneManager = sceneManager;
 
-        this._dialogQueue = new Stack<Dialog>();
+        this._dialogQueue = new Stack<SceneWithData>();
+
 
     }
 
 
     closeTopmost() {
-        const d = this._dialogQueue.pop();
-        if (d) {
+        if (this._dialogQueue.isEmpty()) return;
 
-            console.log("shutting dialog ", d);
-            this._sceneManager.stop(d);
+        let d: SceneWithData | undefined = this._dialogQueue.pop();
+        if (d) {
+            this.closeScene(d);
         }
+    }
+
+    isModalOpen(): boolean {
+        return this._dialogQueue.any((x) => x.data.isModal);
+
+    }
+    closeScene(s: SceneWithData) {
+        console.log("shutting dialog ", s.scene);
+        this._sceneManager.stop(s.scene);
+
+        if (s?.data.isModal) {
+            this.notifyModalClosed(s);
+        }
+
     }
     clear() {
         while (!this._dialogQueue.isEmpty()) {
 
-            const d = this._dialogQueue.pop();
+            let d = this._dialogQueue.pop();
             if (d) {
-
-                console.log("shutting dialog ", d);
-                this._sceneManager.stop(d);
+                this.closeScene(d);
             }
         }
+    }
+    notifyModalShow(d: SceneWithData) {
+        customEmitter.emit(GAMEEVENT_MODALDIALOG_SHOW, d);
+    }
+    notifyModalClosed(d: SceneWithData) {
+        customEmitter.emit(GAMEEVENT_MODALDIALOG_CLOSE, d);
+
     }
     showDialog<T extends Dialog>(id: string, dparams: DialogParameters): T {
 
@@ -59,8 +91,13 @@ export class DialogManager {
         existingScene = this._sceneManager.getScene(id)
         if (existingScene) {
             console.log('push scene ', existingScene);
-            this._dialogQueue.push(existingScene);
 
+            const s = new SceneWithData(existingScene, dparams);
+            this._dialogQueue.push(s);
+
+            if (s.data.isModal) {
+                this.notifyModalShow(s);
+            }
             return existingScene as T;
         }
 

@@ -20,7 +20,6 @@ export class MenuDialog extends Dialog {
     private _itemHeight: number = 20;
     private _itemGapBetween: number = 1;
     private _itemGapLeft: number = 10;
-
     constructor(id: string = 'menudialog1') {
         super(id)
     }
@@ -45,8 +44,17 @@ export class MenuDialog extends Dialog {
 
     }
 
-    calcHeightOfMenuItems(data: MenuDialogParameters): number {
-        console.log(data);
+    protected calcWidthOfMenuItems(data: MenuDialogParameters): number {
+
+        const maxChars = data.menuitems.reduce((a: number, b: string) => b.length > a ? b.length : a, 0);
+
+        const charWidth = 10;
+        const borderWidth = data.tileWidth * 2;
+        return borderWidth + (maxChars * charWidth);
+
+
+    }
+    protected calcHeightOfMenuItems(data: MenuDialogParameters): number {
 
         const borderHeight = data.tileHeight * 2
         const itemCount = data.menuitems.length;

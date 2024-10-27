@@ -1,6 +1,7 @@
 // Allows someone to carry something
 
 import { customEmitter } from "./components/customemitter";
+import { ItemStats } from "./config/configentities";
 
 export interface IInventoryOwner {
 
@@ -12,6 +13,8 @@ export interface IInventoryItem {
     name: string;
     description: string;
     owner?: Inventory;
+
+    stats?: ItemStats;
 
     setOwner(owner?: Inventory): void;
 
@@ -115,6 +118,19 @@ export class InventoryEmptyError extends InventoryError {
 }
 
 export class Inventory {
+    hasItem(predicate: (a: IInventoryItem) => boolean): boolean {
+        let found: boolean = false;
+
+        this._items.forEach((value: IInventoryItem, key: string) => {
+
+            if (predicate(value)) {
+                found = true;
+                return;
+            }
+        });
+
+        return found;
+    }
     //private _owner: IInventoryOwner;
     private _maxNumberOfItems: number;
     private _maxTotalWeight: number;

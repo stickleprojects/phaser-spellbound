@@ -9,12 +9,15 @@ import { Rectangle } from "../config/levelconfig";
 
 import { MenuDialogParameters } from "./dialogs/MenuDialog";
 import { DialogManager, ISceneManager } from "../systems/dialogManager";
+import { customEmitter, GAMEEVENT_MODALDIALOG_CLOSE, GAMEEVENT_MODALDIALOG_SHOW } from "../components/customemitter";
+import { KEYEVENT_CLOSEDIALOG } from "../systems/inputEventSystem";
 
 export class MainWindow extends Scene implements ISceneManager {
 
     private _hudHeight = 60;
     private _copyrightHeight = 120;
     private _dialogManager: DialogManager;
+    CloseDialogKey: any;
 
 
     constructor() {
@@ -26,6 +29,7 @@ export class MainWindow extends Scene implements ISceneManager {
     }
     stop(key: string | Scene): void {
         this.scene.stop(key);
+
     }
     getScene(key: string): Phaser.Scene {
         return this.scene.get(key);
@@ -35,7 +39,13 @@ export class MainWindow extends Scene implements ISceneManager {
     }
 
 
-    update(time, delta) { }
+    update(time, delta) {
+
+        if (Phaser.Input.Keyboard.JustDown(this.CloseDialogKey)) {
+            customEmitter.emit(KEYEVENT_CLOSEDIALOG);
+        }
+
+    }
 
     showHud() {
         var hudData = new HudParameters(this, 0, 0, this.sys.game.canvas.width, this._hudHeight);
@@ -43,20 +53,50 @@ export class MainWindow extends Scene implements ISceneManager {
         this.scene.launch('hud', hudData);
 
     }
+
     getHudScene(): Scene {
         return this.scene.manager.getScene('hud')!;
     }
     getInventoryScene(): Scene {
         return this.scene.manager.getScene('inventory')!;
     }
+
+    getGameplayScene(): Scene {
+        return this.scene.manager.getScene('GamePlay')!;
+    }
     getCopyrightScene(): Scene {
         return this.scene.manager.getScene('copyright')!;
     }
-    wireUpEvents() {
+
+    private closeLastDialog() {
+
+        this._dialogManager.closeTopmost();
 
 
     }
-    showCopyright() {
+    wireUpEvents() {
+        customEmitter.on(GAMEEVENT_MODALDIALOG_CLOSE, (data) => {
+
+            if (!this._dialogManager.isModalOpen()) {
+                const s = this.getGameplayScene();
+                s.scene.setActive(true);
+            }
+
+        });
+
+
+        customEmitter.on(KEYEVENT_CLOSEDIALOG, () => {
+            this.closeLastDialog();
+
+        });
+        customEmitter.on(GAMEEVENT_MODALDIALOG_SHOW, (data) => {
+            const s = this.getGameplayScene();
+            s.scene.setActive(false);
+
+        });
+
+    }
+    showCopyrightPanel() {
 
         const height = this._copyrightHeight;
         var copyrightData = new CopyrightPanelParameters(this, 0,
@@ -65,7 +105,7 @@ export class MainWindow extends Scene implements ISceneManager {
         this.scene.launch('copyright', copyrightData);
 
     }
-    showInventory() {
+    showInventoryPanel() {
         const height = this._copyrightHeight;
         var data = new BottomPanelParameters(this, 0,
             this.sys.game.canvas.height - height, this.sys.game.canvas.width - 120, height);
@@ -101,9 +141,9 @@ export class MainWindow extends Scene implements ISceneManager {
 
         this.showHud();
 
-        this.showCopyright();
+        this.showCopyrightPanel();
 
-        this.showInventory();
+        this.showInventoryPanel();
 
         this.showGamePlayWindow();
 
@@ -112,6 +152,10 @@ export class MainWindow extends Scene implements ISceneManager {
 
     }
     create() {
+
+
+        this.CloseDialogKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+
 
     }
 }
