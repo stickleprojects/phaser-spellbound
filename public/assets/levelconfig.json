@@ -500,7 +500,8 @@
             ],
             "stats": {
                 "fullname": "Glowing Bottle",
-                "weight": 1.0
+                "weight": 1.0,
+                "glows": true
             }
         },
         {

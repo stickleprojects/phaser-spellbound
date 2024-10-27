@@ -16,4 +16,5 @@ export class ObjectItem implements IInventoryItem {
     get Sprite() { return this._sprite; }
     get name() { return this._src.stats?.fullname || this.id }
     get weight() { return this._src.stats?.weight || 0 }
+    get Src() { return this._src; }
 }

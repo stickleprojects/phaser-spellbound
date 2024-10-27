@@ -12,9 +12,14 @@ export default class Player {
     nearbySprite: Phaser.Physics.Arcade.Body;
 
     allowMovement: boolean;
+    KnightLight: Phaser.GameObjects.Light;
     getSprite(): Phaser.GameObjects.Sprite { return this.sprite; }
     getNearbySprite(): Phaser.Physics.Arcade.Body { return this.nearbySprite; }
 
+    frameIndexToString(index: number): string {
+        const spriteFrame = index.toString().padStart(2, '0') + '.png'
+        return spriteFrame;
+    }
     constructor(
         sprite: Phaser.GameObjects.Sprite,
         nearbySprite: Phaser.Physics.Arcade.Body,
@@ -32,8 +37,10 @@ export default class Player {
 
         this.cursorKeys = cursors;
 
-        let fi = this.sprite.anims.generateFrameNumbers('characters', {
-            frames: [16, 17, 18]
+        let fi = this.sprite.anims.generateFrameNames('characters', {
+            frames: [16, 17, 18],
+            zeroPad: 2,
+            suffix: '.png'
         });
 
         if (fi.length < 1) {
@@ -50,8 +57,10 @@ export default class Player {
         })
         this.sprite.anims.create({
             key: 'stop',
-            frames: this.sprite.anims.generateFrameNumbers('characters', {
-                frames: [17]
+            frames: this.sprite.anims.generateFrameNames('characters', {
+                frames: [17],
+                zeroPad: 2,
+                suffix: '.png'
             }),
             frameRate: 80,
             repeat: -1,
@@ -175,6 +184,8 @@ export default class Player {
         })
     }
     repositionCarriedItems() {
+        let enableLight = true;
+
         // move the inventory items too!
         this._inventory.GetItems().forEach((i: IInventoryItem) => {
 
@@ -183,7 +194,20 @@ export default class Player {
             value.Sprite.x = this.sprite.x;
             value.Sprite.y = this.sprite.y;
 
-        })
+            if (value.Src.stats?.glows) {
+                enableLight = true;
+            }
+
+        });
+
+        if (this.KnightLight) {
+            this.KnightLight.setVisible(enableLight);
+
+            this.KnightLight.setPosition(this.sprite.x, this.sprite.y);
+
+        }
+
+
     }
     repositionNearbySprite() {
         this.nearbySprite.x = this.sprite.x - this.nearbySprite.width / 2;
