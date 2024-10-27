@@ -27,14 +27,64 @@ export class Preloader extends Phaser.Scene {
 
     }
 
+    createAtlas22(frameHeight: number, frameWidth: number, imageWidth: number, imageHeight: number) {
+        let ret =
+        {
+            "frames": {
+                "charactersprites.png": {
+                    "frame": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 256,
+                        "h": 64
+                    },
+                    "rotated": false,
+                    "trimmed": false,
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 256,
+                        "h": 64
+                    },
+                    "sourceSize": {
+                        "w": 256,
+                        "h": 64
+                    },
+                    "pivot": {
+                        "x": 0.5,
+                        "y": 0.5
+                    }
+                }
+            },
+            "meta": {
+                "app": "http://free-tex-packer.com",
+                "version": "0.6.7",
+                "image": "texture.png",
+                "format": "RGBA8888",
+                "size": {
+                    "w": 256,
+                    "h": 64
+                },
+                "scale": 1
+            }
+        }
+
+        return ret;
+    }
     preload() {
+        //this.load.setPath('build');
+        //let atlasJSON = this.createAtlas22(32,16,)
+        //this.load.spritesheet('characters', 'charactersprites.png', { frameWidth: 16, frameHeight: 32 });
+
         //  Load the assets for the game - Replace with your own assets
         this.load.setPath('assets');
+
+        this.load.atlas('characters', 'characters.png', 'characters.json');
 
         this.load.tilemapTiledJSON('levels', 'all_levels.tmj')
         this.load.image('map_foreground', 'c64tiles_foreground.png')
         this.load.image('map_background', 'c64tiles.png')
-        this.load.spritesheet('characters', 'charactersprites.png', { frameWidth: 16, frameHeight: 32 });
+
         this.load.spritesheet('objects', 'objectsprites.png', { frameWidth: 16, frameHeight: 32 });
         this.load.spritesheet('knight_smoke', 'knight_smoke.png', { frameWidth: 16, frameHeight: 32 });
 

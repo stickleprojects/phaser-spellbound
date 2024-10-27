@@ -295,7 +295,9 @@ export class GamePlay extends Phaser.Scene {
                     // create the knight and add to the world
                     this.createKnight(pixelX + characterhalfW, pixelY + characterhalfH, index);
                 } else {
-                    let ss = this.add.sprite(pixelX + characterhalfW, pixelY + characterhalfH, 'characters', index);
+                    //let ss = this.add.sprite(pixelX + characterhalfW, pixelY + characterhalfH, 'characters', index);
+                    const spriteFrame = index.toString().padStart(2, '0') + '.png'
+                    let ss = this.add.sprite(pixelX + characterhalfW, pixelY + characterhalfH, 'characters', spriteFrame);
                     ss.name = o.name;
                 }
             }

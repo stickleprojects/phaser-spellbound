@@ -15,6 +15,10 @@ export default class Player {
     getSprite(): Phaser.GameObjects.Sprite { return this.sprite; }
     getNearbySprite(): Phaser.Physics.Arcade.Body { return this.nearbySprite; }
 
+    frameIndexToString(index: number): string {
+        const spriteFrame = index.toString().padStart(2, '0') + '.png'
+        return spriteFrame;
+    }
     constructor(
         sprite: Phaser.GameObjects.Sprite,
         nearbySprite: Phaser.Physics.Arcade.Body,
@@ -32,8 +36,10 @@ export default class Player {
 
         this.cursorKeys = cursors;
 
-        let fi = this.sprite.anims.generateFrameNumbers('characters', {
-            frames: [16, 17, 18]
+        let fi = this.sprite.anims.generateFrameNames('characters', {
+            frames: [16, 17, 18],
+            zeroPad: 2,
+            suffix: '.png'
         });
 
         if (fi.length < 1) {
@@ -50,8 +56,10 @@ export default class Player {
         })
         this.sprite.anims.create({
             key: 'stop',
-            frames: this.sprite.anims.generateFrameNumbers('characters', {
-                frames: [17]
+            frames: this.sprite.anims.generateFrameNames('characters', {
+                frames: [17],
+                zeroPad: 2,
+                suffix: '.png'
             }),
             frameRate: 80,
             repeat: -1,
