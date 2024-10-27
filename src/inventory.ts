@@ -118,19 +118,6 @@ export class InventoryEmptyError extends InventoryError {
 }
 
 export class Inventory {
-    hasItem(predicate: (a: IInventoryItem) => boolean): boolean {
-        let found: boolean = false;
-
-        this._items.forEach((value: IInventoryItem, key: string) => {
-
-            if (predicate(value)) {
-                found = true;
-                return;
-            }
-        });
-
-        return found;
-    }
     //private _owner: IInventoryOwner;
     private _maxNumberOfItems: number;
     private _maxTotalWeight: number;
@@ -154,6 +141,20 @@ export class Inventory {
 
         this._items = new Map<string, IInventoryItem>();
 
+    }
+
+    public FindItem(predicate: (a: IInventoryItem) => boolean): IInventoryItem | undefined {
+        let found: IInventoryItem | undefined = undefined;
+
+        this._items.forEach((value: IInventoryItem, key: string) => {
+
+            if (predicate(value)) {
+                found = value;
+                return;
+            }
+        });
+
+        return found;
     }
 
     public AddItem(item: IInventoryItem): Result<boolean, InventoryError> {

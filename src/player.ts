@@ -197,11 +197,7 @@ export default class Player {
         });
 
     }
-    isCarryingItem(predicate: (arg0: IInventoryItem) => boolean): boolean {
 
-        return this.getInventory().hasItem(predicate);
-
-    }
     repositionNearbySprite() {
         this.nearbySprite.x = this.sprite.x - this.nearbySprite.width / 2;
         this.nearbySprite.y = this.sprite.y - this.nearbySprite.height / 2;

@@ -7,8 +7,8 @@ import { RoomNavigator } from '../roomnavigator';
 import Player from '../player';
 import { LevelConfig, Rectangle } from '../config/levelconfig';
 import { Character, Item } from '../config/configentities';
-import { Inventory } from '../inventory';
-import { customEmitter, GAMEEVENT_SHOWMESSAGE } from '../components/customemitter';
+import { IInventoryItem, Inventory } from '../inventory';
+import { customEmitter, GAMEEVENT_SHOWMESSAGE, GAMEEVENT_TURN_OFF_LIGHT, GAMEEVENT_TURN_ON_LIGHT } from '../components/customemitter';
 import { InputEventSystem, KEYEVENT_DROP_ITEM, KEYEVENT_FOLLOW_PLAYER, KEYEVENT_OPENDIALOG, KEYEVENT_PICKUP_ITEM, KEYEVENT_TELEPORT, KEYEVENT_TOGGLE_DEBUG } from '../systems/inputEventSystem';
 import { GameFlags } from './GameFlags';
 import { ObjectItem } from './objectitem';
@@ -226,7 +226,6 @@ export class GamePlay extends Phaser.Scene {
 
 
     }
-
     showInventory() {
 
         let x = 250;
@@ -249,6 +248,21 @@ export class GamePlay extends Phaser.Scene {
 
     }
     private wireupEvents() {
+
+        customEmitter.on(GAMEEVENT_TURN_ON_LIGHT, (item: IInventoryItem) => {
+
+            let x = item as ObjectItem;
+            if (x) {
+                x.light?.setVisible(true);
+            }
+        });
+        customEmitter.on(GAMEEVENT_TURN_OFF_LIGHT, (item: IInventoryItem) => {
+
+            let x = item as ObjectItem;
+            if (x) {
+                x.light?.setVisible(false);
+            }
+        });
 
         customEmitter.on(GAMEEVENT_SHOWMESSAGE, (data: string[]) => {
             this.showMessage(data);
@@ -432,16 +446,24 @@ export class GamePlay extends Phaser.Scene {
                 roomInfo.WorldLocation.width, roomInfo.WorldLocation.height, false);
 
 
+            const glowingItem = this.Player.getInventory().FindItem(i => i.stats?.glows == true);
+
             if (roomInfo.stats.dark) {
-                if (!this.Player.isCarryingItem(i => i.stats?.glows == true)) {
+
+                if (!glowingItem) {
                     customEmitter.emit(GAMEEVENT_SHOWMESSAGE, ['its TOO DARK in here!', 'Press ESC and make your way back'])
                     console.log("its TOO DARK in here!");
                 } else {
+                    customEmitter.emit(GAMEEVENT_TURN_ON_LIGHT, glowingItem);
+
                     console.log("its reet dark in here!! Good job you have a glowing thing!")
                 }
                 this.disableAmbientLight();
             } else {
                 this.enableAmbientLight();
+                if (glowingItem) {
+                    customEmitter.emit(GAMEEVENT_TURN_OFF_LIGHT, glowingItem);
+                }
             }
 
         }
