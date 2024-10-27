@@ -17,8 +17,6 @@
         "dev": "npm run pack-atlas && vite --config vite/config.dev.mjs",
         "build": "npm run pack-atlas && vite build --config vite/config.prod.mjs",
         "test": "jest",
-        "pack-atlas": "pack-atlas",
-        "sptitesheet": "spritesheet-js -f json"
     },
     "devDependencies": {
         "@types/jest": "^29.5.13",
@@ -28,7 +26,6 @@
         "jest-mock-extended": "^4.0.0-beta1",
         "pack-atlas": "^1.2.0",
         "phaser3spectorjs": "^0.0.8",
-        "spritesheet-js": "^1.2.8",
         "terser": "^5.31.0",
         "ts-jest": "^29.2.5",
         "typescript": "^5.4.5",
