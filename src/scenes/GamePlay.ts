@@ -8,8 +8,8 @@ import Player from '../player';
 import { LevelConfig, Rectangle } from '../config/levelconfig';
 import { Character, Item } from '../config/configentities';
 import { IInventoryItem, Inventory } from '../inventory';
-import { customEmitter, GAMEEVENT_SHOWMESSAGE, GAMEEVENT_TURN_OFF_LIGHT, GAMEEVENT_TURN_ON_LIGHT } from '../components/customemitter';
-import { InputEventSystem, KEYEVENT_DROP_ITEM, KEYEVENT_FOLLOW_PLAYER, KEYEVENT_OPENDIALOG, KEYEVENT_PICKUP_ITEM, KEYEVENT_TELEPORT, KEYEVENT_TOGGLE_DEBUG } from '../systems/inputEventSystem';
+import { customEmitter } from '../components/customemitter';
+import { InputEventSystem } from '../systems/inputEventSystem';
 import { GameFlags } from './GameFlags';
 import { ObjectItem } from './objectitem';
 import { DialogManager } from '../systems/dialogManager';
@@ -92,7 +92,7 @@ export class GamePlay extends Phaser.Scene {
             this.Player.allowMovement = args.FollowingPlayer;
         }
         var newhudFlags = new HudFlags(args.FollowingPlayer, args.Debug);
-        customEmitter.emit('updateflags', newhudFlags);
+        customEmitter.UpdateFlags(newhudFlags);
 
 
     }
@@ -249,14 +249,14 @@ export class GamePlay extends Phaser.Scene {
     }
     private wireupEvents() {
 
-        customEmitter.on(GAMEEVENT_TURN_ON_LIGHT, (item: IInventoryItem) => {
+        customEmitter.onTurnOnLight((item: IInventoryItem) => {
 
             let x = item as ObjectItem;
             if (x) {
                 x.light?.setVisible(true);
             }
         });
-        customEmitter.on(GAMEEVENT_TURN_OFF_LIGHT, (item: IInventoryItem) => {
+        customEmitter.onTurnOffLight((item: IInventoryItem) => {
 
             let x = item as ObjectItem;
             if (x) {
@@ -264,29 +264,32 @@ export class GamePlay extends Phaser.Scene {
             }
         });
 
-        customEmitter.on(GAMEEVENT_SHOWMESSAGE, (data: string[]) => {
+        customEmitter.onShowMessage((data: string[]) => {
             this.showMessage(data);
 
-        })
-        customEmitter.on(KEYEVENT_OPENDIALOG, () => {
+        });
+
+        customEmitter.onOpenDialog(() => {
             this.showDialog();
             this.showInventory();
         });
 
-        customEmitter.on(KEYEVENT_TELEPORT, () => {
+        customEmitter.OnTeleport(() => {
             this.teleportPlayerToPad();
         });
-        customEmitter.on(KEYEVENT_TOGGLE_DEBUG, () => {
+        customEmitter.onToggleDebug(() => {
             this.flags.Debug = !this.flags.Debug;
             this.toggleDebug(this.flags.Debug);
         })
-        customEmitter.on(KEYEVENT_FOLLOW_PLAYER, () => {
+
+        customEmitter.onToggleFollowPlayer(() => {
             this.flags.FollowingPlayer = !this.flags.FollowingPlayer;
         })
-        customEmitter.on(KEYEVENT_DROP_ITEM, () => {
+        customEmitter.onDropItem((itemid: string) => {
             this.dropLastItem();
         })
-        customEmitter.on(KEYEVENT_PICKUP_ITEM, () => {
+
+        customEmitter.onPickupItem(() => {
             this.pickupNearestItem();
         })
 
@@ -440,7 +443,7 @@ export class GamePlay extends Phaser.Scene {
 
             console.log('room stats', roomInfo.stats);
 
-            customEmitter.emit("screenmov", new HudRoomInfo(roomCoords.x, roomCoords.y, roomInfo.name));
+            customEmitter.emitScreenMove(new HudRoomInfo(roomCoords.x, roomCoords.y, roomInfo.name));
             this.camera.setBounds(
                 roomInfo.WorldLocation.x, roomInfo.WorldLocation.y,
                 roomInfo.WorldLocation.width, roomInfo.WorldLocation.height, false);
@@ -451,10 +454,10 @@ export class GamePlay extends Phaser.Scene {
             if (roomInfo.stats.dark) {
 
                 if (!glowingItem) {
-                    customEmitter.emit(GAMEEVENT_SHOWMESSAGE, ['its TOO DARK in here!', 'Press ESC and make your way back'])
+                    customEmitter.emitShowMessage(['its TOO DARK in here!', 'Press ESC and make your way back'])
                     console.log("its TOO DARK in here!");
                 } else {
-                    customEmitter.emit(GAMEEVENT_TURN_ON_LIGHT, glowingItem);
+                    customEmitter.emitTurnOnLight(glowingItem);
 
                     console.log("its reet dark in here!! Good job you have a glowing thing!")
                 }
@@ -462,7 +465,7 @@ export class GamePlay extends Phaser.Scene {
             } else {
                 this.enableAmbientLight();
                 if (glowingItem) {
-                    customEmitter.emit(GAMEEVENT_TURN_OFF_LIGHT, glowingItem);
+                    customEmitter.emitTurnOffLight(glowingItem);
                 }
             }
 

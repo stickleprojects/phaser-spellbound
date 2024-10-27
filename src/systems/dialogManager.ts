@@ -1,9 +1,9 @@
 import { Scene } from "phaser";
 import { Dialog, DialogParameters } from "../scenes/dialogs/Dialog";
 import { Stack } from "./stack";
-import { customEmitter, GAMEEVENT_MODALDIALOG_CLOSE, GAMEEVENT_MODALDIALOG_SHOW } from "../components/customemitter";
+import { customEmitter } from "../components/customemitter";
 
-class SceneWithData {
+export class SceneWithData {
     scene: Phaser.Scene;
     data: DialogParameters;
 
@@ -68,13 +68,13 @@ export class DialogManager {
         }
     }
     notifyModalShow(d: SceneWithData) {
-        customEmitter.emit(GAMEEVENT_MODALDIALOG_SHOW, d);
+        customEmitter.emitModalDialogShow(d);
     }
     notifyModalClosed(d: SceneWithData) {
-        customEmitter.emit(GAMEEVENT_MODALDIALOG_CLOSE, d);
+        customEmitter.emitModalDialogClose(d);
 
     }
-    showDialog<T extends Dialog>(id: string, dparams: DialogParameters): T {
+    showDialog<T extends Dialog>(id: string, dparams: DialogParameters): T | undefined {
 
 
         let existingScene = this._sceneManager.getScene(id);
@@ -101,5 +101,6 @@ export class DialogManager {
             return existingScene as T;
         }
 
+        return undefined;
     }
 }

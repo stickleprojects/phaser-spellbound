@@ -21,9 +21,8 @@ enum CommandStates {
     */
 
 
-import { customEmitter } from "../components/customemitter";
+import { customEmitter, GiveItemEventArgs } from "../components/customemitter";
 
-import { KEYEVENT_PICKUP_ITEM } from "./inputEventSystem";
 
 //import { IInventoryItem, IInventoryOwner, Inventory } from "../inventory";
 
@@ -101,13 +100,13 @@ export class GiveCommand implements ICommand {
 export class CommandExecutor implements ICommandExecutor {
     PickupItem(itemId: string): Promise<boolean> {
         // emit the correct event
-        customEmitter.emit(KEYEVENT_PICKUP_ITEM, { itemid: itemId });
-
+        // customEmitter.emit(KEYEVENT_PICKUP_ITEM, { itemid: itemId });
+        customEmitter.emitPickupItem(itemId);
         return Promise.resolve(true);
     }
     GiveItem(itemId: string, characterId: string): Promise<boolean> {
-        customEmitter.emit(KEYEVENT_PICKUP_ITEM, { itemid: itemId, characterId: characterId });
-
+        //        customEmitter.emit(KEYEVENT_PICKUP_ITEM, { itemid: itemId, characterId: characterId });
+        customEmitter.emitGiveItem(new GiveItemEventArgs(itemId, characterId));
         return Promise.resolve(true);
     }
 

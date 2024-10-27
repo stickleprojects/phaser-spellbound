@@ -70,14 +70,14 @@ export class Hud extends Phaser.Scene {
 
         this.cameras.main.setViewport(data.x, data.y, data.width, data.height);
 
-        customEmitter.on('screenmov', (args: HudRoomInfo) => {
+        customEmitter.onScreenMove((args: HudRoomInfo) => {
             this.updateRoomLocation(args);
 
-        }, this)
-        customEmitter.on('updateflags', (args: HudFlags) => {
+        })
+        customEmitter.onUpdateFlags((args: HudFlags) => {
             this.updateFlags(args);
 
-        }, this)
+        })
 
     }
     preload() {

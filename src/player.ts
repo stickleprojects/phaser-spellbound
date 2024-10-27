@@ -1,7 +1,6 @@
 import { Physics } from "phaser";
 import { IInventoryItem, Inventory } from "./inventory";
 import { ObjectItem } from "./scenes/objectitem";
-import { ItemStats } from "./config/configentities";
 
 export default class Player {
     private sprite: Phaser.GameObjects.Sprite;

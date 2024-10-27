@@ -4,13 +4,8 @@ import { GamePlayWindowConfig } from "./GamePlay";
 import { CopyrightPanelParameters } from "./CopyrightPanel";
 import { BottomPanelParameters } from "./BottomPanel";
 
-
-import { Rectangle } from "../config/levelconfig";
-
-import { MenuDialogParameters } from "./dialogs/MenuDialog";
 import { DialogManager, ISceneManager } from "../systems/dialogManager";
-import { customEmitter, GAMEEVENT_MODALDIALOG_CLOSE, GAMEEVENT_MODALDIALOG_SHOW } from "../components/customemitter";
-import { KEYEVENT_CLOSEDIALOG } from "../systems/inputEventSystem";
+import { customEmitter } from "../components/customemitter";
 
 export class MainWindow extends Scene implements ISceneManager {
 
@@ -42,7 +37,7 @@ export class MainWindow extends Scene implements ISceneManager {
     update(time, delta) {
 
         if (Phaser.Input.Keyboard.JustDown(this.CloseDialogKey)) {
-            customEmitter.emit(KEYEVENT_CLOSEDIALOG);
+            customEmitter.emitCloseDialog();
         }
 
     }
@@ -75,7 +70,7 @@ export class MainWindow extends Scene implements ISceneManager {
 
     }
     wireUpEvents() {
-        customEmitter.on(GAMEEVENT_MODALDIALOG_CLOSE, (data) => {
+        customEmitter.onModalDialogClose((data) => {
 
             if (!this._dialogManager.isModalOpen()) {
                 const s = this.getGameplayScene();
@@ -85,11 +80,11 @@ export class MainWindow extends Scene implements ISceneManager {
         });
 
 
-        customEmitter.on(KEYEVENT_CLOSEDIALOG, () => {
+        customEmitter.onCloseDialog(() => {
             this.closeLastDialog();
 
         });
-        customEmitter.on(GAMEEVENT_MODALDIALOG_SHOW, (data) => {
+        customEmitter.onModalDialogShow((data) => {
             const s = this.getGameplayScene();
             s.scene.setActive(false);
 
