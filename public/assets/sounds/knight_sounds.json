@@ -1,0 +1,12 @@
+{
+    "resources": [
+        "./assets/sounds/knight_step_wood.mp3"
+    ],
+    "spritemap": {
+        "walk": {
+            "start": 0,
+            "end": 0.1,
+            "loop": true
+        }
+    }
+}

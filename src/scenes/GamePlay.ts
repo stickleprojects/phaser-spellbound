@@ -408,6 +408,9 @@ export class GamePlay extends Phaser.Scene {
     createKnight(x: number, y: number, index: number) {
 
 
+        let walking = this.sound.addAudioSprite('knight_walk');
+
+
         const sprite = this.physics.add.sprite(x, y, 'characters', index);
 
 
@@ -428,6 +431,9 @@ export class GamePlay extends Phaser.Scene {
         this.physics.add.overlap(nearbySprite, this.ObjectGroup);
 
         sprite.name = "Knight";
+
+
+        this.Player.setWalkingSound(walking);
 
     }
 

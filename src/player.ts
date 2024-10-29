@@ -12,6 +12,7 @@ export default class Player {
     nearbySprite: Phaser.Physics.Arcade.Body;
 
     allowMovement: boolean;
+    walkingSound: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
     getSprite(): Phaser.GameObjects.Sprite { return this.sprite; }
     getNearbySprite(): Phaser.Physics.Arcade.Body { return this.nearbySprite; }
 
@@ -19,6 +20,10 @@ export default class Player {
         const spriteFrame = index.toString().padStart(2, '0') + '.png'
         return spriteFrame;
     }
+    setWalkingSound(walking: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound) {
+        this.walkingSound = walking;
+    }
+
     constructor(
         sprite: Phaser.GameObjects.Sprite,
         nearbySprite: Phaser.Physics.Arcade.Body,
@@ -112,7 +117,24 @@ export default class Player {
     playAnim(animName: string) {
         if (this.sprite.anims.currentAnim?.key != animName) {
             this.sprite.anims.play(animName, true);
+
+
         }
+        if (this.walkingSound) {
+            if (animName == 'stop') {
+                this.walkingSound.stop();
+            } else {
+                if (this.getBody().onFloor()) {
+                    if (!this.walkingSound.isPlaying) {
+                        this.walkingSound.play('walk')
+                    }
+                } else {
+                    this.walkingSound.stop();
+                }
+                this.walkingSound.volume = 0.2;
+            }
+        }
+
     }
     Update() {
 
