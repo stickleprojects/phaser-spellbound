@@ -3,6 +3,10 @@ import { IInventoryItem, Inventory } from "./inventory";
 import { ObjectItem } from "./scenes/objectitem";
 
 export default class Player {
+    private _teleportSound: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
+    setTeleportSound(teleport: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound) {
+        this._teleportSound = teleport;
+    }
     private sprite: Phaser.GameObjects.Sprite;
     private speed: number = 150;
     private jumpSpeed: number = -250;
@@ -79,7 +83,7 @@ export default class Player {
         this.sprite.anims.create({
             key: 'vanish',
             frames: vanishFrames,
-            frameRate: 8,
+            frameRate: 6,
             repeat: 0,
             yoyo: false
 
@@ -88,7 +92,7 @@ export default class Player {
         this.sprite.anims.create({
             key: 'appear',
             frames: vanishFrames.reverse(),
-            frameRate: 8,
+            frameRate: 5,
             repeat: 0,
 
             yoyo: false
@@ -171,19 +175,24 @@ export default class Player {
 
         this.playAnim('stop');
 
+        this._teleportSound.play('vanish', { volume: 0.2 });
+
         // play vanishing animation
         this.sprite.on('animationcomplete-vanish', () => {
+            this._teleportSound.stop();
+
             this.getBody().setVelocity(0);
             this.sprite.x = x;
             this.sprite.y = y - 10;
 
             this.repositionNearbySprite();
 
+            this._teleportSound.play('appear', { volume: 0.2 });
             this.playAnim('appear');
         })
-
         this.sprite.on('animationcomplete-appear', () => {
             this.allowMovement = oldAllowMovement;
+            this._teleportSound.stop();
             this.showHideInventoryItems(false);
         })
 

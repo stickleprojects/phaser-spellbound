@@ -409,7 +409,7 @@ export class GamePlay extends Phaser.Scene {
 
 
         let walking = this.sound.addAudioSprite('knight_walk');
-
+        let teleport = this.sound.addAudioSprite('knight_teleport');
 
         const sprite = this.physics.add.sprite(x, y, 'characters', index);
 
@@ -434,6 +434,7 @@ export class GamePlay extends Phaser.Scene {
 
 
         this.Player.setWalkingSound(walking);
+        this.Player.setTeleportSound(teleport);
 
     }
 
