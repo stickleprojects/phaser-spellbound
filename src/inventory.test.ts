@@ -1,16 +1,17 @@
 import { mock } from 'jest-mock-extended';
 import { IInventoryItem, Inventory, InventoryEmptyError, ItemAlreadyInInventoryError, ItemNotInInventoryError, ItemTooHeavyError, TooManyItemsError } from './inventory'
+import { SpellboundEmitter } from './components/customemitter';
 
 describe("Inventory Test Suite", () => {
 
     //let ownerMock: IInventoryOwner;
-    let eventEmitter: Phaser.Events.EventEmitter;
+    let eventEmitter: SpellboundEmitter;
     let maxNumberOfItems: number = 15;
     let maxTotalWeight: number = 10.5;
     beforeEach(() => {
         //ownerMock = mock<IInventoryOwner>();
 
-        eventEmitter = mock<Phaser.Events.EventEmitter>();
+        eventEmitter = mock<SpellboundEmitter>();
         maxNumberOfItems = 15;
         maxTotalWeight = 10.4;
     });
@@ -27,7 +28,7 @@ describe("Inventory Test Suite", () => {
             item.weight = 1;
             expect(i.AddItem(item).ok).toBe(true);
 
-            expect(eventEmitter.emit).toHaveBeenCalledWith("itemadded", expect.anything());
+            expect(eventEmitter.emitItemAdded).toHaveBeenCalledWith(expect.anything());
         })
         it("should error if too many items", async () => {
 
@@ -121,7 +122,7 @@ describe("Inventory Test Suite", () => {
             const result = i.RemoveItem(item)
             expect(result.ok).toBe(true);
 
-            expect(eventEmitter.emit).toHaveBeenCalledWith("itemremoved", expect.anything());
+            expect(eventEmitter.emitItemRemoved).toHaveBeenCalledWith(expect.anything());
         })
         it("should error if inventory is empty", async () => {
 
