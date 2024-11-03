@@ -1,5 +1,5 @@
 import Phaser from "phaser"
-import { IInventoryItem, InventoryEventArgs, ItemNotInInventoryError } from "../inventory";
+import { IInventoryItem, InventoryEventArgs } from "../inventory";
 import { KEYEVENT_CLOSEDIALOG, KEYEVENT_DROP_ITEM, KEYEVENT_FOLLOW_PLAYER, KEYEVENT_OPENDIALOG, KEYEVENT_PICKUP_ITEM, KEYEVENT_TELEPORT, KEYEVENT_TOGGLE_DEBUG } from "../systems/inputEventSystem";
 import { HudFlags, HudRoomInfo } from "../scenes/Hud";
 import { SceneWithData } from "../systems/dialogManager";

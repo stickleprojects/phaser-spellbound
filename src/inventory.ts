@@ -146,7 +146,7 @@ export class Inventory {
     public FindItem(predicate: (a: IInventoryItem) => boolean): IInventoryItem | undefined {
         let found: IInventoryItem | undefined = undefined;
 
-        this._items.forEach((value: IInventoryItem, key: string) => {
+        this._items.forEach((value: IInventoryItem) => {
 
             if (predicate(value)) {
                 found = value;

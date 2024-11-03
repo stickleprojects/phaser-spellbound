@@ -16,8 +16,64 @@ import { DialogManager } from '../systems/dialogManager';
 import { MenuDialogParameters } from './dialogs/MenuDialog';
 import { InventoryDialogParameters } from './dialogs/InventorySelector';
 import { MessageDialogParameters } from './dialogs/MessageDialog';
+import { DoorStateEnum, IDoor, LiftManager } from '../systems/liftManager';
+
+class DoorSprite implements IDoor {
+    private _sprite: Phaser.GameObjects.Sprite;
+
+    private _state: DoorStateEnum = DoorStateEnum.closed;
+
+    constructor(sprite: Phaser.GameObjects.Sprite) {
+        this._sprite = sprite;
+
+    }
+    get Name(): string { return this._sprite.name; }
+    OpenAsync(): Promise<boolean> {
 
 
+        return new Promise<boolean>((resolve) => {
+            if (this.isOpen) {
+                resolve(true)
+            } else {
+
+                this._sprite.play('open').once('animationcomplete-open', () => {
+                    this._state = DoorStateEnum.open;
+                    this._sprite.setVisible(false);
+                    console.log('door open', this._sprite.name);
+                    resolve(true);
+                })
+
+            }
+        });
+    }
+    CloseAsync(): Promise<boolean> {
+
+        return new Promise<boolean>((resolve) => {
+
+            if (this.isClosed) {
+                resolve(true)
+            } else {
+                this._sprite.setVisible(true);
+
+                this._sprite.play('close').once('animationcomplete-close', () => {
+                    this._state = DoorStateEnum.closed;
+
+                    console.log('door close', this._sprite.name);
+                    resolve(true);
+                })
+
+            }
+        });
+    }
+    get isOpen(): boolean {
+        return this._state == DoorStateEnum.open;
+    }
+    get isClosed(): boolean {
+        return this._state == DoorStateEnum.closed;
+    }
+
+
+}
 export class GamePlayWindowConfig {
     parent: Scene;
     x: number;
@@ -60,12 +116,15 @@ export class GamePlay extends Phaser.Scene {
     private verticalRooms: number;
     private Items: Map<string, ObjectItem>;
 
+    LiftManager: LiftManager;
     RoomNavigator: RoomNavigator;
     Player: Player;
     flags: GameFlags;
     ObjectGroup: Phaser.Physics.Arcade.Group;
     inputEventSystem: System;
     private _dialogManager: DialogManager;
+    Doors: IDoor[];
+    DoorGroup: Phaser.Physics.Arcade.StaticGroup;
 
     constructor() {
         super('GamePlay')
@@ -100,13 +159,10 @@ export class GamePlay extends Phaser.Scene {
         this.physics.world.gravity.y = 1500;
 
     }
-    create() {
+    async create() {
         this.camera = this.cameras.main
 
-
         this.setupPhysics();
-
-
 
         this.cursors = this.input.keyboard?.createCursorKeys()
         /*
@@ -155,11 +211,14 @@ export class GamePlay extends Phaser.Scene {
         this.solidLayer.setPipeline('Light2D');
 
         this.characterLayer = this.map.getObjectLayer('characters')?.objects!
-        this.map.getObjectLayer('doorobjects')?.objects!
+
         this.objectLayer = this.map.getObjectLayer('objects')?.objects!
 
         this.map.setCollisionBetween(0, 1000, true, true, 'solid');
 
+        this.createDoors(this.map.getObjectLayer('doorobjects')?.objects!);
+
+        this.LiftManager = await LiftManager.CreateAsync(this.Doors, this.input);
 
         this.createObjectSprites();
 
@@ -181,6 +240,65 @@ export class GamePlay extends Phaser.Scene {
 
 
     }
+    createDoors(doorTileObjects: Phaser.Types.Tilemaps.TiledObject[]) {
+
+
+        const objectTileHeight = 32;
+        const objectTileWidth = 16;
+
+
+        const objecthalfW = objectTileWidth / 2;
+
+
+        this.Doors = [];
+
+        this.DoorGroup = this.physics.add.staticGroup();
+
+        // create the door objects
+        doorTileObjects.forEach(o => {
+            const objectName = o.name;
+
+            const frameName = "24.png"
+            const pixelX = Math.ceil(o.x! / 16) * 16;
+            const pixelY = Math.ceil(o.y! / 16) * 16;
+
+
+            let sprite = this.physics.add.staticSprite(pixelX - objecthalfW, pixelY, 'characters', frameName);
+
+            sprite.setGravity(0, 0);
+
+            //            sprite.setOrigin(0, 0.5);
+            sprite.body.setSize(16, 32);
+
+            this.DoorGroup.add(sprite);
+            const door = new DoorSprite(sprite);
+
+            this.Doors.push(door);
+
+            sprite.name = objectName;
+            sprite.setPipeline('Light2D');
+
+            sprite.anims.create({
+                key: 'open',
+                frames: this.anims.generateFrameNames('characters', { start: 24, end: 26, suffix: ".png", zeroPad: 2 }),
+                frameRate: 10
+
+            })
+            sprite.anims.create({
+                key: 'close',
+                frames: this.anims.generateFrameNames('characters', { start: 26, end: 24, suffix: ".png", zeroPad: 2 }),
+                frameRate: 10
+
+            })
+
+        });
+
+        // ensure doors dont fall through the floor
+        this.physics.add.collider(this.DoorGroup, this.solidLayer);
+
+
+    }
+
 
     showDialog() {
 
@@ -427,8 +545,10 @@ export class GamePlay extends Phaser.Scene {
 
         this.Player = new Player(sprite, nearbySprite, this.cursors!, playerGravity, inventory);
 
-        this.physics.add.collider(sprite, this.solidLayer);
-        this.physics.add.overlap(nearbySprite, this.ObjectGroup);
+        // add collider between the player and the solid objects (note that we sometimes make things invisible, so need to ignore those)
+        this.physics.add.collider(sprite, this.solidLayer, undefined, this.ignoreInvisibleItemsCollider.bind(this));
+        this.physics.add.collider(sprite, this.DoorGroup, undefined, this.ignoreInvisibleItemsCollider.bind(this));
+        this.physics.add.overlap(nearbySprite, this.ObjectGroup, undefined, this.ignoreInvisibleItemsCollider.bind(this));
 
         sprite.name = "Knight";
 
@@ -438,6 +558,13 @@ export class GamePlay extends Phaser.Scene {
 
     }
 
+    ignoreInvisibleItemsCollider(a, b): boolean {
+
+        if (!b.visible) return false;
+        if (!a.visible) return false;
+
+        return true;
+    }
     positionCameraAccordingToRoom() {
 
         const roomCoords = this.RoomNavigator.GetRoomCoords();
@@ -458,21 +585,23 @@ export class GamePlay extends Phaser.Scene {
 
             const glowingItem = this.Player.getInventory().FindItem(i => i.stats?.glows == true);
 
-            if (roomInfo.stats.dark) {
+            if (this.flags.FollowingPlayer) {
+                if (roomInfo.stats.dark) {
 
-                if (!glowingItem) {
-                    customEmitter.emitShowMessage(['its TOO DARK in here!', 'Press ESC and make your way back'])
-                    console.log("its TOO DARK in here!");
+                    if (!glowingItem) {
+                        customEmitter.emitShowMessage(['its TOO DARK in here!', 'Press ESC and make your way back'])
+                        console.log("its TOO DARK in here!");
+                    } else {
+                        customEmitter.emitTurnOnLight(glowingItem);
+
+                        console.log("its reet dark in here!! Good job you have a glowing thing!")
+                    }
+                    this.disableAmbientLight();
                 } else {
-                    customEmitter.emitTurnOnLight(glowingItem);
-
-                    console.log("its reet dark in here!! Good job you have a glowing thing!")
-                }
-                this.disableAmbientLight();
-            } else {
-                this.enableAmbientLight();
-                if (glowingItem) {
-                    customEmitter.emitTurnOffLight(glowingItem);
+                    this.enableAmbientLight();
+                    if (glowingItem) {
+                        customEmitter.emitTurnOffLight(glowingItem);
+                    }
                 }
             }
 
@@ -612,12 +741,17 @@ export class GamePlay extends Phaser.Scene {
     }
     update(/*time, delta*/) {
 
-        this.inputEventSystem(this.world);
-        this.RoomNavigator.UpdateInput();
+        if (this.inputEventSystem) {
+            this.inputEventSystem(this.world);
+        }
+        if (this.LiftManager) {
+            this.LiftManager.Update();
+        }
+        this.RoomNavigator?.UpdateInput();
 
-        this.Player.Update();
+        this.Player?.Update();
 
-        if (this.flags.FollowingPlayer) {
+        if (this.flags?.FollowingPlayer) {
             this.showRoomThatThePlayerIsIn();
         }
 

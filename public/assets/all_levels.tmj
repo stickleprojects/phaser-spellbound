@@ -78,7 +78,7 @@
          "name":"solid",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":150,
          "x":0,
          "y":0
@@ -240,7 +240,7 @@
          "name":"background",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":150,
          "x":0,
          "y":0
@@ -670,7 +670,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -709,8 +709,8 @@
                  "type":"",
                  "visible":true,
                  "width":37,
-                 "x":1386,
-                 "y":431
+                 "x":311,
+                 "y":440
                 }, 
                 {
                  "height":19,
@@ -758,7 +758,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -790,15 +790,15 @@
                  "y":592
                 }, 
                 {
-                 "height":26,
+                 "height":32,
                  "id":48,
                  "name":"cellardoor",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":12,
-                 "x":467,
-                 "y":994
+                 "width":16,
+                 "x":467.666666666667,
+                 "y":995.666666666667
                 }, 
                 {
                  "height":32,
@@ -808,7 +808,7 @@
                  "type":"DOOR",
                  "visible":true,
                  "width":16,
-                 "x":255,
+                 "x":259.333333333333,
                  "y":275
                 }, 
                 {
@@ -819,19 +819,8 @@
                  "type":"DOOR",
                  "visible":true,
                  "width":16,
-                 "x":256,
-                 "y":435
-                }, 
-                {
-                 "height":32,
-                 "id":51,
-                 "name":"2ndfloor",
-                 "rotation":0,
-                 "type":"DOOR",
-                 "visible":true,
-                 "width":16,
-                 "x":255,
-                 "y":594
+                 "x":257.333333333333,
+                 "y":432.333333333333
                 }, 
                 {
                  "height":32,
@@ -841,8 +830,8 @@
                  "type":"DOOR",
                  "visible":true,
                  "width":16,
-                 "x":253,
-                 "y":751
+                 "x":256.333333333333,
+                 "y":752.666666666667
                 }, 
                 {
                  "height":32,
@@ -852,7 +841,7 @@
                  "type":"DOOR",
                  "visible":true,
                  "width":16,
-                 "x":256,
+                 "x":259.666666666667,
                  "y":915
                 }, 
                 {
@@ -863,8 +852,8 @@
                  "type":"DOOR",
                  "visible":true,
                  "width":16,
-                 "x":258,
-                 "y":1073
+                 "x":259.666666666667,
+                 "y":1077.33333333333
                 }, 
                 {
                  "height":32,
@@ -874,17 +863,28 @@
                  "type":"DOOR",
                  "visible":true,
                  "width":16,
-                 "x":256,
-                 "y":112
+                 "x":257.666666666667,
+                 "y":116.333333333333
+                }, 
+                {
+                 "height":32,
+                 "id":57,
+                 "name":"2ndfloor",
+                 "rotation":0,
+                 "type":"DOOR",
+                 "visible":true,
+                 "width":16,
+                 "x":258.333333333333,
+                 "y":592.666666666667
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }],
  "nextlayerid":7,
- "nextobjectid":57,
+ "nextobjectid":58,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.0",
