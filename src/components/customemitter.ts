@@ -23,13 +23,7 @@ export class GiveItemEventArgs {
     }
 }
 export class SpellboundEmitter {
-    emitGoToLift() {
-        this._events.emit(GAMEEVENT_GOTO_LIFT);
-    }
 
-    public onGotoLift(eventHander: OnEventHandler<null>): void {
-        this._events.on(GAMEEVENT_GOTO_LIFT, eventHander);
-    }
     private _events: Phaser.Events.EventEmitter;
 
     constructor() {

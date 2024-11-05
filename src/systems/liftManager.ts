@@ -24,7 +24,8 @@ export class LiftManager {
     private _doors: IDoor[];
     private _liftFloorNumber: number = 3;
     private _input: Phaser.Input.InputPlugin;
-    private _floorKeys: Phaser.Input.Keyboard.Key[];
+    private _floorKeys: Map<Phaser.Input.Keyboard.Key, number>;
+
 
     public static async CreateAsync(doors: IDoor[], input: Phaser.Input.InputPlugin): Promise<LiftManager> {
 
@@ -41,10 +42,26 @@ export class LiftManager {
         this.setupKeys();
     }
 
+
     private setupKeys(): void {
 
-        let keys: Phaser.Input.Keyboard.Key[] = [];
+        //      let keys: Phaser.Input.Keyboard.Key[] = [];
 
+        // lets map the keys to the correct floors! lol
+        let keymappings: Map<Phaser.Input.Keyboard.Key, number> = new Map<Phaser.Input.Keyboard.Key, number>();
+
+        let getIndexOfFloor = (name: string) => this._doors.findIndex((d) => d.Name == name ? true : false);
+
+
+        keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.B), getIndexOfFloor("basement"));
+        keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ZERO), getIndexOfFloor("groundfloor"));
+        keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ONE), getIndexOfFloor("1stfloor"));
+        keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.TWO), getIndexOfFloor("2ndfloor"));
+        keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.THREE), getIndexOfFloor("3rdfloor"));
+        keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR), getIndexOfFloor("4thfloor"));
+        keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.FIVE), getIndexOfFloor("roof"));
+
+        /*
         keys.push(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ONE));
         keys.push(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.TWO));
         keys.push(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.THREE));
@@ -55,8 +72,8 @@ export class LiftManager {
         keys.push(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.EIGHT));
         keys.push(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.NINE));
         keys.push(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ZERO));
-
-        this._floorKeys = keys;
+        */
+        this._floorKeys = keymappings;
 
     }
     private async closeAllDoorsAsync(): Promise<boolean> {
@@ -110,9 +127,9 @@ export class LiftManager {
 
     async Update() {
 
-        await this._floorKeys.forEach(async (k, index) => {
+        await this._floorKeys.forEach(async (number, k) => {
             if (Phaser.Input.Keyboard.JustDown(k)) {
-                await this.callLiftAsync(index);
+                await this.callLiftAsync(number);
 
             }
         })

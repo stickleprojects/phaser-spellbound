@@ -380,9 +380,7 @@ export class GamePlay extends Phaser.Scene {
     }
     private wireupEvents() {
 
-        customEmitter.onGotoLift(_ => {
-            this.movePlayerIntoLift();
-        });
+
         customEmitter.onTurnOnLight((item: IInventoryItem) => {
 
             let x = item as ObjectItem;

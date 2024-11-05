@@ -159,7 +159,7 @@
          "name":"foreground",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":150,
          "x":0,
          "y":0
@@ -240,7 +240,7 @@
          "name":"background",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":150,
          "x":0,
          "y":0
@@ -758,7 +758,51 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":7,
+         "name":"moveableWalls",
+         "objects":[
+                {
+                 "height":33,
+                 "id":62,
+                 "name":"thewall",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":18,
+                 "x":1393,
+                 "y":590.833333333333
+                }, 
+                {
+                 "height":28,
+                 "id":63,
+                 "name":"secretentrance",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":15,
+                 "x":739.083666666667,
+                 "y":914.666833333333
+                }, 
+                {
+                 "height":32,
+                 "id":64,
+                 "name":"cellardoor",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":463.249666666667,
+                 "y":991.999833333333
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -767,39 +811,6 @@
          "id":6,
          "name":"doorobjects",
          "objects":[
-                {
-                 "height":28,
-                 "id":46,
-                 "name":"secretentrance",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":15,
-                 "x":737,
-                 "y":914
-                }, 
-                {
-                 "height":33,
-                 "id":47,
-                 "name":"thewall",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":18,
-                 "x":1392,
-                 "y":592
-                }, 
-                {
-                 "height":32,
-                 "id":48,
-                 "name":"cellardoor",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":467.666666666667,
-                 "y":995.666666666667
-                }, 
                 {
                  "height":32,
                  "id":49,
@@ -905,8 +916,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":7,
- "nextobjectid":60,
+ "nextlayerid":8,
+ "nextobjectid":65,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.0",
