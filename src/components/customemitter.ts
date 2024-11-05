@@ -31,10 +31,10 @@ export class SpellboundEmitter {
 
     }
 
-    public emitCloseDialog() {
-        this._events.emit(KEYEVENT_CLOSEDIALOG);
+    public emitCloseDialog(dialogid: string | undefined) {
+        this._events.emit(KEYEVENT_CLOSEDIALOG, dialogid);
     }
-    public onCloseDialog(eventHandler: OnEventHandler<null>): void {
+    public onCloseDialog(eventHandler: OnEventHandler<string>): void {
         this._events.on(KEYEVENT_CLOSEDIALOG, eventHandler);
     }
 

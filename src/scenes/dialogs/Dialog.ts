@@ -1,5 +1,6 @@
 import { Scene } from "phaser";
 import { Rectangle } from "../../config/levelconfig";
+import { customEmitter } from "../../components/customemitter";
 
 
 export class DialogParameters {
@@ -165,6 +166,13 @@ export abstract class Dialog extends Phaser.Scene {
     }
 
 
+    override update(time: number, delta: number) {
+        // react to keypresses
+
+        if (!this.scene.isActive) return;
+
+
+    }
     abstract addControls(data: DialogParameters, innerRect: Rectangle): void;
 
 

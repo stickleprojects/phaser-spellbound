@@ -1,4 +1,6 @@
+
 export class Stack<T> {
+
     private items: T[];
     // Private array to store stack elements
 
@@ -8,6 +10,23 @@ export class Stack<T> {
         //when a new stack is created
     }
 
+    remove(predicate: (item: T) => boolean) {
+        var itemIndex = this.items.findIndex(predicate);
+        if (itemIndex >= 0) {
+            this.items.splice(itemIndex);
+        } else {
+            console.log("Cannot remove item from stack, cannot find it");
+        }
+    }
+
+    findLast(predicate: (item: T) => boolean): T | undefined {
+        return this.items.findLast(i => predicate(i));
+
+    }
+    find(predicate: (item: T) => boolean): T | undefined {
+        return this.items.find(i => predicate(i));
+
+    }
     any(predicate: (item: T) => boolean) {
         return this.items.find(i => predicate(i)) != undefined;
 

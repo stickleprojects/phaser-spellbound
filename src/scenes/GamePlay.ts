@@ -17,6 +17,7 @@ import { MenuDialogParameters } from './dialogs/MenuDialog';
 import { InventoryDialogParameters } from './dialogs/InventorySelector';
 import { MessageDialogParameters } from './dialogs/MessageDialog';
 import { DoorStateEnum, IDoor, LiftManager } from '../systems/liftManager';
+import { CommandDialogParameters } from './dialogs/CommandDialog';
 
 class DoorSprite implements IDoor {
     private _sprite: Phaser.GameObjects.Sprite;
@@ -318,7 +319,7 @@ export class GamePlay extends Phaser.Scene {
         let x = 100;
         let y = 150;
 
-        var dialogParameters = new MenuDialogParameters(this,
+        var dialogParameters = new CommandDialogParameters(this,
             new Rectangle(x, y, 400, 100),
             [
                 'p = pickup',
@@ -326,13 +327,15 @@ export class GamePlay extends Phaser.Scene {
                 'cursorkeys = move',
                 'space = show debug',
                 'f = toggle follow player',
-                't = teleport (if you carry the key)'
+                't = teleport (if you carry the key)',
+                'c = call lift'
             ]
             , true
 
         );
 
         dialogParameters.color = '0xcf6af7';
+        dialogParameters.isModal = true;
 
         this._dialogManager.showDialog('commandDialog', dialogParameters);
 
@@ -801,8 +804,6 @@ export class GamePlay extends Phaser.Scene {
         if (this.flags?.FollowingPlayer) {
             this.showRoomThatThePlayerIsIn();
         }
-
-        //this._liftDoorKnightOverlap?.update();
 
 
     }

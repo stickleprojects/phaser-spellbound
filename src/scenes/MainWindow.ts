@@ -12,7 +12,6 @@ export class MainWindow extends Scene implements ISceneManager {
     private _hudHeight = 60;
     private _copyrightHeight = 120;
     private _dialogManager: DialogManager;
-    CloseDialogKey: any;
 
 
     constructor() {
@@ -33,12 +32,14 @@ export class MainWindow extends Scene implements ISceneManager {
         this.scene.bringToTop(key);
     }
 
+    getInput(): Phaser.Input.InputPlugin {
+        return this.input;
+    }
 
-    update(time, delta) {
+    update(time: number, delta: number) {
 
-        if (Phaser.Input.Keyboard.JustDown(this.CloseDialogKey)) {
-            customEmitter.emitCloseDialog();
-        }
+
+        this._dialogManager.update(time, delta);
 
     }
 
@@ -65,6 +66,7 @@ export class MainWindow extends Scene implements ISceneManager {
 
     private closeLastDialog() {
 
+
         this._dialogManager.closeTopmost();
 
 
@@ -80,9 +82,13 @@ export class MainWindow extends Scene implements ISceneManager {
         });
 
 
-        customEmitter.onCloseDialog(() => {
-            this.closeLastDialog();
-
+        customEmitter.onCloseDialog((id: string) => {
+            if (id) {
+                console.log("Should be closing dialog", id);
+                this._dialogManager.closeDialog(id);
+            } else {
+                this.closeLastDialog();
+            }
         });
         customEmitter.onModalDialogShow((data) => {
             const s = this.getGameplayScene();
@@ -113,7 +119,7 @@ export class MainWindow extends Scene implements ISceneManager {
         var height = this.sys.game.canvas.height - this._hudHeight - this._copyrightHeight;
 
         if (!this._dialogManager) {
-            throw ("Dualogmanager not set");
+            throw ("Dialogmanager not set");
         }
         var playWindow = new GamePlayWindowConfig(this, 0, top,
             this.sys.game.canvas.width, height
@@ -149,8 +155,8 @@ export class MainWindow extends Scene implements ISceneManager {
     create() {
 
 
-        this.CloseDialogKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-
 
     }
+
+
 }
