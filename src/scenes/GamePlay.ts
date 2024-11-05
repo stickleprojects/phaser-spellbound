@@ -28,8 +28,7 @@ class DoorSprite implements IDoor {
 
     }
     GetPosition(): { x: number; y: number; } {
-        // offset the position by the sprite height
-        const y = this._sprite.y + (this._sprite.height / 2);
+
         return { x: this._sprite.x, y: this._sprite.y };
     }
     get Name(): string { return this._sprite.name; }
@@ -147,7 +146,7 @@ export class GamePlay extends Phaser.Scene {
         this.positionCameraAccordingToRoom();
 
     }
-    onFlagsChanged(args: GameFlags, propertyName: string, oldValue: any) {
+    onFlagsChanged(args: GameFlags, propertyName: string) {
 
 
         if (propertyName == 'FollowingPlayer') {
@@ -250,7 +249,7 @@ export class GamePlay extends Phaser.Scene {
     createDoors(doorTileObjects: Phaser.Types.Tilemaps.TiledObject[]) {
 
 
-        const objectTileHeight = 32;
+
         const objectTileWidth = 16;
 
 
@@ -417,7 +416,7 @@ export class GamePlay extends Phaser.Scene {
         customEmitter.onToggleFollowPlayer(() => {
             this.flags.FollowingPlayer = !this.flags.FollowingPlayer;
         })
-        customEmitter.onDropItem((itemid: string) => {
+        customEmitter.onDropItem((/*itemid: string*/) => {
             this.dropLastItem();
         })
 
@@ -573,7 +572,7 @@ export class GamePlay extends Phaser.Scene {
         this.Player.setTeleportSound(teleport);
 
     }
-    liftDoorCollision(player: any, doorSprite: any): boolean {
+    liftDoorCollision(/*player: any*/ _: any, doorSprite: any): boolean {
 
         // ignore collision if the door is not visible
         if (doorSprite.visible) return true;
@@ -585,11 +584,11 @@ export class GamePlay extends Phaser.Scene {
             // move the player sprite x,y coords in the map so they appear in the lift
             this.movePlayerIntoLift();
         } else {
-            this.liftExitCollision(player, doorSprite);
+            this.liftExitCollision(/*player, doorSprite*/);
         }
         return true;
     }
-    liftExitCollision(player: any, doorSprite: any): void {
+    liftExitCollision(/*player: any, doorSprite: any*/): void {
 
         const newLocation = this.LiftManager.GetLiftExitLocation();
         console.log("moving to ", newLocation)
@@ -606,7 +605,7 @@ export class GamePlay extends Phaser.Scene {
         this._liftDoorKnightOverlap.active = true;
     }
 
-    ignoreInvisibleItemsCollider(a, b): boolean {
+    ignoreInvisibleItemsCollider(a: any, b: any): boolean {
 
         if (!b.visible) return false;
         if (!a.visible) return false;
@@ -723,7 +722,7 @@ export class GamePlay extends Phaser.Scene {
 
         let nearObjects: Phaser.GameObjects.Sprite[] = [];
 
-        this.physics.overlap(s, this.ObjectGroup, (_, b: Phaser.Physics.Arcade.GameObjectWithBody) => {
+        this.physics.overlap(s, this.ObjectGroup, (_, b: any) => {
 
 
             nearObjects.push(b);
