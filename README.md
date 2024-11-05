@@ -127,3 +127,11 @@ All rights reserved.
 
 `https://free-tex-packer.com/app/` for splitting spritesheets and getting atlas.json
 
+
+# problems?
+
+## errors on install with npm i
+
+If you see pre-gyp problems, use this command (fedora)
+dnf install libjpeg-devel giflib-devel pixman-devel cairo-devel pango-devel
+see this link https://github.com/Automattic/node-canvas/issues/1065
