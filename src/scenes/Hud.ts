@@ -80,6 +80,8 @@ export class Hud extends Phaser.Scene {
         })
 
     }
+
+
     preload() {
 
     }
