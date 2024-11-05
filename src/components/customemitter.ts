@@ -10,6 +10,7 @@ export const GAMEEVENT_MODALDIALOG_CLOSE = 'modaldialog_close';
 export const GAMEEVENT_TURN_ON_LIGHT = "turn_on_inventorylight";
 export const GAMEEVENT_TURN_OFF_LIGHT = "turn_off_inventorylight";
 export const GAMEEVENT_GIVE_ITEM = "give_item";
+export const GAMEEVENT_GOTO_LIFT = "goto_lift";
 
 export type OnEventHandler<TARGS> = (args: TARGS) => void;
 
@@ -22,7 +23,13 @@ export class GiveItemEventArgs {
     }
 }
 export class SpellboundEmitter {
+    emitGoToLift() {
+        this._events.emit(GAMEEVENT_GOTO_LIFT);
+    }
 
+    public onGotoLift(eventHander: OnEventHandler<null>): void {
+        this._events.on(GAMEEVENT_GOTO_LIFT, eventHander);
+    }
     private _events: Phaser.Events.EventEmitter;
 
     constructor() {

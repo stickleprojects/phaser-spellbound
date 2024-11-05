@@ -709,8 +709,8 @@
                  "type":"",
                  "visible":true,
                  "width":37,
-                 "x":311,
-                 "y":440
+                 "x":300.333333333333,
+                 "y":417.666666666667
                 }, 
                 {
                  "height":19,
@@ -863,8 +863,30 @@
                  "type":"DOOR",
                  "visible":true,
                  "width":16,
-                 "x":257.666666666667,
-                 "y":116.333333333333
+                 "x":258.666666666667,
+                 "y":115.333333333333
+                }, 
+                {
+                 "height":16.3333333333333,
+                 "id":58,
+                 "name":"LiftEntrance",
+                 "rotation":0,
+                 "type":"DOOR",
+                 "visible":true,
+                 "width":16,
+                 "x":226,
+                 "y":122
+                }, 
+                {
+                 "height":16.3333333333333,
+                 "id":59,
+                 "name":"LiftExit",
+                 "rotation":0,
+                 "type":"DOOR",
+                 "visible":true,
+                 "width":16,
+                 "x":246.333333333334,
+                 "y":121.333333333333
                 }, 
                 {
                  "height":32,
@@ -884,7 +906,7 @@
          "y":0
         }],
  "nextlayerid":7,
- "nextobjectid":58,
+ "nextobjectid":60,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.0",

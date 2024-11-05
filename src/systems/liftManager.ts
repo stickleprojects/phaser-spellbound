@@ -6,6 +6,7 @@ export enum DoorStateEnum {
 }
 
 export interface IDoor {
+    GetPosition(): { x: number; y: number; };
 
     get Name(): string;
     OpenAsync(): Promise<boolean>;
@@ -17,6 +18,9 @@ export interface IDoor {
 
 export class LiftManager {
 
+    private _liftEntrance: IDoor;
+
+
     private _doors: IDoor[];
     private _liftFloorNumber: number = 3;
     private _input: Phaser.Input.InputPlugin;
@@ -26,13 +30,14 @@ export class LiftManager {
 
         const x = new LiftManager(doors, input);
         await x.closeAllDoorsAsync();
+
         return x;
     }
     private constructor(doors: IDoor[], input: Phaser.Input.InputPlugin) {
 
         this._input = input;
-        this._doors = doors;
-
+        this._doors = doors.filter(d => d.Name.toLowerCase() != 'liftentrance');
+        this._liftEntrance = doors.find(d => d.Name.toLowerCase() == 'liftentrance')!;
         this.setupKeys();
     }
 
@@ -74,6 +79,15 @@ export class LiftManager {
             });
     }
 
+    GetLiftEntranceLocation(): { x: number, y: number } {
+
+        return this._liftEntrance.GetPosition();
+    }
+
+    GetLiftExitLocation(): { x: number, y: number } {
+        return this._doors[this._liftFloorNumber].GetPosition();
+
+    }
     async callLiftAsync(floorNumber: number): Promise<boolean> {
         return new Promise<boolean>(async (resolve, reject) => {
 

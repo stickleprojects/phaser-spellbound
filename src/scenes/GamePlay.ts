@@ -27,6 +27,11 @@ class DoorSprite implements IDoor {
         this._sprite = sprite;
 
     }
+    GetPosition(): { x: number; y: number; } {
+        // offset the position by the sprite height
+        const y = this._sprite.y + (this._sprite.height / 2);
+        return { x: this._sprite.x, y: this._sprite.y };
+    }
     get Name(): string { return this._sprite.name; }
     OpenAsync(): Promise<boolean> {
 
@@ -125,6 +130,8 @@ export class GamePlay extends Phaser.Scene {
     private _dialogManager: DialogManager;
     Doors: IDoor[];
     DoorGroup: Phaser.Physics.Arcade.StaticGroup;
+    private _liftDoorKnightOverlap: Phaser.Physics.Arcade.Collider;
+
 
     constructor() {
         super('GamePlay')
@@ -256,8 +263,9 @@ export class GamePlay extends Phaser.Scene {
 
         // create the door objects
         doorTileObjects.forEach(o => {
-            const objectName = o.name;
+            const objectName = o.name.toLocaleLowerCase();
 
+            console.log("Creating lift ", objectName)
             const frameName = "24.png"
             const pixelX = Math.ceil(o.x! / 16) * 16;
             const pixelY = Math.ceil(o.y! / 16) * 16;
@@ -270,7 +278,13 @@ export class GamePlay extends Phaser.Scene {
             //            sprite.setOrigin(0, 0.5);
             sprite.body.setSize(16, 32);
 
-            this.DoorGroup.add(sprite);
+
+            if (objectName != "liftentrance") {
+                this.DoorGroup.add(sprite);
+            }
+            if ((objectName == "liftentrance") || (objectName == "liftexit")) {
+                sprite.setVisible(false);
+            }
             const door = new DoorSprite(sprite);
 
             this.Doors.push(door);
@@ -295,7 +309,6 @@ export class GamePlay extends Phaser.Scene {
 
         // ensure doors dont fall through the floor
         this.physics.add.collider(this.DoorGroup, this.solidLayer);
-
 
     }
 
@@ -367,6 +380,9 @@ export class GamePlay extends Phaser.Scene {
     }
     private wireupEvents() {
 
+        customEmitter.onGotoLift(_ => {
+            this.movePlayerIntoLift();
+        });
         customEmitter.onTurnOnLight((item: IInventoryItem) => {
 
             let x = item as ObjectItem;
@@ -548,6 +564,8 @@ export class GamePlay extends Phaser.Scene {
         // add collider between the player and the solid objects (note that we sometimes make things invisible, so need to ignore those)
         this.physics.add.collider(sprite, this.solidLayer, undefined, this.ignoreInvisibleItemsCollider.bind(this));
         this.physics.add.collider(sprite, this.DoorGroup, undefined, this.ignoreInvisibleItemsCollider.bind(this));
+        this._liftDoorKnightOverlap = this.physics.add.overlap(sprite, this.DoorGroup, undefined, this.liftDoorCollision, this);
+
         this.physics.add.overlap(nearbySprite, this.ObjectGroup, undefined, this.ignoreInvisibleItemsCollider.bind(this));
 
         sprite.name = "Knight";
@@ -556,6 +574,38 @@ export class GamePlay extends Phaser.Scene {
         this.Player.setWalkingSound(walking);
         this.Player.setTeleportSound(teleport);
 
+    }
+    liftDoorCollision(player: any, doorSprite: any): boolean {
+
+        // ignore collision if the door is not visible
+        if (doorSprite.visible) return true;
+
+        //disable the collider
+        if (doorSprite.name != 'liftexit') {
+            this._liftDoorKnightOverlap.active = false;
+
+            // move the player sprite x,y coords in the map so they appear in the lift
+            this.movePlayerIntoLift();
+        } else {
+            this.liftExitCollision(player, doorSprite);
+        }
+        return true;
+    }
+    liftExitCollision(player: any, doorSprite: any): void {
+
+        const newLocation = this.LiftManager.GetLiftExitLocation();
+        console.log("moving to ", newLocation)
+
+        this.Player.moveTo(newLocation.x + 20, newLocation.y);
+
+    }
+    movePlayerIntoLift() {
+        const newLocation = this.LiftManager.GetLiftEntranceLocation();
+
+        console.log("moving to ", newLocation)
+
+        this.Player.moveTo(newLocation.x, newLocation.y);
+        this._liftDoorKnightOverlap.active = true;
     }
 
     ignoreInvisibleItemsCollider(a, b): boolean {
@@ -612,7 +662,6 @@ export class GamePlay extends Phaser.Scene {
 
         if (!this.Player.getBody().onFloor()) {
             return;
-
         }
         if (!this.Player.getInventory().HasItem("teleportkey")) {
             console.error("you arent carrying the teleport key");
@@ -640,7 +689,7 @@ export class GamePlay extends Phaser.Scene {
 
         console.log("moving to ", newLocation)
 
-        this.Player.moveTo(newLocation.x, newLocation.y);
+        this.Player.teleportTo(newLocation.x, newLocation.y);
 
     }
     init(data: GamePlayWindowConfig) {
@@ -741,6 +790,7 @@ export class GamePlay extends Phaser.Scene {
     }
     update(/*time, delta*/) {
 
+
         if (this.inputEventSystem) {
             this.inputEventSystem(this.world);
         }
@@ -754,6 +804,8 @@ export class GamePlay extends Phaser.Scene {
         if (this.flags?.FollowingPlayer) {
             this.showRoomThatThePlayerIsIn();
         }
+
+        //this._liftDoorKnightOverlap?.update();
 
 
     }

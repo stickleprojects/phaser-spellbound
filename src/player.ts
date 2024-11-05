@@ -4,6 +4,7 @@ import { ObjectItem } from "./scenes/objectitem";
 
 export default class Player {
     private _teleportSound: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
+    private _moving: any;
     setTeleportSound(teleport: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound) {
         this._teleportSound = teleport;
     }
@@ -166,8 +167,34 @@ export default class Player {
 
             this.repositionNearbySprite();
         }
+
     }
+
+
     moveTo(x: number, y: number) {
+
+        if (this._moving) return;
+
+        this._moving = true;
+
+        const oldAllowMovement = this.allowMovement;
+        this.allowMovement = false;
+        this.getBody().setVelocityX(0);
+
+        this.playAnim('stop');
+
+
+        this.getBody().setVelocity(0);
+        this.sprite.x = x;
+        this.sprite.y = y - 10;
+
+        this.repositionNearbySprite();
+
+        this._moving = false;
+        this.allowMovement = oldAllowMovement;
+
+    }
+    teleportTo(x: number, y: number) {
 
         const oldAllowMovement = this.allowMovement;
         this.allowMovement = false;
