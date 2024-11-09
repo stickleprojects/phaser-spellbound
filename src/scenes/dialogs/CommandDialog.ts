@@ -11,7 +11,7 @@ export class CommandDialog extends MenuDialog {
 
     }
 
-    override init(data: MenuDialogParameters): void {
+    override init(data: CommandDialogParameters): void {
         super.init(data);
     }
 

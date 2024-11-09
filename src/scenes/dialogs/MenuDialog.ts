@@ -20,9 +20,15 @@ export class MenuDialog extends Dialog {
     private _itemHeight: number = 20;
     private _itemGapBetween: number = 1;
     private _itemGapLeft: number = 10;
+
+    private _selectedItemPointer: Phaser.GameObjects.Sprite;
+    private _selectedItemIndex = 0;
+
+
     constructor(id: string = 'menudialog1') {
         super(id)
     }
+
 
     protected calculateDimensions(data: MenuDialogParameters): Rectangle {
 
@@ -33,6 +39,8 @@ export class MenuDialog extends Dialog {
     }
 
     init(data: MenuDialogParameters) {
+
+        this._selectedItemPointer = this.add.sprite(0, 0, 'finger', 0);
 
         let newData = data;
         if (data.autosize) {
@@ -61,7 +69,13 @@ export class MenuDialog extends Dialog {
         return borderHeight + this._itemGapTop + (itemCount * this._itemHeight) + ((itemCount - 1) * this._itemGapBetween);
     }
 
+    private updateSelectedItemPosition(): void {
+        if (this._selectedItemIndex >= this._menuItems.length) return;
 
+        let si = - this._menuItems[this._selectedItemIndex];
+
+        this._selectedItemPointer.setPosition(si.x, si.y);
+    }
     addControls(data: MenuDialogParameters, innerRect: Rectangle) {
 
         console.log(data);
@@ -84,5 +98,13 @@ export class MenuDialog extends Dialog {
         const item = this.add.text(x, y, itemdata, { color: c });
 
         return item;
+    }
+
+    override update(time: number, delta: number): void {
+        super.update(time, delta);
+
+        this.updateSelectedItemPosition();
+
+
     }
 }
