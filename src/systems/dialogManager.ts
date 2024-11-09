@@ -2,6 +2,7 @@ import { Scene } from "phaser";
 import { Dialog, DialogParameters } from "../scenes/dialogs/Dialog";
 import { Stack } from "./stack";
 import { customEmitter } from "../components/customemitter";
+import { MenuDialog } from "../scenes/dialogs/MenuDialog";
 
 export class SceneWithData {
     scene: Phaser.Scene;
@@ -32,7 +33,8 @@ export class DialogManager {
     private _dialogQueue: Stack<SceneWithData>;
 
     CloseDialogKey: Phaser.Input.Keyboard.Key | undefined;
-
+    SelectPreviousItem: Phaser.Input.Keyboard.ke | undefined;
+    SelectNextItem: Phaser.Input.Keyboard.ke | undefined;
 
     constructor(sceneManager: ISceneManager) {
 
@@ -53,6 +55,32 @@ export class DialogManager {
         }
     }
 
+    selectNextItem() {
+        if (this._dialogQueue.isEmpty()) return;
+
+        let d: SceneWithData | undefined = this._dialogQueue.peek();
+        if (d) {
+            let xx = d.scene as MenuDialog;
+
+            if (xx) {
+                xx.SelectedItemIndex++;
+
+            }
+        }
+    }
+    selectPreviousItem() {
+        if (this._dialogQueue.isEmpty()) return;
+
+        let d: SceneWithData | undefined = this._dialogQueue.peek();
+        if (d) {
+            let xx = d.scene as MenuDialog;
+
+            if (xx) {
+                xx.SelectedItemIndex--;
+
+            }
+        }
+    }
     closeTopmost() {
         if (this._dialogQueue.isEmpty()) return;
 
@@ -147,6 +175,16 @@ export class DialogManager {
         if (!this.CloseDialogKey) {
             this.CloseDialogKey = this._sceneManager.getInput().keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         }
+        if (!this.SelectPreviousItem) {
+            this.SelectPreviousItem = this._sceneManager.getInput().keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+
+        }
+
+
+        if (!this.SelectNextItem) {
+            this.SelectNextItem = this._sceneManager.getInput().keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+
+        }
 
         let d: SceneWithData | undefined = this._dialogQueue.peek();
         if (d) {
@@ -156,6 +194,20 @@ export class DialogManager {
         if (Phaser.Input.Keyboard.JustDown(this.CloseDialogKey!)) {
 
             this.closeTopmost();
+
+        }
+
+
+        if (Phaser.Input.Keyboard.JustDown(this.SelectPreviousItem!)) {
+
+            this.selectPreviousItem();
+
+        }
+
+
+        if (Phaser.Input.Keyboard.JustDown(this.SelectNextItem!)) {
+
+            this.selectNextItem();
 
         }
 

@@ -21,8 +21,8 @@ export class MenuDialog extends Dialog {
     private _itemGapBetween: number = 1;
     private _itemGapLeft: number = 10;
 
-    private _selectedItemPointer: Phaser.GameObjects.Sprite;
     private _selectedItemIndex = 0;
+    SelectionIndicator: Phaser.GameObjects.Rectangle;
 
 
     constructor(id: string = 'menudialog1') {
@@ -40,7 +40,7 @@ export class MenuDialog extends Dialog {
 
     init(data: MenuDialogParameters) {
 
-        this._selectedItemPointer = this.add.sprite(0, 0, 'finger', 0);
+
 
         let newData = data;
         if (data.autosize) {
@@ -69,13 +69,45 @@ export class MenuDialog extends Dialog {
         return borderHeight + this._itemGapTop + (itemCount * this._itemHeight) + ((itemCount - 1) * this._itemGapBetween);
     }
 
-    private updateSelectedItemPosition(): void {
-        if (this._selectedItemIndex >= this._menuItems.length) return;
-
-        let si = - this._menuItems[this._selectedItemIndex];
-
-        this._selectedItemPointer.setPosition(si.x, si.y);
+    private deselectAllItems() {
+        this._menuItems.forEach(t => {
+            t.setBackgroundColor('#0');
+        })
     }
+
+    private selectFirstMenuItem() {
+        let idx = this._menuItems.findIndex(x => x.text.length > 0);
+        this.SelectedItemIndex = idx;
+
+    }
+    private selectItem(idx: number) {
+        const safeIdx = Phaser.Math.Clamp(idx, 0, this._menuItems.length - 1)
+        if (!this.SelectionIndicator) return;
+
+
+        //this._menuItems[this._selectedItemIndex].setBackgroundColor('#202020');
+        let s = this._menuItems[safeIdx];
+
+        if (!s) {
+            console.log('cannot selectitem', idx, ' menuitems entry was null');
+            return;
+        }
+        this.SelectionIndicator.setPosition(0, s.y);
+    }
+    set SelectedItemIndex(value: number) {
+        if (value >= this._menuItems.length) value = this._menuItems.length;
+
+        if (value != this._selectedItemIndex) {
+            this.deselectAllItems()
+        }
+        this._selectedItemIndex = value;
+        this.selectItem(this._selectedItemIndex)
+    }
+    get SelectedItemIndex() {
+        return this._selectedItemIndex;
+    }
+
+
     addControls(data: MenuDialogParameters, innerRect: Rectangle) {
 
         console.log(data);
@@ -90,6 +122,15 @@ export class MenuDialog extends Dialog {
             return item;
 
         });
+
+        this.SelectedItemIndex = 0;
+
+        this.SelectionIndicator = this.add.rectangle(0, 0, innerRect.width, itemHeight);
+        this.SelectionIndicator.setOrigin(0, 0);
+        this.SelectionIndicator.setStrokeStyle(2, Phaser.Display.Color.GetColor(200, 200, 200))
+        this.SelectionIndicator.setAlpha(0.5);
+
+        this.selectFirstMenuItem();
     }
     createMenuItem(itemdata: string, x: number, y: number): Phaser.GameObjects.Text {
 
@@ -102,8 +143,6 @@ export class MenuDialog extends Dialog {
 
     override update(time: number, delta: number): void {
         super.update(time, delta);
-
-        this.updateSelectedItemPosition();
 
 
     }
