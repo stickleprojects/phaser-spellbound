@@ -516,6 +516,17 @@ export class GamePlay extends Phaser.Scene {
 
                 if (itemInfo.stats?.glows) {
                     const objectLight = this.lights.addLight(pixelX, pixelY, 50, 0xfcc603, 5);
+                    // sprite.setPipeline('L');
+
+                    const fx = sprite.postFX?.addGlow(0xffffff, 0, 0, false, 0.1, 6);
+
+                    this.tweens.add({
+                        targets: fx,
+                        outerStrength: 2,
+                        yoyo: true,
+                        loop: -1,
+                        ease: 'sine.inout'
+                    });
 
                     newitem.light = objectLight;
 
