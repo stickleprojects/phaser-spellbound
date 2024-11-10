@@ -731,7 +731,7 @@ export class GamePlay extends Phaser.Scene {
             nearObjects.push(b);
         });
 
-        console.log(nearObjects);
+        console.log("nearby objects", nearObjects);
 
         let nearbyItems: ObjectItem[] = [];
         // map the objects into items
@@ -741,7 +741,11 @@ export class GamePlay extends Phaser.Scene {
             if (item) {
                 if (!item.owner) {
                     nearbyItems.push(item);
+                } else {
+                    console.log("Found item", item.name, " but it has an owner already");
                 }
+            } else {
+                console.error("couldnt identify the item from its name", o.name);
             }
         })
         return nearbyItems;
@@ -751,10 +755,9 @@ export class GamePlay extends Phaser.Scene {
 
         if (nearbyItems.length == 0) {
             // no items
+            console.log("nothing nearby to pick up");
         } else {
             let itemToPickup = nearbyItems[0];
-
-            itemToPickup.setOwner(this.Player.getInventory());
 
             let result = this.Player.getInventory().AddItem(itemToPickup);
             if (result.ok) {
@@ -772,8 +775,6 @@ export class GamePlay extends Phaser.Scene {
         } else {
             // drop the last item
             let lastItem = items[items.length - 1];
-
-            lastItem.setOwner(undefined);
 
             this.Player.getInventory().RemoveItem(lastItem);
 

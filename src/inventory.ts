@@ -12,8 +12,7 @@ export interface IInventoryItem {
     weight: number;
     name: string;
     description: string;
-    owner?: Inventory;
-
+    get owner(): Inventory | undefined;
     stats?: ItemStats;
 
     setOwner(owner?: Inventory): void;
@@ -186,7 +185,7 @@ export class Inventory {
         }
 
         this._items.set(item.id, item);
-        item.owner = this;
+        item.setOwner(this);
         this._eventEmitter.emitItemAdded(new InventoryEventArgs(this, item));
 
         return { ok: true, value: true };
@@ -219,7 +218,8 @@ export class Inventory {
         }
 
         this._items.delete(item.id);
-        item.owner = undefined;
+        item.setOwner(undefined);
+
         this._eventEmitter.emitItemRemoved(new InventoryEventArgs(this, item));
         return { ok: true, value: true };
     }
