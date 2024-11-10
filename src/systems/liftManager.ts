@@ -113,7 +113,8 @@ export class LiftManager {
             }
             if (floorNumber == this._liftFloorNumber) {
                 console.log('lift already here!');
-                reject("Already on that floor");
+                reject(false);
+                return;
             }
             console.log("moving lift to floor", floorNumber);
 
