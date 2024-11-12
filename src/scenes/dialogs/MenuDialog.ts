@@ -6,6 +6,8 @@ export class MenuDialogParameters extends DialogParameters {
     menuitems: string[]
     autosize: boolean = true
 
+    allowSelection: boolean = false
+
     constructor(parent: Scene, dims: Rectangle, menuitems: string[], autosize: boolean = true, promise?: Promise<string>) {
         super(parent, dims, promise)
 
@@ -22,7 +24,7 @@ export class MenuDialog extends Dialog {
     private _itemGapLeft: number = 10;
 
     private _selectedItemIndex = 0;
-    SelectionIndicator: Phaser.GameObjects.Rectangle;
+    private _selectionIndicator: Phaser.GameObjects.Rectangle;
 
 
     constructor(id: string = 'menudialog1') {
@@ -76,13 +78,15 @@ export class MenuDialog extends Dialog {
     }
 
     private selectFirstMenuItem() {
+        if (!this._selectionIndicator) return;
+
         let idx = this._menuItems.findIndex(x => x.text.length > 0);
         this.SelectedItemIndex = idx;
 
     }
     private selectItem(idx: number) {
         const safeIdx = Phaser.Math.Clamp(idx, 0, this._menuItems.length - 1)
-        if (!this.SelectionIndicator) return;
+        if (!this._selectionIndicator) return;
 
 
         //this._menuItems[this._selectedItemIndex].setBackgroundColor('#202020');
@@ -92,7 +96,7 @@ export class MenuDialog extends Dialog {
             console.log('cannot selectitem', idx, ' menuitems entry was null');
             return;
         }
-        this.SelectionIndicator.setPosition(0, s.y);
+        this._selectionIndicator.setPosition(0, s.y);
     }
     set SelectedItemIndex(value: number) {
         if (value >= this._menuItems.length) value = this._menuItems.length;
@@ -110,7 +114,6 @@ export class MenuDialog extends Dialog {
 
     addControls(data: MenuDialogParameters, innerRect: Rectangle) {
 
-        console.log(data);
 
         const itemHeight = this._itemHeight;
         let y = innerRect.y + this._itemGapTop;
@@ -125,11 +128,12 @@ export class MenuDialog extends Dialog {
 
         this.SelectedItemIndex = 0;
 
-        this.SelectionIndicator = this.add.rectangle(0, 0, innerRect.width, itemHeight);
-        this.SelectionIndicator.setOrigin(0, 0);
-        this.SelectionIndicator.setStrokeStyle(2, Phaser.Display.Color.GetColor(200, 200, 200))
-        this.SelectionIndicator.setAlpha(0.5);
-
+        if (data.allowSelection) {
+            this._selectionIndicator = this.add.rectangle(0, 0, innerRect.width, itemHeight);
+            this._selectionIndicator.setOrigin(0, 0);
+            this._selectionIndicator.setStrokeStyle(2, Phaser.Display.Color.GetColor(200, 200, 200))
+            this._selectionIndicator.setAlpha(0.5);
+        }
         this.selectFirstMenuItem();
     }
     createMenuItem(itemdata: string, x: number, y: number): Phaser.GameObjects.Text {
