@@ -1,6 +1,5 @@
-
-import { Door, IDoor, IDoorSprite, LiftManager } from './liftManager';
-import { mock } from 'jest-mock-extended';
+import { IDoor, LiftManager } from './liftManager';
+import { any, mock } from 'jest-mock-extended';
 
 describe("door test", () => {
     describe('close', () => {
@@ -42,10 +41,15 @@ describe("lift manager test", () => {
 
         let doors: IDoor[] = [];
 
-        const d = mock<IDoor>();
+        const d = mock<IDoor>({ Name: 'door1' });
         doors.push(d);
 
-        await LiftManager.CreateAsync(doors);
+
+        const im = mock<Phaser.Input.InputPlugin>();
+        const kb = mock<Phaser.Input.Keyboard.KeyboardPlugin>();
+        kb.addKey.calledWith(any()).mockReturnValue(mock<Phaser.Input.Keyboard.Key>());
+        im.keyboard = kb;
+        await LiftManager.CreateAsync(doors, im);
 
         expect(d.CloseAsync).toHaveBeenCalled();
 
@@ -55,20 +59,24 @@ describe("lift manager test", () => {
         it('should close the other doors', async () => {
             let doors: IDoor[] = [];
 
-            const md1 = mock<IDoor>();
+            const md1 = mock<IDoor>({ Name: 'door1' });
             mock(md1).CloseAsync.mockReturnValue(Promise.resolve(true));
 
-            const md2 = mock<IDoor>();
+            const md2 = mock<IDoor>({ Name: 'door2' });
             mock(md2).CloseAsync.mockReturnValue(Promise.resolve(true));
 
-            const md3 = mock<IDoor>();
+            const md3 = mock<IDoor>({ Name: 'door3' });
             mock(md3).CloseAsync.mockReturnValue(Promise.resolve(true));
 
             doors.push(md1);
             doors.push(md2);
             doors.push(md3);
 
-            const sut = await LiftManager.CreateAsync(doors);
+            const im = mock<Phaser.Input.InputPlugin>();
+            const kb = mock<Phaser.Input.Keyboard.KeyboardPlugin>();
+            kb.addKey.calledWith(any()).mockReturnValue(mock<Phaser.Input.Keyboard.Key>());
+            im.keyboard = kb;
+            const sut = await LiftManager.CreateAsync(doors, im);
             await sut.callLiftAsync(2);
 
             doors.forEach(d => expect(d.CloseAsync).toHaveBeenCalled());

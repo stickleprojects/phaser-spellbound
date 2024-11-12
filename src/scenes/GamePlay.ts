@@ -13,7 +13,6 @@ import { InputEventSystem } from '../systems/inputEventSystem';
 import { GameFlags } from './GameFlags';
 import { ObjectItem } from './objectitem';
 import { DialogManager } from '../systems/dialogManager';
-import { MenuDialogParameters } from './dialogs/MenuDialog';
 import { InventoryDialogParameters } from './dialogs/InventorySelector';
 import { MessageDialogParameters } from './dialogs/MessageDialog';
 import { DoorStateEnum, IDoor, LiftManager } from '../systems/liftManager';
