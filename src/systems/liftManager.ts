@@ -167,10 +167,11 @@ export class LiftManager {
 
     }
     async callLiftAsync(floorNumber: number): Promise<boolean> {
-        const that = this;
 
         return this.closeAllDoorsAsync()
-            .then((_) => {
+            .then((b: boolean) => {
+
+                if (!b) return false;
 
                 return new Promise<boolean>(async (resolve, reject) => {
                     if (floorNumber >= this._doors.length) {
