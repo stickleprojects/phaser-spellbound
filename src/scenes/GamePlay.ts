@@ -16,7 +16,7 @@ import { DialogManager } from '../systems/dialogManager';
 import { InventoryDialogParameters } from './dialogs/InventorySelector';
 import { MessageDialogParameters } from './dialogs/MessageDialog';
 import { DoorStateEnum, IDoor, LiftManager } from '../systems/liftManager';
-import { CommandDialogParameters } from './dialogs/CommandDialog';
+import { CommandDialogParameters, CommandItem } from './dialogs/CommandDialog';
 
 class DoorSprite implements IDoor {
     private _sprite: Phaser.GameObjects.Sprite;
@@ -224,7 +224,8 @@ export class GamePlay extends Phaser.Scene {
 
         this.createDoors(this.map.getObjectLayer('doorobjects')?.objects!);
 
-        this.LiftManager = await LiftManager.CreateAsync(this.Doors, this.input);
+
+        this.LiftManager = await LiftManager.CreateAsync(this.Doors, this.input, this.sound);
 
         this.createObjectSprites();
 
@@ -321,13 +322,35 @@ export class GamePlay extends Phaser.Scene {
         var dialogParameters = new CommandDialogParameters(this,
             new Rectangle(x, y, 400, 100),
             [
-                'p = pickup',
-                'x = drop',
-                'cursorkeys = move',
-                'space = show debug',
-                'f = toggle follow player',
-                't = teleport (if you carry the key)',
-                'c = call lift'
+                new CommandItem('p. pickup', (_) => {
+                    this._dialogManager.closeTopmost();
+                    this.pickupNearestItem();
+
+                }),
+                new CommandItem('x. drop', (_) => {
+                    this._dialogManager.closeTopmost();
+                    this.dropLastItem();
+                }),
+                //new CommandItem('cursorkeys = move', (_) => console.log('on cursorkeys')),
+                new CommandItem('Show debug', (_) => {
+                    this._dialogManager.closeTopmost();
+
+                    customEmitter.emitToggleDebug();
+                }),
+                new CommandItem('Toggle follow player', (_) => {
+                    this._dialogManager.closeTopmost();
+
+                    customEmitter.emitToggleFollowPlayer();
+                }),
+                new CommandItem('Teleport (if you carry the key)', (_) => {
+                    this._dialogManager.closeTopmost();
+                    customEmitter.emitTeleport();
+                }),
+                new CommandItem('c = call lift', (_) => {
+                    this._dialogManager.closeTopmost();
+                    customEmitter.emitCallLift();
+
+                })
             ]
             , true
 
@@ -382,6 +405,13 @@ export class GamePlay extends Phaser.Scene {
     private wireupEvents() {
 
 
+        customEmitter.onCallLift(async (_) => {
+            const playerFloor = this.LiftManager.GetClosestLiftLocation(this.Player.getSprite().y);
+
+            if (!playerFloor) return;
+
+            await this.LiftManager.callLiftAsync(playerFloor)
+        })
         customEmitter.onTurnOnLight((item: IInventoryItem) => {
 
             let x = item as ObjectItem;
@@ -404,7 +434,6 @@ export class GamePlay extends Phaser.Scene {
 
         customEmitter.onOpenDialog(() => {
             this.showDialog();
-            this.showInventory();
         });
 
         customEmitter.OnTeleport(() => {

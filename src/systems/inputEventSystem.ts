@@ -16,7 +16,7 @@ export function InputEventSystem(input: Phaser.Input.InputPlugin) {
     const ToggleDebugKey: Phaser.Input.Keyboard.Key = input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     const ToggleFollowingPlayerKey: Phaser.Input.Keyboard.Key = input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.F);
 
-    const OpenDialogKey: Phaser.Input.Keyboard.Key = input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+    const OpenDialogKey: Phaser.Input.Keyboard.Key = input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.R);
     const TeleportKey: Phaser.Input.Keyboard.Key = input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.T);
 
 
@@ -30,6 +30,7 @@ export function InputEventSystem(input: Phaser.Input.InputPlugin) {
         }
 
         if (Phaser.Input.Keyboard.JustDown(OpenDialogKey)) {
+
             customEmitter.emitOpenDialogs();
         }
 

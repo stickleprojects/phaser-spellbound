@@ -90,7 +90,7 @@ export class Preloader extends Phaser.Scene {
 
         this.load.audioSprite('knight_walk', 'sounds/knight_sounds.json', 'sounds/knight_step_wood.mp3');
         this.load.audioSprite('knight_teleport', 'sounds/teleport-sound.json', 'sounds/teleport-sound-with-reverse.mp3');
-
+        this.load.audio('lift_move', 'sounds/elevator-33034.mp3');
         this.load.atlas('objects', ['objectsprites.png', 'default_normal_map.png'], 'objectsprites.json') // { frameWidth: 16, frameHeight: 32 });
         this.load.spritesheet('knight_smoke', 'knight_smoke.png', { frameWidth: 16, frameHeight: 32 });
 

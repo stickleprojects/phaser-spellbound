@@ -35,6 +35,7 @@ export class DialogManager {
     CloseDialogKey: Phaser.Input.Keyboard.Key | undefined;
     SelectPreviousItem: Phaser.Input.Keyboard.ke | undefined;
     SelectNextItem: Phaser.Input.Keyboard.ke | undefined;
+    ActionCurrentItemKey: Phaser.Input.Keyboard.Key | undefined;
 
     constructor(sceneManager: ISceneManager) {
 
@@ -55,7 +56,14 @@ export class DialogManager {
         }
     }
 
-    selectNextItem() {
+    actionCurrentItem() {
+
+        this.doCommandOnCurrentDialogScene((tgt: MenuDialog) => tgt.ActionCurrentItem());
+
+    }
+
+    doCommandOnCurrentDialogScene(cmd: (tgt: MenuDialog) => void) {
+
         if (this._dialogQueue.isEmpty()) return;
 
         let d: SceneWithData | undefined = this._dialogQueue.peek();
@@ -63,25 +71,21 @@ export class DialogManager {
             let xx = d.scene as MenuDialog;
 
             if (xx) {
-                xx.SelectedItemIndex++;
-
+                cmd(xx);
             }
         }
+    }
+    selectNextItem() {
+        this.doCommandOnCurrentDialogScene((tgt) => tgt.SelectedItemIndex++);
+
     }
     selectPreviousItem() {
-        if (this._dialogQueue.isEmpty()) return;
+        this.doCommandOnCurrentDialogScene((tgt) => tgt.SelectedItemIndex--);
 
-        let d: SceneWithData | undefined = this._dialogQueue.peek();
-        if (d) {
-            let xx = d.scene as MenuDialog;
-
-            if (xx) {
-                xx.SelectedItemIndex--;
-
-            }
-        }
     }
     closeTopmost() {
+
+
         if (this._dialogQueue.isEmpty()) return;
 
         let d: SceneWithData | undefined = this._dialogQueue.peek();
@@ -97,6 +101,7 @@ export class DialogManager {
     closeScene(s: SceneWithData) {
         console.log("shutting dialog ", s.scene);
         this._sceneManager.stop(s.scene);
+
         this._dialogQueue.remove(x => x.scene._id == s.scene._id);
 
         if (s?.data.isModal) {
@@ -137,6 +142,7 @@ export class DialogManager {
     showDialog<T extends Dialog>(id: string, dparams: DialogParameters): T | undefined {
 
 
+
         let existingScene = this._sceneManager.getScene(id);
         if (existingScene) {
             this._sceneManager.bringToTop(id);
@@ -144,9 +150,19 @@ export class DialogManager {
         }
 
 
+
         this._sceneManager.start(id, dparams);
 
         this._sceneManager.bringToTop(id);
+
+        this.CloseDialogKey = this._sceneManager.getInput().keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+        this.SelectPreviousItem = this._sceneManager.getInput().keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+        this.ActionCurrentItemKey = this._sceneManager.getInput().keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+        this.SelectNextItem = this._sceneManager.getInput().keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+
+
+        this.CloseDialogKey!.isDown = false;
+        this.ActionCurrentItemKey!.isDown = false;
 
         existingScene = this._sceneManager.getScene(id)
         if (existingScene) {
@@ -172,44 +188,42 @@ export class DialogManager {
 
     update(time: number, delta: number) {
         if (this._dialogQueue.isEmpty()) return;
-        if (!this.CloseDialogKey) {
-            this.CloseDialogKey = this._sceneManager.getInput().keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-        }
-        if (!this.SelectPreviousItem) {
-            this.SelectPreviousItem = this._sceneManager.getInput().keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
-
-        }
-
-
-        if (!this.SelectNextItem) {
-            this.SelectNextItem = this._sceneManager.getInput().keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
-
-        }
 
         let d: SceneWithData | undefined = this._dialogQueue.peek();
+
+        if (!d?.scene.scene.isActive) return;
+
         if (d) {
             d.update(time, delta);
         }
 
         if (Phaser.Input.Keyboard.JustDown(this.CloseDialogKey!)) {
 
+            this._sceneManager.getInput().keyboard?.resetKeys();
+
+
             this.closeTopmost();
 
-        }
+        } else
+            if (Phaser.Input.Keyboard.JustDown(this.SelectPreviousItem!)) {
 
+                this.selectPreviousItem();
 
-        if (Phaser.Input.Keyboard.JustDown(this.SelectPreviousItem!)) {
+            } else
+                if (Phaser.Input.Keyboard.JustDown(this.ActionCurrentItemKey!)) {
 
-            this.selectPreviousItem();
+                    this._sceneManager.getInput().keyboard?.resetKeys();
 
-        }
+                    this.actionCurrentItem();
 
+                } else
 
-        if (Phaser.Input.Keyboard.JustDown(this.SelectNextItem!)) {
+                    if (Phaser.Input.Keyboard.JustDown(this.SelectNextItem!)) {
 
-            this.selectNextItem();
+                        this.selectNextItem();
 
-        }
+                    }
 
     }
+
 }

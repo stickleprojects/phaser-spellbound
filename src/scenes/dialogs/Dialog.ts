@@ -1,6 +1,5 @@
 import { Scene } from "phaser";
 import { Rectangle } from "../../config/levelconfig";
-import { customEmitter } from "../../components/customemitter";
 
 
 export class DialogParameters {
@@ -100,8 +99,6 @@ export abstract class Dialog extends Phaser.Scene {
     }
     create() {
 
-
-
         this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
 
             if (this._topLeft) {
@@ -146,6 +143,8 @@ export abstract class Dialog extends Phaser.Scene {
                 this._leftBorder = undefined;
             }
 
+            this.destroyControls();
+
         });
 
     }
@@ -174,6 +173,7 @@ export abstract class Dialog extends Phaser.Scene {
 
     }
     abstract addControls(data: DialogParameters, innerRect: Rectangle): void;
+    abstract destroyControls();
 
 
 }

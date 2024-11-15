@@ -3,12 +3,12 @@ import { Rectangle } from "../../config/levelconfig";
 import { Dialog, DialogParameters } from "./Dialog";
 
 export class MenuDialogParameters extends DialogParameters {
-    menuitems: string[]
+    menuitems: any[]
     autosize: boolean = true
 
     allowSelection: boolean = false
 
-    constructor(parent: Scene, dims: Rectangle, menuitems: string[], autosize: boolean = true, promise?: Promise<string>) {
+    constructor(parent: Scene, dims: Rectangle, menuitems: any[], autosize: boolean = true, promise?: Promise<string>) {
         super(parent, dims, promise)
 
         this.menuitems = menuitems;
@@ -16,6 +16,7 @@ export class MenuDialogParameters extends DialogParameters {
     }
 }
 export class MenuDialog extends Dialog {
+
     private _menuItems: Phaser.GameObjects.Text[];
 
     private _itemGapTop: number = 10;
@@ -25,6 +26,7 @@ export class MenuDialog extends Dialog {
 
     private _selectedItemIndex = 0;
     private _selectionIndicator: Phaser.GameObjects.Rectangle;
+    protected _data: MenuDialogParameters;
 
 
     constructor(id: string = 'menudialog1') {
@@ -56,7 +58,7 @@ export class MenuDialog extends Dialog {
 
     protected calcWidthOfMenuItems(data: MenuDialogParameters): number {
 
-        const maxChars = data.menuitems.reduce((a: number, b: string) => b.length > a ? b.length : a, 0);
+        const maxChars = data.menuitems.reduce((a: number, b: string) => b.toString().length > a ? b.toString().length : a, 0);
 
         const charWidth = 10;
         const borderWidth = data.tileWidth * 2;
@@ -80,7 +82,7 @@ export class MenuDialog extends Dialog {
     private selectFirstMenuItem() {
         if (!this._selectionIndicator) return;
 
-        let idx = this._menuItems.findIndex(x => x.text.length > 0);
+        let idx = this._menuItems.findIndex(x => x.text.toString().length > 0);
         this.SelectedItemIndex = idx;
 
     }
@@ -98,6 +100,10 @@ export class MenuDialog extends Dialog {
         }
         this._selectionIndicator.setPosition(0, s.y);
     }
+
+    protected ActionCurrentItem(): void {
+        // do nowt
+    }
     set SelectedItemIndex(value: number) {
         if (value >= this._menuItems.length) value = this._menuItems.length;
 
@@ -111,9 +117,13 @@ export class MenuDialog extends Dialog {
         return this._selectedItemIndex;
     }
 
+    override destroyControls() {
 
+    }
     addControls(data: MenuDialogParameters, innerRect: Rectangle) {
 
+
+        this._data = data;
 
         const itemHeight = this._itemHeight;
         let y = innerRect.y + this._itemGapTop;
@@ -136,11 +146,11 @@ export class MenuDialog extends Dialog {
         }
         this.selectFirstMenuItem();
     }
-    createMenuItem(itemdata: string, x: number, y: number): Phaser.GameObjects.Text {
+    createMenuItem(itemdata: any, x: number, y: number): Phaser.GameObjects.Text {
 
         const c = this._borderTint.replace('0x', '#');
 
-        const item = this.add.text(x, y, itemdata, { color: c });
+        const item = this.add.text(x, y, itemdata.toString(), { color: c });
 
         return item;
     }

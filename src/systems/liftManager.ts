@@ -16,33 +16,86 @@ export interface IDoor {
 
 }
 
+class DoorPositionRange {
+
+    min_y: number;
+    max_y: number;
+    door: IDoor;
+
+    constructor(miny: number, maxy: number, door: IDoor) {
+        this.min_y = miny;
+        this.max_y = maxy;
+        this.door = door;
+    }
+}
 export class LiftManager {
 
     private _liftEntrance: IDoor;
-
-
+    private _doorsWithRanges: DoorPositionRange[];
     private _doors: IDoor[];
     private _liftFloorNumber: number = 3;
     private _input: Phaser.Input.InputPlugin;
     private _floorKeys: Map<Phaser.Input.Keyboard.Key, number>;
+    private _sound: Phaser.Sound.NoAudioSoundManager | Phaser.Sound.HTML5AudioSoundManager | Phaser.Sound.WebAudioSoundManager;
 
 
-    public static async CreateAsync(doors: IDoor[], input: Phaser.Input.InputPlugin): Promise<LiftManager> {
+    public static async CreateAsync(doors: IDoor[], input: Phaser.Input.InputPlugin, sound: Phaser.Sound.NoAudioSoundManager | Phaser.Sound.HTML5AudioSoundManager | Phaser.Sound.WebAudioSoundManager): Promise<LiftManager> {
 
-        const x = new LiftManager(doors, input);
+
+        const x = new LiftManager(doors, input, sound);
         await x.closeAllDoorsAsync();
 
         return x;
     }
-    private constructor(doors: IDoor[], input: Phaser.Input.InputPlugin) {
+    private constructor(doors: IDoor[], input: Phaser.Input.InputPlugin, sound: Phaser.Sound.NoAudioSoundManager | Phaser.Sound.HTML5AudioSoundManager | Phaser.Sound.WebAudioSoundManager) {
 
         this._input = input;
-        this._doors = doors.filter(d => d.Name.toLowerCase() != 'liftentrance');
+
+        const doorsWithoutLiftEntrance = doors.filter(d => d.Name.toLowerCase() != 'liftentrance');
+        this._doors = this.sortTheDoorsIntoFloorOrder(doorsWithoutLiftEntrance);
         this._liftEntrance = doors.find(d => d.Name.toLowerCase() == 'liftentrance')!;
         this.setupKeys();
+        this.setupDoorsAndRanges();
+
+        this._sound = sound;
+
     }
 
+    private setupDoorsAndRanges() {
 
+        const sortedDoors = this._doors.toSorted((a, b) => (a.GetPosition().y - b.GetPosition().y));
+
+        let ret: DoorPositionRange[] = [];
+        let prevY: number = 0;
+        sortedDoors.forEach((d, idx) => {
+            const dy = d.GetPosition().y;
+            if (idx == 0) {
+
+                ret.push(new DoorPositionRange(0, dy, d));
+            } else {
+                ret.push(new DoorPositionRange(prevY + 1, dy, d));
+            }
+            prevY = dy;
+        });
+
+        this._doorsWithRanges = ret;
+    }
+
+    private sortTheDoorsIntoFloorOrder(doors: IDoor[]) {
+        const floorNames = [
+            "roof",
+            "4thfloor",
+            "3rdfloor",
+            "2ndfloor",
+            "1stfloor",
+            "groundfloor",
+            "basement",
+        ];
+
+        const sortedDoors = doors.toSorted((a, b) => floorNames.indexOf(a.Name) - floorNames.indexOf(b.Name));
+
+        return sortedDoors;
+    }
     private setupKeys(): void {
 
         //      let keys: Phaser.Input.Keyboard.Key[] = [];
@@ -101,27 +154,42 @@ export class LiftManager {
         return this._liftEntrance.GetPosition();
     }
 
+    GetClosestLiftLocation(y: number): number | undefined {
+        const closestDoor = this._doorsWithRanges.find(d => d.min_y <= y && d.max_y >= y);
+        if (closestDoor) {
+            return this._doors.indexOf(closestDoor.door);
+        }
+        return undefined;
+    }
+
     GetLiftExitLocation(): { x: number, y: number } {
         return this._doors[this._liftFloorNumber].GetPosition();
 
     }
     async callLiftAsync(floorNumber: number): Promise<boolean> {
-        return new Promise<boolean>(async (resolve, reject) => {
+        const that = this;
 
-            if (floorNumber >= this._doors.length) {
-                console.error("cannot go to that floor, max is ", this._doors.length)
-            }
-            if (floorNumber == this._liftFloorNumber) {
-                console.log('lift already here!');
-                reject(false);
-                return;
-            }
-            console.log("moving lift to floor", floorNumber);
+        return this.closeAllDoorsAsync()
+            .then((_) => {
 
-            await this.openDoorAsync(floorNumber);
-            this._liftFloorNumber = floorNumber;
-            resolve(true);
-        })
+                return new Promise<boolean>(async (resolve, reject) => {
+                    if (floorNumber >= this._doors.length) {
+                        console.error("cannot go to that floor, max is ", this._doors.length)
+                    }
+                    console.log("moving lift to floor", floorNumber);
+
+                    const s = this._sound.add('lift_move')
+                        .on(Phaser.Sound.Events.COMPLETE, async () => {
+                            await this.openDoorAsync(floorNumber);
+                            this._liftFloorNumber = floorNumber;
+                            resolve(true);
+
+                        });
+
+                    s.play();
+                })
+
+            })
     }
     get LiftFloorNumber(): number { return this._liftFloorNumber; }
 

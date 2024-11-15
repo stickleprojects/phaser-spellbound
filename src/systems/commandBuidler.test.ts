@@ -35,8 +35,10 @@ describe('pickup command tests', () => {
 describe('commandbuilder tests', () => {
 
     it('should pause the main screen', async () => {
+        const cp = mock<ICommandPresenter>();
+        const cs = mock<ICommandExecutor>();
 
-        let cb = new CommandBuilder();
+        let cb = new CommandBuilder(cp, cs);
 
         // cb is a statemachine
         return cb.GetInventoryItemId()

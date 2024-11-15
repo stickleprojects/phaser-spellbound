@@ -11,6 +11,7 @@ export const GAMEEVENT_TURN_ON_LIGHT = "turn_on_inventorylight";
 export const GAMEEVENT_TURN_OFF_LIGHT = "turn_off_inventorylight";
 export const GAMEEVENT_GIVE_ITEM = "give_item";
 export const GAMEEVENT_GOTO_LIFT = "goto_lift";
+export const GAMEEVENT_CALL_LIFT = "call_lift";
 
 export type OnEventHandler<TARGS> = (args: TARGS) => void;
 
@@ -81,6 +82,12 @@ export class SpellboundEmitter {
     }
     public emitTeleport(): void {
         this._events.emit(KEYEVENT_TELEPORT);
+    }
+    public emitCallLift(): void {
+        this._events.emit(GAMEEVENT_CALL_LIFT);
+    }
+    public onCallLift(eventHander: OnEventHandler<void>): void {
+        this._events.on(GAMEEVENT_CALL_LIFT, eventHander);
     }
     public emitDropItem(id: string): void {
         this._events.emit(KEYEVENT_DROP_ITEM, id);
