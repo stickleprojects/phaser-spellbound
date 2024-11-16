@@ -122,3 +122,29 @@ Created by [Phaser Studio](mailto:support@phaser.io). Powered by coffee, anime, 
 The Phaser logo and characters are &copy; 2011 - 2024 Phaser Studio Inc.
 
 All rights reserved.
+
+# external refs
+
+`https://free-tex-packer.com/app/` for splitting spritesheets and getting atlas.json
+
+
+# problems?
+
+## errors on install with npm i
+
+If you see pre-gyp problems, use this command (fedora)
+dnf install libjpeg-devel giflib-devel pixman-devel cairo-devel pango-devel
+see this link https://github.com/Automattic/node-canvas/issues/1065
+
+## lines/artefacts on sprite images
+bleeding edges  - see https://github.com/sporadic-labs/tile-extruder#readme
+```
+npm install --save-dev tile-extruder
+npx tile-extruder --tileWidth 16 --tileHeight 16 --input ./public/assets/c64tiles.png --output ./public/assets/c64tiles-extruded.png
+```
+
+
+## credits
+
+sound:
+https://pixabay.com/sound-effects/search/lift/?pagi=2

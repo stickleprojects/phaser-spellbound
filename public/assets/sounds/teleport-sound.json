@@ -1,0 +1,17 @@
+{
+    "resources": [
+        "./assets/sounds/teleport-sound.mp3"
+    ],
+    "spritemap": {
+        "vanish": {
+            "start": 0,
+            "end": 3,
+            "loop": false
+        },
+        "appear": {
+            "start": 4,
+            "end": 8,
+            "loop": false
+        }
+    }
+}

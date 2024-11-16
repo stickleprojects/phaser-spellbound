@@ -19,11 +19,11 @@ export class InventoryPanel extends BottomPanel {
     }
     create() {
 
-        customEmitter.on('itemadded', (args: InventoryEventArgs) => {
+        customEmitter.onItemAdded((args: InventoryEventArgs) => {
             this._inventory = args.inventory
             this.showInventory();
         })
-        customEmitter.on('itemremoved', (args: InventoryEventArgs) => {
+        customEmitter.onItemRemoved((args: InventoryEventArgs) => {
             this._inventory = args.inventory
             this.showInventory();
         })

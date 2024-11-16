@@ -26,6 +26,8 @@ export class RoomStats extends Stats {
 }
 export class ItemStats extends Stats {
     weight: number
+    glows: boolean
+
 }
 
 export class Character {

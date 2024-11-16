@@ -1,6 +1,7 @@
 // Allows someone to carry something
 
-import { customEmitter } from "./components/customemitter";
+import { customEmitter, SpellboundEmitter } from "./components/customemitter";
+import { ItemStats } from "./config/configentities";
 
 export interface IInventoryOwner {
 
@@ -11,7 +12,11 @@ export interface IInventoryItem {
     weight: number;
     name: string;
     description: string;
-    owner?: Inventory;
+    get owner(): Inventory | undefined;
+    stats?: ItemStats;
+
+    setOwner(owner?: Inventory): void;
+
 }
 export class TemplateString {
     private _template: string;
@@ -118,13 +123,13 @@ export class Inventory {
 
     private _items: Map<string, IInventoryItem>;
 
-    private _eventEmitter: Phaser.Events.EventEmitter;
+    private _eventEmitter: SpellboundEmitter;
 
     constructor(
         //owner: IInventoryOwner,
         maxNumberOfItems: number,
         maxTotalWeight: number,
-        eventEmitter?: Phaser.Events.EventEmitter
+        eventEmitter?: SpellboundEmitter
 
     ) {
 
@@ -135,6 +140,20 @@ export class Inventory {
 
         this._items = new Map<string, IInventoryItem>();
 
+    }
+
+    public FindItem(predicate: (a: IInventoryItem) => boolean): IInventoryItem | undefined {
+        let found: IInventoryItem | undefined = undefined;
+
+        this._items.forEach((value: IInventoryItem) => {
+
+            if (predicate(value)) {
+                found = value;
+                return;
+            }
+        });
+
+        return found;
     }
 
     public AddItem(item: IInventoryItem): Result<boolean, InventoryError> {
@@ -166,8 +185,8 @@ export class Inventory {
         }
 
         this._items.set(item.id, item);
-        item.owner = this;
-        this._eventEmitter.emit("itemadded", new InventoryEventArgs(this, item));
+        item.setOwner(this);
+        this._eventEmitter.emitItemAdded(new InventoryEventArgs(this, item));
 
         return { ok: true, value: true };
     }
@@ -199,8 +218,9 @@ export class Inventory {
         }
 
         this._items.delete(item.id);
-        item.owner = undefined;
-        this._eventEmitter.emit("itemremoved", new InventoryEventArgs(this, item));
+        item.setOwner(undefined);
+
+        this._eventEmitter.emitItemRemoved(new InventoryEventArgs(this, item));
         return { ok: true, value: true };
     }
 }

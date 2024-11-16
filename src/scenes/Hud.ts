@@ -70,16 +70,18 @@ export class Hud extends Phaser.Scene {
 
         this.cameras.main.setViewport(data.x, data.y, data.width, data.height);
 
-        customEmitter.on('screenmov', (args: HudRoomInfo) => {
+        customEmitter.onScreenMove((args: HudRoomInfo) => {
             this.updateRoomLocation(args);
 
-        }, this)
-        customEmitter.on('updateflags', (args: HudFlags) => {
+        })
+        customEmitter.onUpdateFlags((args: HudFlags) => {
             this.updateFlags(args);
 
-        }, this)
+        })
 
     }
+
+
     preload() {
 
     }
@@ -92,7 +94,8 @@ export class Hud extends Phaser.Scene {
         ];
         const Following_instructionText = [
             'Instructions:      Use Arrow Keys to walk about, Press F to toggle walking/screens',
-            '                   P=Pickup object, X = Drop last object, SPACE=debug'
+            '                   P=Pickup object, X = Drop last object, SPACE=debug',
+            '                   (B,0-5) = Move lift to a floor (note that 3 is the start floor)'
 
         ];
 
