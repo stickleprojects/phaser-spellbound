@@ -37,6 +37,7 @@ export class LiftManager {
     private _input: Phaser.Input.InputPlugin;
     private _floorKeys: Map<Phaser.Input.Keyboard.Key, number>;
     private _sound: Phaser.Sound.NoAudioSoundManager | Phaser.Sound.HTML5AudioSoundManager | Phaser.Sound.WebAudioSoundManager;
+    private _liftInteriorDoor: IDoor;
 
 
     public static async CreateAsync(doors: IDoor[], input: Phaser.Input.InputPlugin, sound: Phaser.Sound.NoAudioSoundManager | Phaser.Sound.HTML5AudioSoundManager | Phaser.Sound.WebAudioSoundManager): Promise<LiftManager> {
@@ -54,6 +55,7 @@ export class LiftManager {
         const doorsWithoutLiftEntrance = doors.filter(d => d.Name.toLowerCase() != 'liftentrance');
         this._doors = this.sortTheDoorsIntoFloorOrder(doorsWithoutLiftEntrance);
         this._liftEntrance = doors.find(d => d.Name.toLowerCase() == 'liftentrance')!;
+        this._liftInteriorDoor = doors.find(d => d.Name.toLowerCase() == 'liftexit')!
         this.setupKeys();
         this.setupDoorsAndRanges();
 
@@ -142,9 +144,14 @@ export class LiftManager {
         console.log('closing all lift doors');
         return this.closeAllDoorsAsync()
             .then(async () => {
-                const d = this._doors[index];
-                console.log('opening lift', d.Name);
-                return await d.OpenAsync();
+                const floorDoor = this._doors[index];
+                console.log('opening lift', floorDoor.Name);
+                return await floorDoor.OpenAsync()
+                    .then(async () => {
+                        console.log('opening lift', this._liftInteriorDoor.Name);
+                        return await this._liftInteriorDoor.OpenAsync()
+
+                    });
 
             });
     }

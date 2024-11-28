@@ -282,7 +282,7 @@ export class GamePlay extends Phaser.Scene {
             if (objectName != "liftentrance") {
                 this.DoorGroup.add(sprite);
             }
-            if ((objectName == "liftentrance") || (objectName == "liftexit")) {
+            if ((objectName == "liftentrance")) {
                 sprite.setVisible(false);
             }
             const door = new DoorSprite(sprite);
