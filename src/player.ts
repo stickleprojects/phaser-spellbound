@@ -131,7 +131,7 @@ export default class Player {
             } else {
                 if (this.getBody().onFloor()) {
                     if (!this.walkingSound.isPlaying) {
-                        this.walkingSound.play('walk')
+                        this.walkingSound.play('walk');
                     }
                 } else {
                     this.walkingSound.stop();

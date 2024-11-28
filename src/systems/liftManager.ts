@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { customEmitter } from "../components/customemitter";
 
 export enum DoorStateEnum {
     closed,
@@ -183,13 +184,19 @@ export class LiftManager {
                 return new Promise<boolean>(async (resolve, reject) => {
                     if (floorNumber >= this._doors.length) {
                         console.error("cannot go to that floor, max is ", this._doors.length)
+
+                        resolve(true);
+                        return;
                     }
                     console.log("moving lift to floor", floorNumber);
+                    customEmitter.emitLiftIsMoving();
 
                     const s = this._sound.add('lift_move')
                         .on(Phaser.Sound.Events.COMPLETE, async () => {
                             await this.openDoorAsync(floorNumber);
                             this._liftFloorNumber = floorNumber;
+                            customEmitter.emitLiftArrived();
+
                             resolve(true);
 
                         });

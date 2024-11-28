@@ -12,6 +12,8 @@ export const GAMEEVENT_TURN_OFF_LIGHT = "turn_off_inventorylight";
 export const GAMEEVENT_GIVE_ITEM = "give_item";
 export const GAMEEVENT_GOTO_LIFT = "goto_lift";
 export const GAMEEVENT_CALL_LIFT = "call_lift";
+export const GAMEEVENT_LIFT_ARRIVED = "lift_arrived";
+export const GAMEEVENT_LIFT_MOVING = "lift_moving";
 
 export type OnEventHandler<TARGS> = (args: TARGS) => void;
 
@@ -30,6 +32,13 @@ export class SpellboundEmitter {
     constructor() {
         this._events = new Phaser.Events.EventEmitter();
 
+    }
+
+    emitLiftArrived() {
+        this._events.emit(GAMEEVENT_LIFT_ARRIVED);
+    }
+    emitLiftIsMoving() {
+        this._events.emit(GAMEEVENT_LIFT_MOVING);
     }
 
     public emitCloseDialog(dialogid: string | undefined) {
@@ -79,6 +88,12 @@ export class SpellboundEmitter {
     }
     public OnTeleport(eventHander: OnEventHandler<null>): void {
         this._events.on(KEYEVENT_TELEPORT, eventHander);
+    }
+    public OnLiftMoving(eventHander: OnEventHandler<null>): void {
+        this._events.on(GAMEEVENT_LIFT_MOVING, eventHander);
+    }
+    public OnLiftArrived(eventHander: OnEventHandler<null>): void {
+        this._events.on(GAMEEVENT_LIFT_ARRIVED, eventHander);
     }
     public emitTeleport(): void {
         this._events.emit(KEYEVENT_TELEPORT);

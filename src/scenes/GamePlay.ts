@@ -412,6 +412,12 @@ export class GamePlay extends Phaser.Scene {
 
             await this.LiftManager.callLiftAsync(playerFloor)
         })
+        customEmitter.OnLiftArrived(() => {
+            console.log("on lift arrived");
+        })
+        customEmitter.OnLiftMoving(() => {
+            console.log("on lift moving");
+        })
         customEmitter.onTurnOnLight((item: IInventoryItem) => {
 
             let x = item as ObjectItem;

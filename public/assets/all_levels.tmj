@@ -439,17 +439,6 @@
                 }, 
                 {
                  "height":15,
-                 "id":18,
-                 "name":"teleportpad",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":14,
-                 "x":1843,
-                 "y":441
-                }, 
-                {
-                 "height":15,
                  "id":19,
                  "name":"advert",
                  "rotation":0,
@@ -667,6 +656,17 @@
                  "width":21,
                  "x":541.5,
                  "y":606.5
+                }, 
+                {
+                 "height":15,
+                 "id":65,
+                 "name":"teleportpad",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":14,
+                 "x":337.333333333333,
+                 "y":443.5
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -885,8 +885,8 @@
                  "type":"DOOR",
                  "visible":true,
                  "width":16,
-                 "x":226,
-                 "y":122
+                 "x":216.333333333333,
+                 "y":129.333333333333
                 }, 
                 {
                  "height":31.3333333333333,
@@ -917,7 +917,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":65,
+ "nextobjectid":66,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.0",
