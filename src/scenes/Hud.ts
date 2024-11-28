@@ -94,8 +94,7 @@ export class Hud extends Phaser.Scene {
         ];
         const Following_instructionText = [
             'Instructions:      Use Arrow Keys to walk about, Press F to toggle walking/screens',
-            '                   P=Pickup object, X = Drop last object, SPACE=debug',
-            '                   (B,0-5) = Move lift to a floor (note that 3 is the start floor)'
+            '                   R = Menu',
 
         ];
 

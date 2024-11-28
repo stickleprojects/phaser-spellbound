@@ -639,7 +639,7 @@ export class GamePlay extends Phaser.Scene {
         const newLocation = this.LiftManager.GetLiftExitLocation();
         console.log("moving to ", newLocation)
 
-        this.Player.moveTo(newLocation.x + 20, newLocation.y);
+        this.Player.moveTo(newLocation.x + 20, newLocation.y + 16);
 
     }
     movePlayerIntoLift() {
