@@ -17,6 +17,7 @@ import { InventoryDialogParameters } from './dialogs/InventorySelector';
 import { MessageDialogParameters } from './dialogs/MessageDialog';
 import { DoorStateEnum, IDoor, LiftManager } from '../systems/liftManager';
 import { CommandDialogParameters, CommandItem } from './dialogs/CommandDialog';
+import { LiftControlPanel } from './LiftControlPanel';
 
 class DoorSprite implements IDoor {
     private _sprite: Phaser.GameObjects.Sprite;
@@ -130,6 +131,7 @@ export class GamePlay extends Phaser.Scene {
     Doors: IDoor[];
     DoorGroup: Phaser.Physics.Arcade.StaticGroup;
     private _liftDoorKnightOverlap: Phaser.Physics.Arcade.Collider;
+    private _liftControlPanel: LiftControlPanel;
 
 
     constructor() {
@@ -218,8 +220,17 @@ export class GamePlay extends Phaser.Scene {
 
         this.characterLayer = this.map.getObjectLayer('characters')?.objects!
 
+
+
         this.objectLayer = this.map.getObjectLayer('objects')?.objects!
 
+        let pnl = this.objectLayer.find(x => x.name == '#lift-control-panel');
+
+        if (!pnl) {
+            throw "Cannot find #lift-control-panel in the objectlayer"
+        } else {
+            this._liftControlPanel = new LiftControlPanel(this, pnl.x!, pnl.y!);
+        }
         this.map.setCollisionBetween(0, 1000, true, true, 'solid');
 
         this.createDoors(this.map.getObjectLayer('doorobjects')?.objects!);
@@ -269,7 +280,6 @@ export class GamePlay extends Phaser.Scene {
             const frameName = "24.png"
             const pixelX = Math.ceil(o.x! / 16) * 16;
             const pixelY = Math.ceil(o.y! / 16) * 16;
-
 
             let sprite = this.physics.add.staticSprite(pixelX - objecthalfW, pixelY, 'characters', frameName);
 
@@ -527,7 +537,9 @@ export class GamePlay extends Phaser.Scene {
 
             const mapWidth = objectTilemapWidth;
             if (!itemInfo) {
-                console.log("Failed to find object " + objectName);
+                if (!objectName.startsWith('#')) {
+                    console.log("Failed to find object " + objectName);
+                }
             } else {
 
                 let firstImage = itemInfo.images[0];

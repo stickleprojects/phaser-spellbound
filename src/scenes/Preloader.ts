@@ -85,6 +85,8 @@ export class Preloader extends Phaser.Scene {
         this.load.tilemapTiledJSON('levels', 'all_levels.tmj')
         this.load.image('map_foreground', 'c64tiles_foreground.png')
         this.load.image('map_background', 'c64tiles.png')
+        this.load.image('lift-control-panel', 'c64spritesheets/lift-panel1.png');
+
         this.load.spritesheet('finger', 'finger2.png', { frameWidth: 32, frameHeight: 32 })
         //        this.load.audio('knight1', 'sounds/0.mp3',);
 

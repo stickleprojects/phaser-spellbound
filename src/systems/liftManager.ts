@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { customEmitter } from "../components/customemitter";
+import { customEmitter, LiftArrivedEventArgs, LiftMovingEventArgs } from "../components/customemitter";
 
 export enum DoorStateEnum {
     closed,
@@ -117,18 +117,6 @@ export class LiftManager {
         keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR), getIndexOfFloor("4thfloor"));
         keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.FIVE), getIndexOfFloor("roof"));
 
-        /*
-        keys.push(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ONE));
-        keys.push(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.TWO));
-        keys.push(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.THREE));
-        keys.push(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR));
-        keys.push(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.FIVE));
-        keys.push(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SIX));
-        keys.push(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SEVEN));
-        keys.push(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.EIGHT));
-        keys.push(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.NINE));
-        keys.push(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ZERO));
-        */
         this._floorKeys = keymappings;
 
     }
@@ -189,13 +177,13 @@ export class LiftManager {
                         return;
                     }
                     console.log("moving lift to floor", floorNumber);
-                    customEmitter.emitLiftIsMoving();
+                    customEmitter.emitLiftIsMoving(new LiftMovingEventArgs(this._liftFloorNumber, floorNumber));
 
                     const s = this._sound.add('lift_move')
                         .on(Phaser.Sound.Events.COMPLETE, async () => {
                             await this.openDoorAsync(floorNumber);
                             this._liftFloorNumber = floorNumber;
-                            customEmitter.emitLiftArrived();
+                            customEmitter.emitLiftArrived(new LiftArrivedEventArgs(floorNumber));
 
                             resolve(true);
 

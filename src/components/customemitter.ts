@@ -17,6 +17,20 @@ export const GAMEEVENT_LIFT_MOVING = "lift_moving";
 
 export type OnEventHandler<TARGS> = (args: TARGS) => void;
 
+export class LiftMovingEventArgs {
+    fromFloor: number;
+    toFloor: number;
+    constructor(fromFloor: number, toFloor: number) {
+        this.fromFloor = fromFloor;
+        this.toFloor = toFloor;
+    }
+}
+export class LiftArrivedEventArgs {
+    onFloor: number;
+    constructor(onFloor: number) {
+        this.onFloor = onFloor;
+    }
+}
 export class GiveItemEventArgs {
     itemId: string;
     characterId: string;
@@ -34,11 +48,11 @@ export class SpellboundEmitter {
 
     }
 
-    emitLiftArrived() {
-        this._events.emit(GAMEEVENT_LIFT_ARRIVED);
+    emitLiftArrived(args: LiftArrivedEventArgs) {
+        this._events.emit(GAMEEVENT_LIFT_ARRIVED, args);
     }
-    emitLiftIsMoving() {
-        this._events.emit(GAMEEVENT_LIFT_MOVING);
+    emitLiftIsMoving(args: LiftMovingEventArgs) {
+        this._events.emit(GAMEEVENT_LIFT_MOVING, args);
     }
 
     public emitCloseDialog(dialogid: string | undefined) {
@@ -89,10 +103,10 @@ export class SpellboundEmitter {
     public OnTeleport(eventHander: OnEventHandler<null>): void {
         this._events.on(KEYEVENT_TELEPORT, eventHander);
     }
-    public OnLiftMoving(eventHander: OnEventHandler<null>): void {
+    public OnLiftMoving(eventHander: OnEventHandler<LiftMovingEventArgs>): void {
         this._events.on(GAMEEVENT_LIFT_MOVING, eventHander);
     }
-    public OnLiftArrived(eventHander: OnEventHandler<null>): void {
+    public OnLiftArrived(eventHander: OnEventHandler<LiftArrivedEventArgs>): void {
         this._events.on(GAMEEVENT_LIFT_ARRIVED, eventHander);
     }
     public emitTeleport(): void {
