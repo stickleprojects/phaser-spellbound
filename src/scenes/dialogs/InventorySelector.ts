@@ -1,15 +1,15 @@
-import { MenuDialogParameters, MenuDialog } from "./MenuDialog";
+import { CommandDialog, CommandDialogParameters, CommandItem } from "./CommandDialog";
 
-export class InventoryDialogParameters extends MenuDialogParameters {
+export class InventoryDialogParameters extends CommandDialogParameters {
 
-    constructor(parent: Scene, dims: Rectangle, menuitems: string[], autosize: boolean = true, promise?: Promise<string>) {
+    constructor(parent: Scene, dims: Rectangle, menuitems: CommandItem[], autosize: boolean = true, promise?: Promise<string>) {
         super(parent, dims, menuitems, autosize, promise);
 
 
         this.allowSelection = true;
     }
 }
-export class InventoryDialog extends MenuDialog {
+export class InventoryDialog extends CommandDialog {
 
     constructor() {
         super('inventoryDialog');

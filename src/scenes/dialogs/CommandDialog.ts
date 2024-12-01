@@ -18,7 +18,7 @@ export class CommandDialogParameters extends MenuDialogParameters {
 
     isModal: boolean = true;
 
-    constructor(parent: Scene, dims: Rectangle, menuitems: any[], autosize: boolean = true, promise?: Promise<string>) {
+    constructor(parent: Scene, dims: Rectangle, menuitems: CommandItem[], autosize: boolean = true, promise?: Promise<string>) {
         super(parent, dims, menuitems, autosize, promise);
 
 
@@ -27,8 +27,8 @@ export class CommandDialogParameters extends MenuDialogParameters {
 }
 export class CommandDialog extends MenuDialog {
 
-    constructor() {
-        super('commandDialog');
+    constructor(id: string | undefined) {
+        super(id ?? 'commandDialog');
 
     }
 
