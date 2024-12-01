@@ -134,6 +134,8 @@ export class GamePlay extends Phaser.Scene {
     private _dialogManager: DialogManager;
     Doors: IDoor[];
     DoorGroup: Phaser.Physics.Arcade.StaticGroup;
+    CharacterGroup: Phaser.Physics.Arcade.StaticGroup;
+
     private _liftDoorKnightOverlap: Phaser.Physics.Arcade.Collider;
     private _liftControlPanel: LiftControlPanel;
 
@@ -323,7 +325,74 @@ export class GamePlay extends Phaser.Scene {
 
     }
 
+    examine() {
+        // examine what?
+        const r = this._dialogManager.getTopmost()?.data.dimensions;
 
+        if (!r) {
+            console.error("Failed to get topmostdialog.data.dimensions, got undefined instead");
+            return;
+        }
+
+        const commands = [
+            new CommandItem('Item you are carrying', (_) => {
+                this.showInventorySelector((itm: IInventoryItem) => {
+                    this.showMessage('obvioulsy its a thingy! ' + itm.name)
+                })
+            }),
+            new CommandItem('Person', (_) => {
+                this.getNearbyDoors
+            }),
+        ];
+
+        const chooseWhat = new CommandDialogParameters(this,
+            new Rectangle(r.x + 200, r.y + 200, r.width, r.height),
+            commands
+        );
+    }
+
+    getCommandList(): CommandItem[] {
+        const i = this.Player.getInventory();
+
+        const nearbyDoors: IDoor[] = this.getNearbyDoors();
+        const isLiftNearby: boolean = nearbyDoors.length > 0;
+
+        const commands = [
+            new CommandItem('Examine', (_) => {
+                this.examine();
+
+            }),
+            new CommandItem('p. pickup', (_) => {
+                this.pickupItem();
+
+            }),
+            new CommandItem('x. drop', (_) => {
+                this.dropItem();
+            }),
+            //new CommandItem('cursorkeys = move', (_) => console.log('on cursorkeys')),
+            new CommandItem('Show debug', (_) => {
+                this._dialogManager.closeTopmost();
+
+                customEmitter.emitToggleDebug();
+            }),
+            new CommandItem('Toggle follow player', (_) => {
+                this._dialogManager.closeTopmost();
+
+                customEmitter.emitToggleFollowPlayer();
+            }),
+            (i.HasItem('teleportkey') ? new CommandItem('Teleport', (_) => {
+                this._dialogManager.closeTopmost();
+                customEmitter.emitTeleport();
+            }) : null),
+            (isLiftNearby ? new CommandItem('c = call lift', (_) => {
+                this._dialogManager.closeTopmost();
+                customEmitter.emitCallLift();
+
+            }) : null)
+        ];
+
+        return commands.filter((x) => x != null);
+    }
     showDialog() {
 
         this._dialogManager.clear();
@@ -332,45 +401,7 @@ export class GamePlay extends Phaser.Scene {
 
         var dialogParameters = new CommandDialogParameters(this,
             new Rectangle(x, y, 400, 100),
-            [
-                new CommandItem('i. inventory', (_) => {
-                    //this._dialogManager.closeTopmost();
-                    this.showInventorySelector((selectedItem: IInventoryItem) => {
-                        this._dialogManager.clear();
-                        this.showMessage('YOu selected ' + selectedItem.name);
-                        console.log('woo hoo, inventory and you selected a thing %s', selectedItem.name)
-                    });
-
-                }),
-                new CommandItem('p. pickup', (_) => {
-                    this.pickupItem();
-
-                }),
-                new CommandItem('x. drop', (_) => {
-                    this._dialogManager.closeTopmost();
-                    this.dropLastItem();
-                }),
-                //new CommandItem('cursorkeys = move', (_) => console.log('on cursorkeys')),
-                new CommandItem('Show debug', (_) => {
-                    this._dialogManager.closeTopmost();
-
-                    customEmitter.emitToggleDebug();
-                }),
-                new CommandItem('Toggle follow player', (_) => {
-                    this._dialogManager.closeTopmost();
-
-                    customEmitter.emitToggleFollowPlayer();
-                }),
-                new CommandItem('Teleport (if you carry the key)', (_) => {
-                    this._dialogManager.closeTopmost();
-                    customEmitter.emitTeleport();
-                }),
-                new CommandItem('c = call lift', (_) => {
-                    this._dialogManager.closeTopmost();
-                    customEmitter.emitCallLift();
-
-                })
-            ]
+            this.getCommandList()
             , true
 
         );
@@ -534,6 +565,10 @@ export class GamePlay extends Phaser.Scene {
         const characterhalfH = characterTileHeight / 2;
         const characterhalfW = charaterTileWidth / 2;
 
+
+
+        this.CharacterGroup = this.physics.add.staticGroup();
+
         this.characterLayer.forEach(o => {
             const characterName = o.name; // + "_right";
 
@@ -546,7 +581,7 @@ export class GamePlay extends Phaser.Scene {
             } else {
                 let firstImage = characterInfo.images[0];
                 const index = (firstImage.y * mapWidth) + firstImage.x;
-
+                todo: add list of characters
                 const pixelX = Math.ceil(o.x! / 16) * 16;
                 const pixelY = Math.ceil(o.y! / 16) * 16;
 
@@ -558,6 +593,9 @@ export class GamePlay extends Phaser.Scene {
                     const spriteFrame = index.toString().padStart(2, '0') + '.png'
                     let ss = this.add.sprite(pixelX + characterhalfW, pixelY + characterhalfH, 'characters', spriteFrame);
                     ss.name = o.name;
+
+                    this.CharacterGroup.add(ss);
+
                 }
             }
         });
@@ -831,7 +869,6 @@ export class GamePlay extends Phaser.Scene {
 
         this.physics.overlap(s, this.ObjectGroup, (_, b: any) => {
 
-
             nearObjects.push(b);
         });
 
@@ -854,6 +891,43 @@ export class GamePlay extends Phaser.Scene {
         })
         return nearbyItems;
     }
+    getNearbyCharacters(): any[] {
+        let s = this.Player.getNearbySprite();
+
+        let nearThings: any[] = [];
+
+        this.physics.overlap(s, this.CharacterGroup, (_, b: any) => {
+
+            nearThings.push(b);
+        });
+
+
+    }
+    getNearbyDoors(): IDoor[] {
+        let s = this.Player.getNearbySprite();
+
+        let nearThings: any[] = [];
+
+        this.physics.overlap(s, this.DoorGroup, (_, b: any) => {
+
+            nearThings.push(b);
+        });
+
+        console.log("nearby things", nearThings);
+
+        let nearbyDoors: IDoor[] = [];
+        // map the objects into items
+        nearThings.map(o => {
+            let name = o.name;
+            let door = this.Doors.find((d, idx) => d.Name == name);
+            if (door) {
+                nearbyDoors.push(door);
+            } else {
+                console.error("couldnt identify the door from its name %s", o.name);
+            }
+        })
+        return nearbyDoors;
+    }
     pickupNearestItem() {
         let nearbyItems = this.getNearbyItems();
 
@@ -863,7 +937,7 @@ export class GamePlay extends Phaser.Scene {
         } else {
             let itemToPickup = nearbyItems[0];
 
-            let result = this.Player.getInventory().AddItem(itemToPickup);
+            let result = this.Player.getInventory().AddItem(itemToPickup as IInventoryItem);
             if (result.ok) {
                 // great
             } else {
@@ -884,6 +958,12 @@ export class GamePlay extends Phaser.Scene {
             }
         })
 
+    }
+    dropItem() {
+        this.showInventorySelector((itm: IInventoryItem) => {
+            this._dialogManager.clear();
+            this.Player.getInventory().RemoveItem(itm);
+        })
     }
     dropLastItem() {
         let items = this.Player.getInventory().GetItems();
