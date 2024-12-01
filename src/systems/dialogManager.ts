@@ -3,7 +3,18 @@ import { Dialog, DialogParameters } from "../scenes/dialogs/Dialog";
 import { Stack } from "./stack";
 import { customEmitter } from "../components/customemitter";
 import { MenuDialog } from "../scenes/dialogs/MenuDialog";
+import { InventoryDialogParameters } from "../scenes/dialogs/InventorySelector";
+import { Inventory } from "../inventory";
 
+export class DialogResult {
+    private _value: any;
+    private _inner: DialogResult;
+
+    constructor(value: any, inner: DialogResult) {
+        this._value = value;
+        this._inner = inner;
+    }
+}
 export class SceneWithData {
     scene: Phaser.Scene;
     data: DialogParameters;
@@ -83,6 +94,15 @@ export class DialogManager {
         this.doCommandOnCurrentDialogScene((tgt) => tgt.SelectedItemIndex--);
 
     }
+
+    getTopmost() {
+        if (this._dialogQueue.isEmpty()) return;
+
+        let d: SceneWithData | undefined = this._dialogQueue.peek();
+
+        return d;
+
+    }
     closeTopmost() {
 
 
@@ -155,11 +175,7 @@ export class DialogManager {
 
         this._sceneManager.bringToTop(id);
 
-        this.CloseDialogKey = this._sceneManager.getInput().keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-        this.SelectPreviousItem = this._sceneManager.getInput().keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
-        this.ActionCurrentItemKey = this._sceneManager.getInput().keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
-        this.SelectNextItem = this._sceneManager.getInput().keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
-
+        this.wireupKeyboard();
 
         this.CloseDialogKey!.isDown = false;
         this.ActionCurrentItemKey!.isDown = false;
@@ -184,6 +200,13 @@ export class DialogManager {
         }
 
         return undefined;
+    }
+
+    private wireupKeyboard() {
+        if (!this.CloseDialogKey) this.CloseDialogKey = this._sceneManager.getInput().keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+        if (!this.SelectPreviousItem) this.SelectPreviousItem = this._sceneManager.getInput().keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+        if (!this.ActionCurrentItemKey) this.ActionCurrentItemKey = this._sceneManager.getInput().keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+        if (!this.SelectNextItem) this.SelectNextItem = this._sceneManager.getInput().keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
     }
 
     update(time: number, delta: number) {

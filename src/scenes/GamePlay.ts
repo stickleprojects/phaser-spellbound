@@ -333,9 +333,17 @@ export class GamePlay extends Phaser.Scene {
         var dialogParameters = new CommandDialogParameters(this,
             new Rectangle(x, y, 400, 100),
             [
+                new CommandItem('i. inventory', (_) => {
+                    //this._dialogManager.closeTopmost();
+                    this.showInventorySelector((selectedItem: IInventoryItem) => {
+                        this._dialogManager.clear();
+                        this.showMessage('YOu selected ' + selectedItem.name);
+                        console.log('woo hoo, inventory and you selected a thing %s', selectedItem.name)
+                    });
+
+                }),
                 new CommandItem('p. pickup', (_) => {
-                    this._dialogManager.closeTopmost();
-                    this.pickupNearestItem();
+                    this.pickupItem();
 
                 }),
                 new CommandItem('x. drop', (_) => {
@@ -374,9 +382,11 @@ export class GamePlay extends Phaser.Scene {
 
     }
 
-    showMessage(txt: string[]) {
+    showMessage(txt: string[] | string) {
 
-
+        if (typeof txt === 'string') {
+            txt = [txt];
+        }
         var dialogParameter = new MessageDialogParameters(this,
             new Rectangle(0, 0, 400, 100),
             txt
@@ -392,25 +402,62 @@ export class GamePlay extends Phaser.Scene {
 
 
     }
-    showInventory() {
+    showNearbyItemsSelector(onselected: (itm: IInventoryItem) => void) {
+        const r = this._dialogManager.getTopmost()?.data.dimensions;
 
-        let x = 250;
-        let y = 250;
+        if (!r) {
+            console.error("Failed to get topmostdialog.data.dimensions, got undefined instead");
+            return;
+        }
 
-        var dialogParameter = new InventoryDialogParameters(this,
-            new Rectangle(x, y, 400, 100),
-            [
-                'f = florin',
-                'e = elrand',
+        const nearbyItems = this.getNearbyItems();
+        if (nearbyItems.length == 0) {
+            this._dialogManager.closeTopmost();
+            this.showMessage('There is nothing nearby to do that to!');
+            return;
+        }
+        const newPosition = new Rectangle(r.x + 100, r.y + 100, r?.width, 100);
+        const menuItems = nearbyItems.map((itm: ObjectItem, _) =>
+            new CommandItem(itm.name, (p) => {
+                console.log('you selected item %s, invoking callback', itm.name);
+                onselected(itm as IInventoryItem);
+            }));
+        const args = new InventoryDialogParameters(parent, newPosition, menuItems);
 
-            ]
-            , true
+        args.color = '0x6a6aff';
 
-        );
+        this._dialogManager.showDialog('inventoryDialog', args);
 
-        dialogParameter.color = '0x6a6aff';
+    }
+    showInventorySelector(onselected: (itm: IInventoryItem) => void) {
 
-        this._dialogManager.showDialog('inventoryDialog', dialogParameter);
+        const r = this._dialogManager.getTopmost()?.data.dimensions;
+
+        if (!r) {
+            console.error("Failed to get topmostdialog.data.dimensions, got undefined instead");
+            return;
+        }
+        const inventory = this.Player.getInventory();
+        if (!inventory) {
+            console.error("Cannot find player's inventory");
+            return;
+        }
+        if (inventory.GetItems().length == 0) {
+            this._dialogManager.closeTopmost();
+            this.showMessage('you arent carrying anything!');
+            return;
+        }
+        const newPosition = new Rectangle(r.x + 100, r.y + 100, r?.width, 100);
+        const menuItems = inventory.GetItems().map((itm, _) =>
+            new CommandItem(itm.name, (p) => {
+                console.log('you selected item %s, invoking callback', itm.name);
+                onselected(itm);
+            }));
+        const args = new InventoryDialogParameters(parent, newPosition, menuItems);
+
+        args.color = '0x6a6aff';
+
+        this._dialogManager.showDialog('inventoryDialog', args);
 
     }
     private wireupEvents() {
@@ -823,6 +870,20 @@ export class GamePlay extends Phaser.Scene {
                 console.log(result.error.message);
             }
         }
+    }
+    pickupItem() {
+
+        this.showNearbyItemsSelector((itemToPickup: IInventoryItem) => {
+
+            this._dialogManager.clear();
+            let result = this.Player.getInventory().AddItem(itemToPickup);
+            if (result.ok) {
+                // great
+            } else {
+                console.log(result.error.message);
+            }
+        })
+
     }
     dropLastItem() {
         let items = this.Player.getInventory().GetItems();

@@ -65,7 +65,7 @@ export class LiftManager {
         this._sound = sound;
 
         // put the lift on the roof
-        this.callLiftAsync(this.GetDoorByName('roof')!);
+        this.callLiftAsync(this.GetDoorByName('roof')!, false);
 
     }
 
@@ -176,7 +176,7 @@ export class LiftManager {
     GetCurrentDoor() {
         return this._currentDoor;
     }
-    async callLiftAsync(door: IDoor): Promise<boolean> {
+    async callLiftAsync(door: IDoor, playSound: boolean = true): Promise<boolean> {
 
         return this.closeAllDoorsAsync()
             .then((b: boolean) => {
@@ -187,17 +187,26 @@ export class LiftManager {
 
                     customEmitter.emitLiftIsMoving(new LiftMovingEventArgs(this._currentDoor, door));
 
-                    const s = this._sound.add('lift_move')
-                        .on(Phaser.Sound.Events.COMPLETE, async () => {
-                            await this.openDoorAsync(door);
-                            this._currentDoor = door;
-                            customEmitter.emitLiftArrived(new LiftArrivedEventArgs(this._currentDoor));
+                    if (playSound == true) {
+                        const s = this._sound.add('lift_move')
+                            .on(Phaser.Sound.Events.COMPLETE, async () => {
+                                await this.openDoorAsync(door);
+                                this._currentDoor = door;
+                                customEmitter.emitLiftArrived(new LiftArrivedEventArgs(this._currentDoor));
 
-                            resolve(true);
+                                resolve(true);
 
-                        });
+                            });
 
-                    s.play();
+                        s.play();
+                    } else {
+                        await this.openDoorAsync(door);
+                        this._currentDoor = door;
+                        customEmitter.emitLiftArrived(new LiftArrivedEventArgs(this._currentDoor));
+
+                        resolve(true);
+
+                    }
                 })
 
             })
