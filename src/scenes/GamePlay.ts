@@ -21,12 +21,16 @@ import { LiftControlPanel } from './LiftControlPanel';
 
 class DoorSprite implements IDoor {
     private _sprite: Phaser.GameObjects.Sprite;
+    private _tags: Map<string, any> = new Map<string, any>();
 
     private _state: DoorStateEnum = DoorStateEnum.closed;
 
     constructor(sprite: Phaser.GameObjects.Sprite) {
         this._sprite = sprite;
 
+    }
+    get Tags(): Map<string, any> {
+        return this._tags;
     }
     GetPosition(): { x: number; y: number; } {
 
@@ -198,12 +202,9 @@ export class GamePlay extends Phaser.Scene {
         this.horizontalRooms = boundaries.x + 1;
         this.verticalRooms = boundaries.y + 1;
 
-        //this.rooms = this.splitTileMapIntoRooms(this.map);
-
         this.RoomNavigator = new RoomNavigator(this.input,
             this.horizontalRooms, this.verticalRooms,
             () => this.positionCameraAccordingToRoom());
-
 
 
         this.map_alltiles = this.map.addTilesetImage('alltiles', 'map_background')!
@@ -221,22 +222,22 @@ export class GamePlay extends Phaser.Scene {
         this.characterLayer = this.map.getObjectLayer('characters')?.objects!
 
 
-
         this.objectLayer = this.map.getObjectLayer('objects')?.objects!
 
-        let pnl = this.objectLayer.find(x => x.name == '#lift-control-panel');
-
-        if (!pnl) {
-            throw "Cannot find #lift-control-panel in the objectlayer"
-        } else {
-            this._liftControlPanel = new LiftControlPanel(this, pnl.x!, pnl.y!);
-        }
         this.map.setCollisionBetween(0, 1000, true, true, 'solid');
 
         this.createDoors(this.map.getObjectLayer('doorobjects')?.objects!);
 
 
         this.LiftManager = await LiftManager.CreateAsync(this.Doors, this.input, this.sound);
+
+        let pnl = this.objectLayer.find(x => x.name == '#lift-control-panel');
+
+        if (!pnl) {
+            throw "Cannot find #lift-control-panel in the objectlayer"
+        } else {
+            this._liftControlPanel = new LiftControlPanel(this, pnl.x!, pnl.y!, this.LiftManager);
+        }
 
         this.createObjectSprites();
 
@@ -419,6 +420,7 @@ export class GamePlay extends Phaser.Scene {
             const playerFloor = this.LiftManager.GetClosestLiftLocation(this.Player.getSprite().y);
 
             if (!playerFloor) return;
+
 
             await this.LiftManager.callLiftAsync(playerFloor)
         })

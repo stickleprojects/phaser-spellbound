@@ -15,6 +15,7 @@ export interface IDoor {
     get isOpen(): boolean;
     get isClosed(): boolean;
 
+    get Tags(): Map<string, any>;
 }
 
 class DoorPositionRange {
@@ -34,9 +35,10 @@ export class LiftManager {
     private _liftEntrance: IDoor;
     private _doorsWithRanges: DoorPositionRange[];
     private _doors: IDoor[];
-    private _liftFloorNumber: number = 3;
+
+    private _currentDoor: IDoor;
     private _input: Phaser.Input.InputPlugin;
-    private _floorKeys: Map<Phaser.Input.Keyboard.Key, number>;
+    private _doorKeys: Map<Phaser.Input.Keyboard.Key, IDoor>;
     private _sound: Phaser.Sound.NoAudioSoundManager | Phaser.Sound.HTML5AudioSoundManager | Phaser.Sound.WebAudioSoundManager;
     private _liftInteriorDoor: IDoor;
 
@@ -62,6 +64,9 @@ export class LiftManager {
 
         this._sound = sound;
 
+        // put the lift on the roof
+        this.callLiftAsync(this.GetDoorByName('roof')!);
+
     }
 
     private setupDoorsAndRanges() {
@@ -84,6 +89,12 @@ export class LiftManager {
         this._doorsWithRanges = ret;
     }
 
+    ForEachDoor(action: (d: IDoor, idx: number) => void) {
+        const sortedDoors = this.sortTheDoorsIntoFloorOrder(this._doors);
+
+        sortedDoors.forEach(action);
+
+    }
     private sortTheDoorsIntoFloorOrder(doors: IDoor[]) {
         const floorNames = [
             "roof",
@@ -99,27 +110,28 @@ export class LiftManager {
 
         return sortedDoors;
     }
+    GetDoorByName(name: string): IDoor | undefined {
+        return this._doors.find((d) => d.Name == name ? true : false);
+    }
+
     private setupKeys(): void {
 
         //      let keys: Phaser.Input.Keyboard.Key[] = [];
 
-        // lets map the keys to the correct floors! lol
-        let keymappings: Map<Phaser.Input.Keyboard.Key, number> = new Map<Phaser.Input.Keyboard.Key, number>();
+        let keymappings: Map<Phaser.Input.Keyboard.Key, IDoor> = new Map<Phaser.Input.Keyboard.Key, IDoor>();
 
-        let getIndexOfFloor = (name: string) => this._doors.findIndex((d) => d.Name == name ? true : false);
+        keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.B), this.GetDoorByName("basement")!);
+        keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ZERO), this.GetDoorByName("groundfloor")!);
+        keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ONE), this.GetDoorByName("1stfloor")!);
+        keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.TWO), this.GetDoorByName("2ndfloor")!);
+        keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.THREE), this.GetDoorByName("3rdfloor")!);
+        keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR), this.GetDoorByName("4thfloor")!);
+        keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.FIVE), this.GetDoorByName("roof")!);
 
-
-        keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.B), getIndexOfFloor("basement"));
-        keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ZERO), getIndexOfFloor("groundfloor"));
-        keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ONE), getIndexOfFloor("1stfloor"));
-        keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.TWO), getIndexOfFloor("2ndfloor"));
-        keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.THREE), getIndexOfFloor("3rdfloor"));
-        keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR), getIndexOfFloor("4thfloor"));
-        keymappings.set(this._input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.FIVE), getIndexOfFloor("roof"));
-
-        this._floorKeys = keymappings;
+        this._doorKeys = keymappings;
 
     }
+
     private async closeAllDoorsAsync(): Promise<boolean> {
         return new Promise<boolean>(async (resolve) => {
             await this._doors.forEach(async (d) => {
@@ -129,15 +141,14 @@ export class LiftManager {
             resolve(true);
         })
     }
-    private openDoorAsync(index: number): Promise<boolean> {
+    private openDoorAsync(door: IDoor): Promise<boolean> {
         console.log('closing all lift doors');
         return this.closeAllDoorsAsync()
             .then(async () => {
-                const floorDoor = this._doors[index];
-                console.log('opening lift', floorDoor.Name);
-                return await floorDoor.OpenAsync()
+
+                return await door.OpenAsync()
                     .then(async () => {
-                        console.log('opening lift', this._liftInteriorDoor.Name);
+                        console.log('opening lift internal door', this._liftInteriorDoor.Name);
                         return await this._liftInteriorDoor.OpenAsync()
 
                     });
@@ -150,19 +161,22 @@ export class LiftManager {
         return this._liftEntrance.GetPosition();
     }
 
-    GetClosestLiftLocation(y: number): number | undefined {
+    GetClosestLiftDoor(y: number): IDoor | undefined {
         const closestDoor = this._doorsWithRanges.find(d => d.min_y <= y && d.max_y >= y);
         if (closestDoor) {
-            return this._doors.indexOf(closestDoor.door);
+            return closestDoor.door;
         }
         return undefined;
     }
 
     GetLiftExitLocation(): { x: number, y: number } {
-        return this._doors[this._liftFloorNumber].GetPosition();
+        return this._currentDoor.GetPosition();
 
     }
-    async callLiftAsync(floorNumber: number): Promise<boolean> {
+    GetCurrentDoor() {
+        return this._currentDoor;
+    }
+    async callLiftAsync(door: IDoor): Promise<boolean> {
 
         return this.closeAllDoorsAsync()
             .then((b: boolean) => {
@@ -170,38 +184,30 @@ export class LiftManager {
                 if (!b) return false;
 
                 return new Promise<boolean>(async (resolve, reject) => {
-                    if (floorNumber >= this._doors.length) {
-                        console.error("cannot go to that floor, max is ", this._doors.length)
 
-                        resolve(true);
-                        return;
-                    }
-                    console.log("moving lift to floor", floorNumber);
-                    customEmitter.emitLiftIsMoving(new LiftMovingEventArgs(this._liftFloorNumber, floorNumber));
+                    customEmitter.emitLiftIsMoving(new LiftMovingEventArgs(this._currentDoor, door));
 
-                    const s = this._sound.add('lift_move')
-                        .on(Phaser.Sound.Events.COMPLETE, async () => {
-                            await this.openDoorAsync(floorNumber);
-                            this._liftFloorNumber = floorNumber;
-                            customEmitter.emitLiftArrived(new LiftArrivedEventArgs(floorNumber));
+                    //const s = this._sound.add('lift_move')
+                    //   .on(Phaser.Sound.Events.COMPLETE, async () => {
+                    await this.openDoorAsync(door);
+                    this._currentDoor = door;
+                    customEmitter.emitLiftArrived(new LiftArrivedEventArgs(this._currentDoor));
 
-                            resolve(true);
+                    resolve(true);
 
-                        });
+                    //});
 
-                    s.play();
+                    //s.play();
                 })
 
             })
     }
-    get LiftFloorNumber(): number { return this._liftFloorNumber; }
-
 
     async Update() {
 
-        await this._floorKeys.forEach(async (number, k) => {
+        await this._doorKeys.forEach(async (d, k) => {
             if (Phaser.Input.Keyboard.JustDown(k)) {
-                await this.callLiftAsync(number);
+                await this.callLiftAsync(d);
 
             }
         })

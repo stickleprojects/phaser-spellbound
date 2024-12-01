@@ -1,54 +1,77 @@
 import { customEmitter, LiftArrivedEventArgs } from "../components/customemitter";
+import { IDoor, LiftManager } from "../systems/liftManager";
 
 export class LiftControlPanel {
     private _panelSprite: Phaser.GameObjects.Sprite;
     private _light: Phaser.GameObjects.Light;
-    private _floorIndicator: Phaser.GameObjects.Rectangle;
-    private _roof_Indicator_Position: { x: number; y: number; };
-    private _indicator_gap_y: number;
-    private _liftIndicatorPositions: { x: number, y: number }[];
+    private _doorIndicator: Phaser.GameObjects.Rectangle;
 
-    constructor(scene: Phaser.Scene, x: number, y: number) {
+    private _liftManager: LiftManager;
+
+    constructor(scene: Phaser.Scene, x: number, y: number, liftManager: LiftManager) {
         this._panelSprite = scene.add.sprite(x, y, 'lift-control-panel');
         this._panelSprite.setOrigin(0, 0);
         this._panelSprite.setPipeline('Light2D');
 
-        this._floorIndicator = scene.add.rectangle(x, y, 5, 5, 0xff0000, 0.5);
-        this._floorIndicator.setOrigin(0, 0);
-        this._roof_Indicator_Position = { x: 11, y: 15 };
-        this._indicator_gap_y = 10;
-        this._light = scene.lights.addLight(x + 10, y, 30, 0xfcc603, 20);
-        //const fx = this._panelSprite.postFX?.addGlow(0xf5e887, 0, 0, false, 0.1, 2);
+        this._liftManager = liftManager;
+        this._doorIndicator = scene.add.rectangle(x, y, 5, 4, 0xff0000, 1);
+        this._doorIndicator.setOrigin(0, 0);
+        this._doorIndicator.setVisible(false);
 
-        this._liftIndicatorPositions = [];
-        this._liftIndicatorPositions.push({ x: x + 6, y: y + 65 });
-        this._liftIndicatorPositions.push({ x: x + 6, y: y + 55 });
-        this._liftIndicatorPositions.push({ x: x + 6, y: y + 45 });
-        this._liftIndicatorPositions.push({ x: x + 6, y: y + 35 });
-        this._liftIndicatorPositions.push({ x: x + 6, y: y + 14 });
-        this._liftIndicatorPositions.push({ x: x + 6, y: y + 9 });
+        this._light = scene.lights.addLight(x, y, 20, 0xff0000, 1);
+        this._doorIndicator.postFX?.addGlow(0xf5e887, 0, 0, false, 0.1, 10);
+
+        // link the controls to the correct door
+        // starting from the roof
+
+        const liftIndicatorPositions = new Map<string, { x: number, y: number }>();
+        liftIndicatorPositions.set('roof', { x: x + 6, y: y + 10 });
+        liftIndicatorPositions.set('4thfloor', { x: x + 6, y: y + 18 });
+        liftIndicatorPositions.set('3rdfloor', { x: x + 6, y: y + 26 });
+        liftIndicatorPositions.set('2ndfloor', { x: x + 6, y: y + 34 });
+        liftIndicatorPositions.set('1stfloor', { x: x + 6, y: y + 42 });
+        liftIndicatorPositions.set('groundfloor', { x: x + 6, y: y + 50 });
+        liftIndicatorPositions.set('basement', { x: x + 6, y: y + 58 });
+
+        liftManager.ForEachDoor((d: IDoor, idx: number) => {
+
+            const pos = liftIndicatorPositions.get(d.Name);
+            if (!pos) {
+                console.log('warning - cannot find door indicator for door %s', d.Name);
+            } else {
+                const xy = pos;
+                d.Tags.set('doorIndicator', xy);
+                console.log('idx: %d, door: %s, xy:%s', idx, d.Name, JSON.stringify(xy));
+            }
+        });
 
         this.wireUpEvents();
 
         // position on the roof
-        this.positionIndicatorOnFloor(5);
+        this.positionIndicatorAtDoor(this._liftManager.GetCurrentDoor());
     }
 
-    private positionIndicatorOnFloor(floorNumber: number) {
-        const where = this._liftIndicatorPositions[floorNumber];
-        this._floorIndicator.setPosition(where.x, where.y);
+    private positionIndicatorAtDoor(d: IDoor) {
 
+        if (!d) return;
+
+        const where = d.Tags.get('doorIndicator');
+        if (where) {
+            this._doorIndicator.setPosition(where.x, where.y);
+            this._light.setPosition(where.x, where.y);
+            this._light.setVisible(true);
+            this._doorIndicator.setVisible(true);
+        }
     }
     private wireUpEvents() {
         customEmitter.OnLiftMoving(() => {
-            console.log('moo liftmoving');
+            console.log('liftcontrolpanel: liftmoving');
 
         })
         customEmitter.OnLiftArrived((args: LiftArrivedEventArgs) => {
-            console.log('moo liftrrived', args);
-            todo: error the floornumber is the position in the array in liftmanager NOT the floornumber!
+            console.log('liftcontrolpanel: liftrrived at door ', args.on.Name);
 
-            this.positionIndicatorOnFloor(args.onFloor);
+            this.positionIndicatorAtDoor(args.on);
         })
     }
 }

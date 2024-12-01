@@ -3,6 +3,7 @@ import { IInventoryItem, InventoryEventArgs } from "../inventory";
 import { KEYEVENT_CLOSEDIALOG, KEYEVENT_DROP_ITEM, KEYEVENT_FOLLOW_PLAYER, KEYEVENT_OPENDIALOG, KEYEVENT_PICKUP_ITEM, KEYEVENT_TELEPORT, KEYEVENT_TOGGLE_DEBUG } from "../systems/inputEventSystem";
 import { HudFlags, HudRoomInfo } from "../scenes/Hud";
 import { SceneWithData } from "../systems/dialogManager";
+import { IDoor } from "../systems/liftManager";
 
 export const GAMEEVENT_SHOWMESSAGE = 'showmessagedialog';
 export const GAMEEVENT_MODALDIALOG_SHOW = 'modaldialog_show';
@@ -18,17 +19,17 @@ export const GAMEEVENT_LIFT_MOVING = "lift_moving";
 export type OnEventHandler<TARGS> = (args: TARGS) => void;
 
 export class LiftMovingEventArgs {
-    fromFloor: number;
-    toFloor: number;
-    constructor(fromFloor: number, toFloor: number) {
-        this.fromFloor = fromFloor;
-        this.toFloor = toFloor;
+    from: IDoor;
+    to: IDoor;
+    constructor(from: IDoor, to: IDoor) {
+        this.from = from;
+        this.to = to;
     }
 }
 export class LiftArrivedEventArgs {
-    onFloor: number;
-    constructor(onFloor: number) {
-        this.onFloor = onFloor;
+    on: IDoor;
+    constructor(on: IDoor) {
+        this.on = on;
     }
 }
 export class GiveItemEventArgs {
