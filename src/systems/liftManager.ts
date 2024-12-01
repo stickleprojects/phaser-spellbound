@@ -183,21 +183,21 @@ export class LiftManager {
 
                 if (!b) return false;
 
-                return new Promise<boolean>(async (resolve, reject) => {
+                return new Promise<boolean>(async (resolve, _) => {
 
                     customEmitter.emitLiftIsMoving(new LiftMovingEventArgs(this._currentDoor, door));
 
-                    //const s = this._sound.add('lift_move')
-                    //   .on(Phaser.Sound.Events.COMPLETE, async () => {
-                    await this.openDoorAsync(door);
-                    this._currentDoor = door;
-                    customEmitter.emitLiftArrived(new LiftArrivedEventArgs(this._currentDoor));
+                    const s = this._sound.add('lift_move')
+                        .on(Phaser.Sound.Events.COMPLETE, async () => {
+                            await this.openDoorAsync(door);
+                            this._currentDoor = door;
+                            customEmitter.emitLiftArrived(new LiftArrivedEventArgs(this._currentDoor));
 
-                    resolve(true);
+                            resolve(true);
 
-                    //});
+                        });
 
-                    //s.play();
+                    s.play();
                 })
 
             })
