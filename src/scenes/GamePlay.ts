@@ -417,7 +417,7 @@ export class GamePlay extends Phaser.Scene {
 
 
         customEmitter.onCallLift(async (_) => {
-            const playerFloor = this.LiftManager.GetClosestLiftLocation(this.Player.getSprite().y);
+            const playerFloor = this.LiftManager.GetClosestLiftDoor(this.Player.getSprite().y);
 
             if (!playerFloor) return;
 
