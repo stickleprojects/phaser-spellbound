@@ -6,6 +6,7 @@ import 'reflect-metadata';
 
 export class Stats {
     fullname: string
+
 }
 
 export class Image {

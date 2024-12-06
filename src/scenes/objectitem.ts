@@ -34,7 +34,7 @@ export class ObjectItem implements IInventoryItem {
     get weight() { return this._src.stats?.weight || 0 }
     get Src() { return this._src; }
     get stats(): ItemStats | undefined { return this._src.stats; }
-
+    get Sprite() { return this._sprite; }
     setVisible(visible: boolean) {
         this._sprite.visible = visible;
 

@@ -3,6 +3,7 @@ import { CopyrightPanel } from './scenes/CopyrightPanel';
 import { CharacterDialog } from './scenes/dialogs/CharacterSelector';
 import { CommandDialog } from './scenes/dialogs/CommandDialog';
 import { InventoryDialog } from './scenes/dialogs/InventorySelector';
+import { ItemInfoDialog } from './scenes/dialogs/ItemInfoDialog';
 
 import { MenuDialog } from './scenes/dialogs/MenuDialog';
 import { MessageDialog } from './scenes/dialogs/MessageDialog';
@@ -52,7 +53,8 @@ const config: Types.Core.GameConfig = {
         InventoryDialog,
         MessageDialog,
         ShowWhatDialog,
-        CharacterDialog
+        CharacterDialog,
+        ItemInfoDialog
 
         // MainMenu,
         // MainGame,

@@ -20,6 +20,7 @@ import { CommandDialogParameters, CommandItem } from './dialogs/CommandDialog';
 import { LiftControlPanel } from './LiftControlPanel';
 import { CharacterDialogParameters } from './dialogs/CharacterSelector';
 import { ShowWhatDialogParameters } from './dialogs/ShowWhatSelector';
+import { ItemInfoDialog, ItemInfoParameters } from './dialogs/ItemInfoDialog';
 
 export class CharacterSprite extends Phaser.GameObjects.Sprite {
     private _info: Character;
@@ -353,8 +354,11 @@ export class GamePlay extends Phaser.Scene {
         const commands = [
             new CommandItem('Item you are carrying', (_) => {
                 this.showInventorySelector((itm: IInventoryItem) => {
-                    this._dialogManager.clear();
-                    this.showMessage('obvioulsy its a thingy! ' + itm.name)
+                    this.showItemInfo(itm as ObjectItem);
+
+                    //          this._dialogManager.clear();
+
+                    //        this.showMessage('obvioulsy its a thingy! ' + itm.name)
                 })
             }),
             new CommandItem('Person', (_) => {
@@ -506,6 +510,27 @@ export class GamePlay extends Phaser.Scene {
         args.color = '0x6a6aff';
 
         this._dialogManager.showDialog('inventoryDialog', args);
+
+    }
+    showItemInfo(item: ObjectItem) {
+        const r = this._dialogManager.getTopmost()?.data.dimensions;
+
+        if (!r) {
+            console.error("Failed to get topmostdialog.data.dimensions, got undefined instead");
+            return;
+        }
+        const w = 400;
+        const h = 150;
+        const x = this.sys.canvas.width / 2 - (w / 2);
+        const y = this.sys.canvas.height / 2 - (h / 2) - 40;
+        const newPosition = new Rectangle(x, y, w, h);
+        const args = new ItemInfoParameters(parent, newPosition, item);
+
+        args.isModal = true;
+
+        args.color = '0x6a6aff';
+
+        this._dialogManager.showDialog('itemInfoDialog', args);
 
     }
     showInventorySelector(onselected: (itm: IInventoryItem) => void) {
