@@ -19,6 +19,7 @@ import { DoorStateEnum, IDoor, LiftManager } from '../systems/liftManager';
 import { CommandDialogParameters, CommandItem } from './dialogs/CommandDialog';
 import { LiftControlPanel } from './LiftControlPanel';
 import { CharacterDialogParameters } from './dialogs/CharacterSelector';
+import { ShowWhatDialogParameters } from './dialogs/ShowWhatSelector';
 
 export class CharacterSprite extends Phaser.GameObjects.Sprite {
     private _info: Character;
@@ -352,20 +353,23 @@ export class GamePlay extends Phaser.Scene {
         const commands = [
             new CommandItem('Item you are carrying', (_) => {
                 this.showInventorySelector((itm: IInventoryItem) => {
+                    this._dialogManager.clear();
                     this.showMessage('obvioulsy its a thingy! ' + itm.name)
                 })
             }),
             new CommandItem('Person', (_) => {
-                this.showNearbyItemsSelector
-                this.getNearbyCharacters()
+                this.showNearbyCharacterSelector((character: CharacterSprite) => {
+                    this._dialogManager.clear();
+                    this.showMessage(character.name + ' gives you the evil eye!');
+                })
             }),
         ];
 
-        const chooseWhat = new CommandDialogParameters(this,
+        const chooseWhat = new ShowWhatDialogParameters(this,
             new Rectangle(r.x + 200, r.y + 200, r.width, r.height),
             commands
         );
-        this._dialogManager.showDialog('commandDialog', chooseWhat);
+        this._dialogManager.showDialog('showWhatDialog', chooseWhat);
     }
 
     getCommandList(): CommandItem[] {
