@@ -1,4 +1,4 @@
-import Phaser, { Scene } from 'phaser';
+import Phaser, { Scene, Textures } from 'phaser';
 
 import { createWorld, IWorld, System } from "bitecs";
 
@@ -18,7 +18,24 @@ import { MessageDialogParameters } from './dialogs/MessageDialog';
 import { DoorStateEnum, IDoor, LiftManager } from '../systems/liftManager';
 import { CommandDialogParameters, CommandItem } from './dialogs/CommandDialog';
 import { LiftControlPanel } from './LiftControlPanel';
+import { CharacterDialogParameters } from './dialogs/CharacterSelector';
+import { ShowWhatDialogParameters } from './dialogs/ShowWhatSelector';
+import { ItemInfoDialog, ItemInfoParameters } from './dialogs/ItemInfoDialog';
 
+export class CharacterSprite extends Phaser.GameObjects.Sprite {
+    private _info: Character;
+    constructor(scene: Phaser.Scene, x: number, y: number,
+        texture: string | Textures.Texture, frame: string | number,
+        name: string, characterInfo: Character) {
+        super(scene, x, y, texture, frame);
+        this.name = name;
+        this._info = characterInfo;
+        scene.add.existing(this);
+    }
+
+    public get Info(): Character { return this._info; }
+
+}
 class DoorSprite implements IDoor {
     private _sprite: Phaser.GameObjects.Sprite;
     private _tags: Map<string, any> = new Map<string, any>();
@@ -337,18 +354,26 @@ export class GamePlay extends Phaser.Scene {
         const commands = [
             new CommandItem('Item you are carrying', (_) => {
                 this.showInventorySelector((itm: IInventoryItem) => {
-                    this.showMessage('obvioulsy its a thingy! ' + itm.name)
+                    this.showItemInfo(itm as ObjectItem);
+
+                    //          this._dialogManager.clear();
+
+                    //        this.showMessage('obvioulsy its a thingy! ' + itm.name)
                 })
             }),
             new CommandItem('Person', (_) => {
-                this.getNearbyDoors
+                this.showNearbyCharacterSelector((character: CharacterSprite) => {
+                    this._dialogManager.clear();
+                    this.showMessage(character.name + ' gives you the evil eye!');
+                })
             }),
         ];
 
-        const chooseWhat = new CommandDialogParameters(this,
+        const chooseWhat = new ShowWhatDialogParameters(this,
             new Rectangle(r.x + 200, r.y + 200, r.width, r.height),
             commands
         );
+        this._dialogManager.showDialog('showWhatDialog', chooseWhat);
     }
 
     getCommandList(): CommandItem[] {
@@ -433,6 +458,33 @@ export class GamePlay extends Phaser.Scene {
 
 
     }
+    showNearbyCharacterSelector(onselected: (itm: CharacterSprite) => void) {
+        const r = this._dialogManager.getTopmost()?.data.dimensions;
+
+        if (!r) {
+            console.error("Failed to get topmostdialog.data.dimensions, got undefined instead");
+            return;
+        }
+
+        const nearbyItems = this.getNearbyCharacters();
+        if (nearbyItems.length == 0) {
+            this._dialogManager.closeTopmost();
+            this.showMessage('There is noone nearby to do that to!');
+            return;
+        }
+        const newPosition = new Rectangle(r.x + 100, r.y + 100, r?.width, 100);
+        const menuItems = nearbyItems.map((itm: CharacterSprite, _) =>
+            new CommandItem(itm.name, (p) => {
+                console.log('you selected person %s, invoking callback', itm.name);
+                onselected(itm);
+            }));
+        const args = new CharacterDialogParameters(parent, newPosition, menuItems);
+
+        args.color = '0x6a6aff';
+
+        this._dialogManager.showDialog('characterDialog', args);
+
+    }
     showNearbyItemsSelector(onselected: (itm: IInventoryItem) => void) {
         const r = this._dialogManager.getTopmost()?.data.dimensions;
 
@@ -458,6 +510,27 @@ export class GamePlay extends Phaser.Scene {
         args.color = '0x6a6aff';
 
         this._dialogManager.showDialog('inventoryDialog', args);
+
+    }
+    showItemInfo(item: ObjectItem) {
+        const r = this._dialogManager.getTopmost()?.data.dimensions;
+
+        if (!r) {
+            console.error("Failed to get topmostdialog.data.dimensions, got undefined instead");
+            return;
+        }
+        const w = 400;
+        const h = 150;
+        const x = this.sys.canvas.width / 2 - (w / 2);
+        const y = this.sys.canvas.height / 2 - (h / 2) - 40;
+        const newPosition = new Rectangle(x, y, w, h);
+        const args = new ItemInfoParameters(parent, newPosition, item);
+
+        args.isModal = true;
+
+        args.color = '0x6a6aff';
+
+        this._dialogManager.showDialog('itemInfoDialog', args);
 
     }
     showInventorySelector(onselected: (itm: IInventoryItem) => void) {
@@ -581,7 +654,6 @@ export class GamePlay extends Phaser.Scene {
             } else {
                 let firstImage = characterInfo.images[0];
                 const index = (firstImage.y * mapWidth) + firstImage.x;
-                todo: add list of characters
                 const pixelX = Math.ceil(o.x! / 16) * 16;
                 const pixelY = Math.ceil(o.y! / 16) * 16;
 
@@ -591,10 +663,14 @@ export class GamePlay extends Phaser.Scene {
                 } else {
                     //let ss = this.add.sprite(pixelX + characterhalfW, pixelY + characterhalfH, 'characters', index);
                     const spriteFrame = index.toString().padStart(2, '0') + '.png'
-                    let ss = this.add.sprite(pixelX + characterhalfW, pixelY + characterhalfH, 'characters', spriteFrame);
-                    ss.name = o.name;
+                    const cs = new CharacterSprite(this,
+                        pixelX + characterhalfW,
+                        pixelY + characterhalfH,
+                        'characters',
+                        spriteFrame,
+                        o.name)
 
-                    this.CharacterGroup.add(ss);
+                    this.CharacterGroup.add(cs);
 
                 }
             }
@@ -891,16 +967,17 @@ export class GamePlay extends Phaser.Scene {
         })
         return nearbyItems;
     }
-    getNearbyCharacters(): any[] {
+    getNearbyCharacters(): CharacterSprite[] {
         let s = this.Player.getNearbySprite();
 
-        let nearThings: any[] = [];
+        let nearThings: CharacterSprite[] = [];
 
         this.physics.overlap(s, this.CharacterGroup, (_, b: any) => {
 
             nearThings.push(b);
         });
 
+        return nearThings;
 
     }
     getNearbyDoors(): IDoor[] {
