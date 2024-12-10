@@ -21,6 +21,7 @@ import { LiftControlPanel } from './LiftControlPanel';
 import { CharacterDialogParameters } from './dialogs/CharacterSelector';
 import { ShowWhatDialogParameters } from './dialogs/ShowWhatSelector';
 import { ItemInfoDialog, ItemInfoParameters } from './dialogs/ItemInfoDialog';
+import { CharacterInfoParameters } from './dialogs/CharacterInfoDialog';
 
 export class CharacterSprite extends Phaser.GameObjects.Sprite {
     private _info: Character;
@@ -354,6 +355,7 @@ export class GamePlay extends Phaser.Scene {
         const commands = [
             new CommandItem('Item you are carrying', (_) => {
                 this.showInventorySelector((itm: IInventoryItem) => {
+                    this._dialogManager.clear();
                     this.showItemInfo(itm as ObjectItem);
 
                     //          this._dialogManager.clear();
@@ -364,13 +366,13 @@ export class GamePlay extends Phaser.Scene {
             new CommandItem('Person', (_) => {
                 this.showNearbyCharacterSelector((character: CharacterSprite) => {
                     this._dialogManager.clear();
-                    this.showMessage(character.name + ' gives you the evil eye!');
+                    this.showCharacterInfo(character);
                 })
             }),
         ];
 
         const chooseWhat = new ShowWhatDialogParameters(this,
-            new Rectangle(r.x + 200, r.y + 200, r.width, r.height),
+            new Rectangle(r.x + 50, r.y + 50, r.width, r.height),
             commands
         );
         this._dialogManager.showDialog('showWhatDialog', chooseWhat);
@@ -468,14 +470,14 @@ export class GamePlay extends Phaser.Scene {
 
         const nearbyItems = this.getNearbyCharacters();
         if (nearbyItems.length == 0) {
-            this._dialogManager.closeTopmost();
+            this._dialogManager.clear();
             this.showMessage('There is noone nearby to do that to!');
             return;
         }
-        const newPosition = new Rectangle(r.x + 100, r.y + 100, r?.width, 100);
+        const newPosition = new Rectangle(r.x + 50, r.y + 50, r?.width, 100);
         const menuItems = nearbyItems.map((itm: CharacterSprite, _) =>
             new CommandItem(itm.name, (p) => {
-                console.log('you selected person %s, invoking callback', itm.name);
+
                 onselected(itm);
             }));
         const args = new CharacterDialogParameters(parent, newPosition, menuItems);
@@ -495,14 +497,14 @@ export class GamePlay extends Phaser.Scene {
 
         const nearbyItems = this.getNearbyItems();
         if (nearbyItems.length == 0) {
-            this._dialogManager.closeTopmost();
+            this._dialogManager.clear();
             this.showMessage('There is nothing nearby to do that to!');
             return;
         }
         const newPosition = new Rectangle(r.x + 100, r.y + 100, r?.width, 100);
         const menuItems = nearbyItems.map((itm: ObjectItem, _) =>
             new CommandItem(itm.name, (p) => {
-                console.log('you selected item %s, invoking callback', itm.name);
+
                 onselected(itm as IInventoryItem);
             }));
         const args = new InventoryDialogParameters(parent, newPosition, menuItems);
@@ -512,23 +514,37 @@ export class GamePlay extends Phaser.Scene {
         this._dialogManager.showDialog('inventoryDialog', args);
 
     }
-    showItemInfo(item: ObjectItem) {
-        const r = this._dialogManager.getTopmost()?.data.dimensions;
+    showCharacterInfo(character: CharacterSprite) {
+        let r = this._dialogManager.getTopmost()?.data.dimensions;
 
         if (!r) {
-            console.error("Failed to get topmostdialog.data.dimensions, got undefined instead");
-            return;
+            r = new Rectangle(100, 100, 10, 10);
         }
         const w = 400;
         const h = 150;
         const x = this.sys.canvas.width / 2 - (w / 2);
         const y = this.sys.canvas.height / 2 - (h / 2) - 40;
         const newPosition = new Rectangle(x, y, w, h);
-        const args = new ItemInfoParameters(parent, newPosition, item);
+        const args = new CharacterInfoParameters(this, newPosition, character);
 
         args.isModal = true;
 
-        args.color = '0x6a6aff';
+        this._dialogManager.showDialog('characterInfoDialog', args);
+    }
+    showItemInfo(item: ObjectItem) {
+        let r = this._dialogManager.getTopmost()?.data.dimensions;
+
+        if (!r) {
+            r = new Rectangle(100, 100, 10, 10);
+        }
+        const w = 400;
+        const h = 150;
+        const x = this.sys.canvas.width / 2 - (w / 2);
+        const y = this.sys.canvas.height / 2 - (h / 2) - 40;
+        const newPosition = new Rectangle(x, y, w, h);
+        const args = new ItemInfoParameters(this, newPosition, item);
+
+        args.isModal = true;
 
         this._dialogManager.showDialog('itemInfoDialog', args);
 
@@ -547,11 +563,11 @@ export class GamePlay extends Phaser.Scene {
             return;
         }
         if (inventory.GetItems().length == 0) {
-            this._dialogManager.closeTopmost();
+            this._dialogManager.clear();
             this.showMessage('you arent carrying anything!');
             return;
         }
-        const newPosition = new Rectangle(r.x + 100, r.y + 100, r?.width, 100);
+        const newPosition = new Rectangle(r.x + 50, r.y + 50, r?.width, 100);
         const menuItems = inventory.GetItems().map((itm, _) =>
             new CommandItem(itm.name, (p) => {
                 console.log('you selected item %s, invoking callback', itm.name);
@@ -668,7 +684,7 @@ export class GamePlay extends Phaser.Scene {
                         pixelY + characterhalfH,
                         'characters',
                         spriteFrame,
-                        o.name)
+                        o.name, characterInfo)
 
                     this.CharacterGroup.add(cs);
 

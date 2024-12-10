@@ -15,10 +15,26 @@ export class Image {
     y: number
 }
 
+
+function stat(target: any, propertyName: string, description: string, format: string) {
+    Reflect.defineMetadata(
+        `description:${propertyName}`,
+        description,
+        target
+    );
+    Reflect.defineMetadata(
+        `format:${propertyName}`,
+        format,
+        target
+    )
+}
 export class CharacterStats extends Stats {
     maxnumberofitems: number
     maxweightperitem: number
+
     maxenergy: number
+
+    @stat()
     energy: number
 }
 export class RoomStats extends Stats {

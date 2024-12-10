@@ -2,29 +2,30 @@ import { Scene } from "phaser";
 import { Rectangle } from "../../config/levelconfig";
 import { ObjectItem } from "../objectitem";
 import { Dialog, DialogParameters } from "./Dialog";
+import { CharacterSprite } from "../GamePlay";
 
-export class ItemInfoParameters extends DialogParameters {
+export class CharacterInfoParameters extends DialogParameters {
 
     isModal: boolean = true;
-    itemInfo: ObjectItem;
+    CharacterInfo: CharacterSprite;
 
-    constructor(parent: Scene, dims: Rectangle, itemInfo: ObjectItem) {
+    constructor(parent: Scene, dims: Rectangle, CharacterInfo: CharacterSprite) {
         super(parent, dims);
         this.color = '0xfd0606';
 
-        this.itemInfo = itemInfo;
+        this.CharacterInfo = CharacterInfo;
     }
 }
-export class ItemInfoDialog extends Dialog {
+export class CharacterInfoDialog extends Dialog {
     icon: Phaser.GameObjects.Image;
     title: Phaser.GameObjects.Text;
 
     constructor(id: string | undefined) {
-        super(id ?? 'itemInfoDialog');
+        super(id ?? 'characterInfoDialog');
 
     }
 
-    override init(data: ItemInfoParameters): void {
+    override init(data: CharacterInfoParameters): void {
         super.init(data);
     }
 
@@ -32,32 +33,36 @@ export class ItemInfoDialog extends Dialog {
         this.icon?.destroy();
         this.title?.destroy();
     }
-    override addControls(data: ItemInfoParameters, innerRect: Rectangle): void {
+    override addControls(data: CharacterInfoParameters, innerRect: Rectangle): void {
 
         let x: number = innerRect.x;
         let y: number = innerRect.y;
 
-        data.itemInfo
+
 
         const w = 60;
-        const h = w;
+        const h = w * 2;
         const r = this.add.rectangle(x, y, w, h);
         r.setStrokeStyle(1, 0xffff);
         r.setOrigin(0, 0);
 
-        this.icon = this.add.image(r.x + 30, r.y + 20, data.itemInfo.Sprite.texture, data.itemInfo.Sprite.frame.name);
-        //this.icon.setOrigin(0, 0);
+        const iconRect = new Rectangle(r.x + 30, r.y + 60, 60, 120);
+
+        this.icon = this.add.image(iconRect.x, iconRect.y, data.CharacterInfo.texture, data.CharacterInfo.frame.name);
+
         this.icon.setScale(3);
 
+
         const left = x + 70;
-        this.title = this.add.text(left, y, data.itemInfo.name,
+        this.title = this.add.text(left, y, data.CharacterInfo.name,
             { align: 'center', fixedWidth: innerRect.width - left });
 
         const vy: number = 15;
         let start: number = y + 40;
         // add the stats
 
-        Object.entries(data.itemInfo.stats!).forEach(([key, value]) => {
+
+        Object.entries(data.CharacterInfo.Info.stats!).forEach(([key, value]) => {
             if (value) {
                 this.add.text(left, start, `${key} = ${value}`);
                 start += vy;

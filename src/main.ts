@@ -1,5 +1,6 @@
 import { Boot } from './scenes/Boot';
 import { CopyrightPanel } from './scenes/CopyrightPanel';
+import { CharacterInfoDialog } from './scenes/dialogs/CharacterInfoDialog';
 import { CharacterDialog } from './scenes/dialogs/CharacterSelector';
 import { CommandDialog } from './scenes/dialogs/CommandDialog';
 import { InventoryDialog } from './scenes/dialogs/InventorySelector';
@@ -54,7 +55,8 @@ const config: Types.Core.GameConfig = {
         MessageDialog,
         ShowWhatDialog,
         CharacterDialog,
-        ItemInfoDialog
+        ItemInfoDialog,
+        CharacterInfoDialog
 
         // MainMenu,
         // MainGame,
