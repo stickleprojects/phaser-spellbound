@@ -2,6 +2,7 @@
 
 import { Type } from 'class-transformer'
 import 'reflect-metadata';
+import { stat } from './decorators';
 
 
 export class Stats {
@@ -16,26 +17,17 @@ export class Image {
 }
 
 
-function stat(target: any, propertyName: string, description: string, format: string) {
-    Reflect.defineMetadata(
-        `description:${propertyName}`,
-        description,
-        target
-    );
-    Reflect.defineMetadata(
-        `format:${propertyName}`,
-        format,
-        target
-    )
-}
 export class CharacterStats extends Stats {
     maxnumberofitems: number
     maxweightperitem: number
 
     maxenergy: number
 
-    @stat()
+    @stat('Energy', 'number', '%d')
     energy: number
+
+    @stat('Food', 'number', '%d')
+    food: number
 }
 export class RoomStats extends Stats {
     dark: boolean

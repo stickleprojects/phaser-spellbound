@@ -3,6 +3,8 @@ import { Rectangle } from "../../config/levelconfig";
 import { ObjectItem } from "../objectitem";
 import { Dialog, DialogParameters } from "./Dialog";
 import { CharacterSprite } from "../GamePlay";
+import { getMetadata } from "reflect-metadata/no-conflict";
+import { GetStats, PropertyStats } from "../../config/decorators";
 
 export class CharacterInfoParameters extends DialogParameters {
 
@@ -57,14 +59,18 @@ export class CharacterInfoDialog extends Dialog {
         this.title = this.add.text(left, y, data.CharacterInfo.name,
             { align: 'center', fixedWidth: innerRect.width - left });
 
+        const inf = data.CharacterInfo.Info;
+        const statstuff = GetStats(inf.stats!);
+        console.log(statstuff);
+
+
         const vy: number = 15;
         let start: number = y + 40;
         // add the stats
 
-
-        Object.entries(data.CharacterInfo.Info.stats!).forEach(([key, value]) => {
+        statstuff?.forEach((value: PropertyStats, key: string) => {
             if (value) {
-                this.add.text(left, start, `${key} = ${value}`);
+                this.add.text(left, start, `${value.description} = ${value.getter()}`);
                 start += vy;
             }
         })
