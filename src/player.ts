@@ -21,10 +21,6 @@ export default class Player {
     getSprite(): Phaser.GameObjects.Sprite { return this.sprite; }
     getNearbySprite(): Phaser.Physics.Arcade.Body { return this.nearbySprite; }
 
-    frameIndexToString(index: number): string {
-        const spriteFrame = index.toString().padStart(2, '0') + '.png'
-        return spriteFrame;
-    }
     setWalkingSound(walking: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound) {
         this.walkingSound = walking;
     }
@@ -46,31 +42,31 @@ export default class Player {
 
         this.cursorKeys = cursors;
 
+
         let fi = this.sprite.anims.generateFrameNames('characters', {
-            frames: [16, 17, 18],
-            zeroPad: 2,
+            frames: [1, 2, 3],
+            zeroPad: 0,
+            prefix: 'charactersprites-',
             suffix: '.png'
         });
-
-        if (fi.length < 1) {
-            console.error("No animation frames found");
-        }
 
         // setup the anims
         this.sprite.anims.create({
             key: 'walk',
-            frames: fi,
+            frames: [
+                { key: 'knight', frame: 'right_01.png' },
+                { key: 'knight', frame: 'right_stop.png' },
+
+            ],
             frameRate: 15,
             repeat: -1,
 
         })
         this.sprite.anims.create({
             key: 'stop',
-            frames: this.sprite.anims.generateFrameNames('characters', {
-                frames: [17],
-                zeroPad: 2,
-                suffix: '.png'
-            }),
+            frames: [
+                { key: 'knight', frame: 'right_stop.png' }
+            ],
             frameRate: 80,
             repeat: -1,
 

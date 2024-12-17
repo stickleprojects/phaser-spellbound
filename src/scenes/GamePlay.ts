@@ -298,7 +298,7 @@ export class GamePlay extends Phaser.Scene {
             const objectName = o.name.toLocaleLowerCase();
 
             console.log("Creating lift ", objectName)
-            const frameName = "24.png"
+            const frameName = 'charactersprites-' + "24.png"
             const pixelX = Math.ceil(o.x! / 16) * 16;
             const pixelY = Math.ceil(o.y! / 16) * 16;
 
@@ -325,13 +325,21 @@ export class GamePlay extends Phaser.Scene {
 
             sprite.anims.create({
                 key: 'open',
-                frames: this.anims.generateFrameNames('characters', { start: 24, end: 26, suffix: ".png", zeroPad: 2 }),
+                frames: this.anims.generateFrameNames('characters', {
+                    start: 22, end: 26,
+                    prefix: 'charactersprites-',
+                    suffix: ".png", zeroPad: 0
+                }),
                 frameRate: 10
 
             })
             sprite.anims.create({
                 key: 'close',
-                frames: this.anims.generateFrameNames('characters', { start: 26, end: 24, suffix: ".png", zeroPad: 2 }),
+                frames: this.anims.generateFrameNames('characters', {
+                    start: 26, end: 22,
+                    prefix: 'charactersprites-',
+                    suffix: ".png", zeroPad: 0
+                }),
                 frameRate: 10
 
             })
@@ -677,8 +685,8 @@ export class GamePlay extends Phaser.Scene {
                     // create the knight and add to the world
                     this.createKnight(pixelX + characterhalfW, pixelY + characterhalfH, index);
                 } else {
-                    //let ss = this.add.sprite(pixelX + characterhalfW, pixelY + characterhalfH, 'characters', index);
-                    const spriteFrame = index.toString().padStart(2, '0') + '.png'
+
+                    const spriteFrame = 'charactersprites-' + index.toString() + '.png'
                     const cs = new CharacterSprite(this,
                         pixelX + characterhalfW,
                         pixelY + characterhalfH,
@@ -779,7 +787,7 @@ export class GamePlay extends Phaser.Scene {
         let walking = this.sound.addAudioSprite('knight_walk');
         let teleport = this.sound.addAudioSprite('knight_teleport');
 
-        const sprite = this.physics.add.sprite(x, y, 'characters', index);
+        const sprite = this.physics.add.sprite(x, y, 'knight', index);
 
 
         sprite.setPipeline('Light2D');

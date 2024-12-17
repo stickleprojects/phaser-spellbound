@@ -1,0 +1,104 @@
+{
+	"textures": [
+		{
+			"image": "knight_sprites.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 45,
+				"h": 75
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "left_01.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 1,
+						"w": 16,
+						"h": 31
+					},
+					"frame": {
+						"x": 4,
+						"y": 4,
+						"w": 16,
+						"h": 31
+					}
+				},
+				{
+					"filename": "left_stop.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 1,
+						"w": 16,
+						"h": 31
+					},
+					"frame": {
+						"x": 25,
+						"y": 4,
+						"w": 16,
+						"h": 31
+					}
+				},
+				{
+					"filename": "right_01.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 1,
+						"w": 16,
+						"h": 31
+					},
+					"frame": {
+						"x": 4,
+						"y": 40,
+						"w": 16,
+						"h": 31
+					}
+				},
+				{
+					"filename": "right_stop.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 1,
+						"w": 16,
+						"h": 31
+					},
+					"frame": {
+						"x": 25,
+						"y": 40,
+						"w": 16,
+						"h": 31
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:fcb3649be8cb7220d8300e4be7c957e1:dca8992a66286d16263075af035345c4:3dd1230af1d727168db6b0dce682b858$"
+	}
+}
