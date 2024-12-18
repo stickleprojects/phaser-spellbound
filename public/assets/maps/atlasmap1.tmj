@@ -1,0 +1,202 @@
+{ "compressionlevel":-1,
+ "height":20,
+ "infinite":false,
+ "layers":[
+        {
+         "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 21, 0, 0, 0,
+            0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22, 0, 23, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 17, 0, 0, 18, 0, 0, 19, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 8, 0, 8, 7, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+         "height":20,
+         "id":1,
+         "name":"Tile Layer 1",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":30,
+         "x":0,
+         "y":0
+        }],
+ "nextlayerid":2,
+ "nextobjectid":1,
+ "orientation":"orthogonal",
+ "renderorder":"right-down",
+ "tiledversion":"1.11.0",
+ "tileheight":16,
+ "tilesets":[
+        {
+         "columns":0,
+         "firstgid":1,
+         "grid":
+            {
+             "height":1,
+             "orientation":"orthogonal",
+             "width":1
+            },
+         "margin":0,
+         "name":"atlastileset1",
+         "spacing":0,
+         "tilecount":23,
+         "tileheight":474,
+         "tiles":[
+                {
+                 "id":0,
+                 "image":"..\/c64spritesheets\/candle5.png",
+                 "imageheight":48,
+                 "imagewidth":32
+                }, 
+                {
+                 "id":1,
+                 "image":"..\/c64spritesheets\/candle6.png",
+                 "imageheight":48,
+                 "imagewidth":32
+                }, 
+                {
+                 "id":2,
+                 "image":"..\/c64spritesheets\/clock1.png",
+                 "imageheight":80,
+                 "imagewidth":32
+                }, 
+                {
+                 "id":3,
+                 "image":"..\/c64spritesheets\/grass1.png",
+                 "imageheight":16,
+                 "imagewidth":16
+                }, 
+                {
+                 "id":4,
+                 "image":"..\/c64spritesheets\/lift-panel1.png",
+                 "imageheight":80,
+                 "imagewidth":32
+                }, 
+                {
+                 "id":5,
+                 "image":"..\/c64spritesheets\/mirror1.png",
+                 "imageheight":48,
+                 "imagewidth":48
+                }, 
+                {
+                 "id":6,
+                 "image":"..\/c64spritesheets\/mushroom1.png",
+                 "imageheight":16,
+                 "imagewidth":16
+                }, 
+                {
+                 "id":7,
+                 "image":"..\/c64spritesheets\/mushroom2.png",
+                 "imageheight":16,
+                 "imagewidth":16
+                }, 
+                {
+                 "id":8,
+                 "image":"..\/c64spritesheets\/mushroom3.png",
+                 "imageheight":16,
+                 "imagewidth":16
+                }, 
+                {
+                 "id":9,
+                 "image":"..\/c64spritesheets\/mushroom4.png",
+                 "imageheight":32,
+                 "imagewidth":32
+                }, 
+                {
+                 "id":10,
+                 "image":"..\/c64spritesheets\/mushroom5.png",
+                 "imageheight":16,
+                 "imagewidth":16
+                }, 
+                {
+                 "id":11,
+                 "image":"..\/c64spritesheets\/picture1.png",
+                 "imageheight":48,
+                 "imagewidth":32
+                }, 
+                {
+                 "id":12,
+                 "image":"..\/c64spritesheets\/picture2.png",
+                 "imageheight":48,
+                 "imagewidth":48
+                }, 
+                {
+                 "id":13,
+                 "image":"..\/c64spritesheets\/picture3.png",
+                 "imageheight":48,
+                 "imagewidth":48
+                }, 
+                {
+                 "id":14,
+                 "image":"..\/c64spritesheets\/picture4.png",
+                 "imageheight":474,
+                 "imagewidth":512
+                }, 
+                {
+                 "id":15,
+                 "image":"..\/c64spritesheets\/picture5.png",
+                 "imageheight":48,
+                 "imagewidth":80
+                }, 
+                {
+                 "id":16,
+                 "image":"..\/c64spritesheets\/portrait1.png",
+                 "imageheight":48,
+                 "imagewidth":32
+                }, 
+                {
+                 "id":17,
+                 "image":"..\/c64spritesheets\/portrait2.png",
+                 "imageheight":48,
+                 "imagewidth":32
+                }, 
+                {
+                 "id":18,
+                 "image":"..\/c64spritesheets\/portrait3.png",
+                 "imageheight":48,
+                 "imagewidth":32
+                }, 
+                {
+                 "id":19,
+                 "image":"..\/c64spritesheets\/shield1.png",
+                 "imageheight":16,
+                 "imagewidth":16
+                }, 
+                {
+                 "id":20,
+                 "image":"..\/c64spritesheets\/shield2.png",
+                 "imageheight":16,
+                 "imagewidth":16
+                }, 
+                {
+                 "id":21,
+                 "image":"..\/c64spritesheets\/shield3.png",
+                 "imageheight":16,
+                 "imagewidth":16
+                }, 
+                {
+                 "id":22,
+                 "image":"..\/c64spritesheets\/shield4.png",
+                 "imageheight":16,
+                 "imagewidth":16
+                }],
+         "tilewidth":512
+        }],
+ "tilewidth":16,
+ "type":"map",
+ "version":"1.10",
+ "width":30
+}

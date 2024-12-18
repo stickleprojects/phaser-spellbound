@@ -1,3 +1,4 @@
+import { AtlasScene } from './scenes/atlasscene';
 import { Boot } from './scenes/Boot';
 import { CopyrightPanel } from './scenes/CopyrightPanel';
 import { CharacterInfoDialog } from './scenes/dialogs/CharacterInfoDialog';
@@ -56,8 +57,8 @@ const config: Types.Core.GameConfig = {
         ShowWhatDialog,
         CharacterDialog,
         ItemInfoDialog,
-        CharacterInfoDialog
-
+        CharacterInfoDialog,
+        AtlasScene
         // MainMenu,
         // MainGame,
         // GameOver

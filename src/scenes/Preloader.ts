@@ -84,6 +84,7 @@ export class Preloader extends Phaser.Scene {
         this.load.atlas('knight', ['knight_sprites.png', 'default_normal_map.png'], 'knight_sprites.json');
 
         this.load.tilemapTiledJSON('levels', 'all_levels.tmj')
+
         this.load.image('map_foreground', 'c64tiles_foreground.png')
         this.load.image('map_background', 'c64tiles.png')
         this.load.image('lift-control-panel', 'c64spritesheets/lift-panel1.png');
