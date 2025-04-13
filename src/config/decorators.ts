@@ -31,7 +31,9 @@ export function stat(description: string, datatype: string, format: string) {
 
         existing.set(propertyKey, new PropertyStats(
             description, datatype, format
-            , () => target[propertyKey]
+            , () => {
+                return target[propertyKey];
+            }
         ));
 
     }
