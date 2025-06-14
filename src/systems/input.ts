@@ -1,4 +1,3 @@
-import { DEBUG_MODE } from "../../globals"; // Import DEBUG_MODE
 import { defineQuery, defineSystem } from "bitecs";
 import Input, { Direction, Jumping } from "../components/input";
 

@@ -1,4 +1,3 @@
-import { DEBUG_MODE } from "../../globals"; // Import DEBUG_MODE
 import { defineQuery, defineSystem, enterQuery, exitQuery } from "bitecs";
 import Position from "../components/position";
 import Sprite from "../components/sprite";
@@ -39,7 +38,7 @@ export default function createSpriteSystem(
 
     const entitiesExited = spriteQueryExit(world);
     for (let i = 0; i < entitiesExited.length; ++i) {
-      const id = entitiesEntered[i];
+      const id = entitiesExited[i];
       spritesById.delete(id);
     }
 

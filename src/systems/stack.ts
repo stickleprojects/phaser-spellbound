@@ -1,5 +1,3 @@
-import { DEBUG_MODE } from "../../globals"; // Import DEBUG_MODE
-
 export class Stack<T> {
   private items: T[];
   // Private array to store stack elements
@@ -13,7 +11,7 @@ export class Stack<T> {
   remove(predicate: (item: T) => boolean) {
     var itemIndex = this.items.findIndex(predicate);
     if (itemIndex >= 0) {
-      this.items.splice(itemIndex);
+      this.items.splice(itemIndex, 1);
     } else {
       if (DEBUG_LEVEL > 0)
         console.log("Cannot remove item from stack, cannot find it");

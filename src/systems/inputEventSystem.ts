@@ -1,4 +1,3 @@
-import { DEBUG_MODE } from "../../globals"; // Import DEBUG_MODE
 import { defineSystem } from "bitecs";
 import { customEmitter } from "../components/customemitter";
 

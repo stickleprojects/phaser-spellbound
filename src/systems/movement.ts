@@ -1,5 +1,5 @@
 import { defineQuery, defineSystem } from "bitecs";
-import { DEBUG_MODE } from "../../globals"; // Import DEBUG_MODE
+
 import Position from "../components/position";
 import Input, { Direction } from "../components/input";
 import Velocity from "../components/velocity";
@@ -18,7 +18,7 @@ export default function createMovementSystem() {
       switch (direction) {
         case Direction.None:
           Velocity.x[id] = 0;
-          Velocity.y[i] = 0;
+          Velocity.y[id] = 0;
           break;
         case Direction.Left:
           Velocity.x[id] = -speed;
