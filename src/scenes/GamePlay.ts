@@ -70,7 +70,7 @@ class DoorSprite implements IDoor {
         this._sprite.play("open").once("animationcomplete-open", () => {
           this._state = DoorStateEnum.open;
           this._sprite.setVisible(false);
-          if (DEBUG_MODE) console.log("door open", this._sprite.name);
+          if (DEBUG_LEVEL > 0) console.log("door open", this._sprite.name);
           resolve(true);
         });
       }
@@ -86,7 +86,7 @@ class DoorSprite implements IDoor {
         this._sprite.play("close").once("animationcomplete-close", () => {
           this._state = DoorStateEnum.closed;
 
-          if (DEBUG_MODE) console.log("door close", this._sprite.name);
+          if (DEBUG_LEVEL > 0) console.log("door close", this._sprite.name);
           resolve(true);
         });
       }
@@ -302,7 +302,7 @@ export class GamePlay extends Phaser.Scene {
     doorTileObjects.forEach((o) => {
       const objectName = o.name.toLocaleLowerCase();
 
-      if (DEBUG_MODE) console.log("Creating lift ", objectName);
+      if (DEBUG_LEVEL > 0) console.log("Creating lift ", objectName);
       const frameName = "charactersprites-" + "24.png";
       const pixelX = Math.ceil(o.x! / 16) * 16;
       const pixelY = Math.ceil(o.y! / 16) * 16;
@@ -414,7 +414,7 @@ export class GamePlay extends Phaser.Scene {
       new CommandItem("x. drop", (_) => {
         this.dropItem();
       }),
-      //new CommandItem('cursorkeys = move', (_) => if (DEBUG_MODE) console.log('on cursorkeys')),
+      //new CommandItem('cursorkeys = move', (_) => if (DEBUG_LEVEL>0) console.log('on cursorkeys')),
       new CommandItem("Show debug", (_) => {
         this._dialogManager.closeTopmost();
 
@@ -591,7 +591,7 @@ export class GamePlay extends Phaser.Scene {
     const menuItems = inventory.GetItems().map(
       (itm, _) =>
         new CommandItem(itm.name, (p) => {
-          if (DEBUG_MODE)
+          if (DEBUG_LEVEL > 0)
             console.log("you selected item %s, invoking callback", itm.name);
           onselected(itm);
         })
@@ -613,10 +613,10 @@ export class GamePlay extends Phaser.Scene {
       await this.LiftManager.callLiftAsync(playerFloor);
     });
     customEmitter.OnLiftArrived(() => {
-      if (DEBUG_MODE) console.log("on lift arrived");
+      if (DEBUG_LEVEL > 0) console.log("on lift arrived");
     });
     customEmitter.OnLiftMoving(() => {
-      if (DEBUG_MODE) console.log("on lift moving");
+      if (DEBUG_LEVEL > 0) console.log("on lift moving");
     });
     customEmitter.onTurnOnLight((item: IInventoryItem) => {
       let x = item as ObjectItem;
@@ -681,7 +681,7 @@ export class GamePlay extends Phaser.Scene {
       const mapWidth = characterTilemapWidth;
 
       if (!characterInfo) {
-        if (DEBUG_MODE)
+        if (DEBUG_LEVEL > 0)
           console.log("Cannot find character texture for " + characterName);
       } else {
         let firstImage = characterInfo.images[0];
@@ -738,7 +738,8 @@ export class GamePlay extends Phaser.Scene {
       const mapWidth = objectTilemapWidth;
       if (!itemInfo) {
         if (!objectName.startsWith("#")) {
-          if (DEBUG_MODE) console.log("Failed to find object " + objectName);
+          if (DEBUG_LEVEL > 0)
+            console.log("Failed to find object " + objectName);
         }
       } else {
         let firstImage = itemInfo.images[0];
@@ -880,14 +881,14 @@ export class GamePlay extends Phaser.Scene {
   }
   liftExitCollision(/*player: any, doorSprite: any*/): void {
     const newLocation = this.LiftManager.GetLiftExitLocation();
-    if (DEBUG_MODE) console.log("moving to ", newLocation);
+    if (DEBUG_LEVEL > 0) console.log("moving to ", newLocation);
 
     this.Player.moveTo(newLocation.x + 20, newLocation.y + 16);
   }
   movePlayerIntoLift() {
     const newLocation = this.LiftManager.GetLiftEntranceLocation();
 
-    if (DEBUG_MODE) console.log("moving to ", newLocation);
+    if (DEBUG_LEVEL > 0) console.log("moving to ", newLocation);
 
     this.Player.moveTo(newLocation.x, newLocation.y);
     this._liftDoorKnightOverlap.active = true;
@@ -905,9 +906,9 @@ export class GamePlay extends Phaser.Scene {
     const roomInfo = this._levelConfig.findRoom(roomCoords.x, roomCoords.y);
 
     if (!roomInfo) {
-      if (DEBUG_MODE) console.log(`Failed to find room! ${roomCoords}`);
+      if (DEBUG_LEVEL > 0) console.log(`Failed to find room! ${roomCoords}`);
     } else {
-      if (DEBUG_MODE) console.log("room stats", roomInfo.stats);
+      if (DEBUG_LEVEL > 0) console.log("room stats", roomInfo.stats);
 
       customEmitter.emitScreenMove(
         new HudRoomInfo(roomCoords.x, roomCoords.y, roomInfo.name)
@@ -931,11 +932,11 @@ export class GamePlay extends Phaser.Scene {
               "its TOO DARK in here!",
               "Press ESC and make your way back",
             ]);
-            if (DEBUG_MODE) console.log("its TOO DARK in here!");
+            if (DEBUG_LEVEL > 0) console.log("its TOO DARK in here!");
           } else {
             customEmitter.emitTurnOnLight(glowingItem);
 
-            if (DEBUG_MODE)
+            if (DEBUG_LEVEL > 0)
               console.log(
                 "its reet dark in here!! Good job you have a glowing thing!"
               );
@@ -982,7 +983,7 @@ export class GamePlay extends Phaser.Scene {
 
     const newLocation = tp.getLocation();
 
-    if (DEBUG_MODE) console.log("moving to ", newLocation);
+    if (DEBUG_LEVEL > 0) console.log("moving to ", newLocation);
 
     this.Player.teleportTo(newLocation.x, newLocation.y);
   }
@@ -1018,7 +1019,7 @@ export class GamePlay extends Phaser.Scene {
       nearObjects.push(b);
     });
 
-    if (DEBUG_MODE) console.log("nearby objects", nearObjects);
+    if (DEBUG_LEVEL > 0) console.log("nearby objects", nearObjects);
 
     let nearbyItems: ObjectItem[] = [];
     // map the objects into items
@@ -1029,7 +1030,7 @@ export class GamePlay extends Phaser.Scene {
         if (!item.owner) {
           nearbyItems.push(item);
         } else {
-          if (DEBUG_MODE)
+          if (DEBUG_LEVEL > 0)
             console.log(
               "Found item",
               item.name,
@@ -1062,7 +1063,7 @@ export class GamePlay extends Phaser.Scene {
       nearThings.push(b);
     });
 
-    if (DEBUG_MODE) console.log("nearby things", nearThings);
+    if (DEBUG_LEVEL > 0) console.log("nearby things", nearThings);
 
     let nearbyDoors: IDoor[] = [];
     // map the objects into items
@@ -1082,7 +1083,7 @@ export class GamePlay extends Phaser.Scene {
 
     if (nearbyItems.length == 0) {
       // no items
-      if (DEBUG_MODE) console.log("nothing nearby to pick up");
+      if (DEBUG_LEVEL > 0) console.log("nothing nearby to pick up");
     } else {
       let itemToPickup = nearbyItems[0];
 
@@ -1092,7 +1093,7 @@ export class GamePlay extends Phaser.Scene {
       if (result.ok) {
         // great
       } else {
-        if (DEBUG_MODE) console.log(result.error.message);
+        if (DEBUG_LEVEL > 0) console.log(result.error.message);
       }
     }
   }
@@ -1103,7 +1104,7 @@ export class GamePlay extends Phaser.Scene {
       if (result.ok) {
         // great
       } else {
-        if (DEBUG_MODE) console.log(result.error.message);
+        if (DEBUG_LEVEL > 0) console.log(result.error.message);
       }
     });
   }
@@ -1117,7 +1118,7 @@ export class GamePlay extends Phaser.Scene {
     let items = this.Player.getInventory().GetItems();
     if (items.length == 0) {
       // you arent carrying anything
-      if (DEBUG_MODE) console.log("You arent carrying anything!");
+      if (DEBUG_LEVEL > 0) console.log("You arent carrying anything!");
     } else {
       // drop the last item
       let lastItem = items[items.length - 1];

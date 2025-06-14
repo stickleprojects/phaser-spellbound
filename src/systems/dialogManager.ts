@@ -104,7 +104,7 @@ export class DialogManager {
     return this._dialogQueue.any((x) => x.data.isModal);
   }
   closeScene(s: SceneWithData) {
-    if (DEBUG_MODE) console.log("shutting dialog ", s.scene);
+    if (DEBUG_LEVEL > 0) console.log("shutting dialog ", s.scene);
     this._sceneManager.stop(s.scene);
 
     this._dialogQueue.remove((x) => x.scene._id == s.scene._id);
@@ -162,7 +162,7 @@ export class DialogManager {
 
     existingScene = this._sceneManager.getScene(id);
     if (existingScene) {
-      if (DEBUG_MODE) console.log("push scene ", existingScene);
+      if (DEBUG_LEVEL > 0) console.log("push scene ", existingScene);
 
       const s = new SceneWithData(existingScene, dparams);
 

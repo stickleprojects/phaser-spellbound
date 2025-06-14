@@ -1,4 +1,6 @@
 import Phaser from "phaser";
+import { DEBUG_MODE } from "../../globals"; // Import DEBUG_MODE
+
 import {
   customEmitter,
   LiftArrivedEventArgs,
@@ -185,10 +187,10 @@ export class LiftManager {
     });
   }
   private openDoorAsync(door: IDoor): Promise<boolean> {
-    if (DEBUG_MODE) console.log("closing all lift doors");
+    if (DEBUG_LEVEL > 0) console.log("closing all lift doors");
     return this.closeAllDoorsAsync().then(async () => {
       return await door.OpenAsync().then(async () => {
-        if (DEBUG_MODE)
+        if (DEBUG_LEVEL > 0)
           console.log(
             "opening lift internal door",
             this._liftInteriorDoor.Name

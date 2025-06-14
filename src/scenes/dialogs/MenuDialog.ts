@@ -100,7 +100,7 @@ export class MenuDialog extends Dialog {
     let s = this._menuItems[safeIdx];
 
     if (!s) {
-      if (DEBUG_MODE)
+      if (DEBUG_LEVEL > 0)
         console.log("cannot selectitem", idx, " menuitems entry was null");
       return;
     }

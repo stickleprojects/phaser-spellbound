@@ -65,7 +65,7 @@ export class CharacterInfoDialog extends Dialog {
 
     const inf = data.CharacterInfo.Info;
     const statstuff = GetStats(inf.stats!);
-    if (DEBUG_MODE) console.log(statstuff);
+    if (DEBUG_LEVEL > 0) console.log(statstuff);
 
     const vy: number = 15;
     let start: number = y + 40;

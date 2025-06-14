@@ -74,13 +74,13 @@ export class PickupCommand extends CommandBase {
   execute(): Promise<boolean> {
     return super.Presenter.GetInventoryItemId().then(
       (itemId: string) => {
-        if (DEBUG_MODE) console.log(`pickup nearby item ${itemId}`);
+        if (DEBUG_LEVEL > 0) console.log(`pickup nearby item ${itemId}`);
 
         super.Executor.PickupItem(itemId);
         return true;
       },
       (err: any) => {
-        if (DEBUG_MODE) console.log("something went really wrong", err);
+        if (DEBUG_LEVEL > 0) console.log("something went really wrong", err);
         return false;
       }
     );
@@ -130,7 +130,7 @@ export class CommandBuilder {
     return x.execute();
   }
   GiveItem(itemId: string, characterId: string): Promise<boolean> {
-    if (DEBUG_MODE) console.log("pickupItem", itemId, characterId);
+    if (DEBUG_LEVEL > 0) console.log("pickupItem", itemId, characterId);
     throw new Error("Method not implemented.");
   }
   initCommands() {
@@ -153,7 +153,7 @@ export class CommandBuilder {
   public ExecuteCommand(commandid: string): Promise<boolean> {
     let c = this._commands[0];
 
-    if (DEBUG_MODE) console.log(commandid);
+    if (DEBUG_LEVEL > 0) console.log(commandid);
 
     return c.execute();
   }

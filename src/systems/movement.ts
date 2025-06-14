@@ -1,4 +1,5 @@
 import { defineQuery, defineSystem } from "bitecs";
+import { DEBUG_MODE } from "../../globals"; // Import DEBUG_MODE
 import Position from "../components/position";
 import Input, { Direction } from "../components/input";
 import Velocity from "../components/velocity";
@@ -45,7 +46,7 @@ export default function createMovementSystem() {
       Position.x[id] += Velocity.x[id];
       Position.y[id] += Velocity.y[id];
 
-      if (DEBUG_MODE) console.log(Position.x[id]);
+      if (DEBUG_LEVEL > 0) console.log(Position.x[id]);
     }
 
     return world;

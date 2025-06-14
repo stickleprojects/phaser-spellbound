@@ -1,3 +1,5 @@
+import { DEBUG_MODE } from "../../globals"; // Import DEBUG_MODE
+
 export class Stack<T> {
   private items: T[];
   // Private array to store stack elements
@@ -13,7 +15,7 @@ export class Stack<T> {
     if (itemIndex >= 0) {
       this.items.splice(itemIndex);
     } else {
-      if (DEBUG_MODE)
+      if (DEBUG_LEVEL > 0)
         console.log("Cannot remove item from stack, cannot find it");
     }
   }
@@ -66,6 +68,6 @@ export class Stack<T> {
   // Method to print
   // the elements of the stack
   print(): void {
-    if (DEBUG_MODE) console.log(this.items);
+    if (DEBUG_LEVEL > 0) console.log(this.items);
   }
 }

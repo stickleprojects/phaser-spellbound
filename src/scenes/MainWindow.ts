@@ -75,7 +75,7 @@ export class MainWindow extends Scene implements ISceneManager {
 
     customEmitter.onCloseDialog((id: string) => {
       if (id) {
-        if (DEBUG_MODE) console.log("Should be closing dialog", id);
+        if (DEBUG_LEVEL > 0) console.log("Should be closing dialog", id);
         this._dialogManager.closeDialog(id);
       } else {
         this.closeLastDialog();

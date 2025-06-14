@@ -44,7 +44,7 @@ export class LiftControlPanel {
     liftManager.ForEachDoor((d: IDoor, idx: number) => {
       const pos = liftIndicatorPositions.get(d.Name);
       if (!pos) {
-        if (DEBUG_MODE)
+        if (DEBUG_LEVEL > 0)
           console.log(
             "warning - cannot find door indicator for door %s",
             d.Name
@@ -52,7 +52,7 @@ export class LiftControlPanel {
       } else {
         const xy = pos;
         d.Tags.set("doorIndicator", xy);
-        if (DEBUG_MODE)
+        if (DEBUG_LEVEL > 0)
           console.log(
             "idx: %d, door: %s, xy:%s",
             idx,
@@ -81,10 +81,10 @@ export class LiftControlPanel {
   }
   private wireUpEvents() {
     customEmitter.OnLiftMoving(() => {
-      if (DEBUG_MODE) console.log("liftcontrolpanel: liftmoving");
+      if (DEBUG_LEVEL > 0) console.log("liftcontrolpanel: liftmoving");
     });
     customEmitter.OnLiftArrived((args: LiftArrivedEventArgs) => {
-      if (DEBUG_MODE)
+      if (DEBUG_LEVEL > 0)
         console.log("liftcontrolpanel: liftrrived at door ", args.on.Name);
 
       this.positionIndicatorAtDoor(args.on);
