@@ -6,7 +6,7 @@ describe("door test", () => {
     // it('should play the close animation', async () => {
     //     const spr = mock<IDoorSprite>();
     //     spr.PlayAnimation.mockImplementationOnce((animationName: string) => {
-    //         console.log(animationName);
+    //         if (DEBUG_MODE) console.log(animationName);
     //         return Promise.resolve();
     //     })
     //     const d = new Door(spr);
@@ -16,7 +16,7 @@ describe("door test", () => {
     // it('should set closed state after the close animation finishes', async () => {
     //     const spr = mock<IDoorSprite>();
     //     spr.PlayAnimation.mockImplementationOnce((animationName: string) => {
-    //         console.log(animationName);
+    //         if (DEBUG_MODE) console.log(animationName);
     //         //  spr.OnAnimationCompleted(animationName);
     //         return Promise.resolve();
     //     });
